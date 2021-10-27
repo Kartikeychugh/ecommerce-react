@@ -1,7 +1,8 @@
 import React from "react";
+
 import { fetchCollectionData } from "../../fake-server";
 import { ICollectionData } from "../../models/collection-data.interface";
-import { CollectionPreview } from "../collection-preview/collection-preview.component";
+import { CollectionPreview } from "../../components";
 
 interface IShopPageProps {}
 interface IShopPageState {
