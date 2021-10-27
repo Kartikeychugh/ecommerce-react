@@ -1,11 +1,11 @@
-import { HomePage } from "./components";
-import { HatsPage } from "./components/hats-page";
+import { HomePage, ShopPage } from "./components";
 import { Route } from "react-router-dom";
+
 function App() {
   return (
     <>
       <Route exact path="/" component={HomePage} />
-      <Route exact path="/shop/hats" component={HatsPage} />
+      <Route exact path="/shop" component={ShopPage} />
     </>
   );
 }

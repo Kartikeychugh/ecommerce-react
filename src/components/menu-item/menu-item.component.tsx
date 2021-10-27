@@ -7,16 +7,13 @@ interface IMenuItemProps extends RouteComponentProps {
 
 export const MenuItem = withRouter((props: IMenuItemProps) => {
   const {
-    section: { imageUrl, size, title, linkUrl },
-    match,
-    history,
+    section: { imageUrl, size, title },
   } = props;
 
   return (
     <div
       style={{ backgroundImage: `url(${imageUrl})` }}
-      className={`${size} menu-item`}
-      onClick={() => history.push(`${match.url}${linkUrl}`)}>
+      className={`${size} menu-item`}>
       <div
         className="background-image"
         style={{ backgroundImage: `url(${imageUrl})` }}></div>
