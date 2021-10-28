@@ -1,17 +1,26 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  withRouter,
+  RouteComponentProps,
+  Redirect,
+} from "react-router-dom";
 
-import { firestoreAPI, User, Unsubscribe } from "./core/firebase";
+import { Auth, Unsubscribe, Store } from "./core/firebase";
 
 import { Header } from "./components";
 import { HomePage, ShopPage, SignInAndSignUpPage } from "./pages";
+import { IUser } from "./models";
+import { DocumentData, DocumentSnapshot } from "@firebase/firestore";
 
-type AppState = { currentUser: User | null | undefined };
+type AppState = { currentUser: IUser | null | undefined };
+type AppProps = RouteComponentProps;
 
-export class App extends React.Component<{}, AppState> {
+class AppInternal extends React.Component<AppProps, AppState> {
   private unsubscribeAuth: Unsubscribe | undefined;
 
-  constructor(props: {}) {
+  constructor(props: AppProps) {
     super(props);
     this.unsubscribeAuth = undefined;
     this.state = {
@@ -20,13 +29,23 @@ export class App extends React.Component<{}, AppState> {
   }
 
   public componentDidMount() {
-    this.unsubscribeAuth = firestoreAPI.onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ currentUser: user });
-        console.log("Signed in");
+    this.unsubscribeAuth = Auth.onAuthStateChanged(async (userAuthDetails) => {
+      if (userAuthDetails) {
+        const docRef = await Store.createUserProfileDocument(userAuthDetails);
+        Store.subscribeToDocRef(
+          docRef,
+          (docSnap: DocumentSnapshot<DocumentData>) => {
+            const userData = docSnap.data() as Omit<IUser, "id">;
+            this.setState({
+              currentUser: {
+                ...userData,
+                id: docSnap.id,
+              },
+            });
+          }
+        );
       } else {
-        this.setState({ currentUser: user });
-        console.log("Signed out");
+        this.setState({ currentUser: userAuthDetails });
       }
     });
   }
@@ -51,10 +70,19 @@ export class App extends React.Component<{}, AppState> {
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/shop" component={ShopPage} />
-              <Route exact path="/signin" component={SignInAndSignUpPage} />
+              <Route exact path="/signin">
+                {this.state.currentUser !== null ? (
+                  <Redirect to="/" />
+                ) : (
+                  <SignInAndSignUpPage />
+                )}
+              </Route>
+              <Route path="*" component={() => <div>404</div>} />
             </Switch>
           </>
         );
     }
   }
 }
+
+export const App = withRouter(AppInternal);

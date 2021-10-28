@@ -1,10 +1,12 @@
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { firestoreAPI } from "../../core/firebase";
+import { Auth } from "../../core/firebase";
 import { Button, Input } from "../../core/ui";
+import { IUser } from "../../models";
 import "./sign-in.styles.scss";
 
-type SignInProps = RouteComponentProps<{ [key: string]: never }>;
+type SignInProps = RouteComponentProps<{}, {}, { navType: string }> & {};
+
 type SignInState = {
   email: string;
   password: string;
@@ -21,6 +23,8 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
       email: "",
     };
   }
+
+  public componentDidMount() {}
 
   public render() {
     return (
@@ -71,10 +75,18 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
   };
 
   private signin = () => {
-    firestoreAPI.loginWithGoogle().then(() => {
-      this.props.history.goBack();
-      // console.log(this.props.history.goBack());
-    });
+    Auth.loginWithGoogle()
+      .then(() => {
+        const next = this.props.location?.state?.navType;
+        if (next) {
+          this.props.history.push(next);
+        } else {
+          this.props.history.push("/");
+        }
+      })
+      .catch(() => {
+        console.log("Login failed");
+      });
   };
 }
 

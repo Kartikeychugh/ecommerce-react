@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { Crown } from "../../assests";
 import "./header.styles.scss";
-import { firestoreAPI, User } from "../../core/firebase";
+import { Auth } from "../../core/firebase";
+import { IUser } from "../../models";
 
-type HeaderProps = { currentUser: User | null };
+type HeaderProps = {
+  currentUser: IUser | null;
+};
 
 export const Header = (props: HeaderProps) => {
   const { currentUser } = props;
@@ -22,11 +25,13 @@ export const Header = (props: HeaderProps) => {
         </Link>
 
         {currentUser ? (
-          <div className="option" onClick={() => firestoreAPI.signOut()}>
+          <div className="option" onClick={() => Auth.signOut()}>
             SIGN OUT
           </div>
         ) : (
-          <Link className="option" to="/signin">
+          <Link
+            className="option"
+            to={{ pathname: "/signin", state: { navType: "/shop" } }}>
             SIGN IN
           </Link>
         )}
