@@ -2,19 +2,18 @@ import React, { ChangeEventHandler } from "react";
 import { AllOrNone } from "../utils";
 import "./input.styles.scss";
 
-interface IBasicInputProps {
-  required?: boolean;
-  name?: string;
-  type?: string;
+interface ICustomInputProps {
   label?: string;
 }
 
-type ControlledInputProps = AllOrNone<{
+type ReactControlledInputProps = AllOrNone<{
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }>;
 
-type IInputProps = ControlledInputProps & IBasicInputProps;
+type IInputProps = ReactControlledInputProps &
+  Partial<HTMLInputElement> &
+  ICustomInputProps;
 
 export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
   (props: IInputProps, ref: React.ForwardedRef<HTMLInputElement>) => {

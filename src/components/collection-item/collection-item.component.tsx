@@ -1,11 +1,11 @@
 import { ICollectionItem } from "../../models/collection-data.interface";
 import "./collection-item.styles.scss";
 
-interface ICollectionItemProps {
+type CollectionItemProps = {
   item: ICollectionItem;
-}
+};
 
-export const CollectionItem = (props: ICollectionItemProps) => {
+export const CollectionItem = (props: CollectionItemProps) => {
   const { item } = props;
   return (
     <div className="collection-item">

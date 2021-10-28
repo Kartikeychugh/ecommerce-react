@@ -2,12 +2,12 @@ import { ICollectionItem } from "../../models/collection-data.interface";
 import { CollectionItem } from "../collection-item/collection-item.component";
 import "./collection-preview.styles.scss";
 
-interface ICollectionPreviewProps {
+type CollectionPreviewProps = {
   title: string;
   items: ICollectionItem[];
-}
+};
 
-export const CollectionPreview = (props: ICollectionPreviewProps) => {
+export const CollectionPreview = (props: CollectionPreviewProps) => {
   const { title, items } = props;
   return (
     <div className="collection-preview">

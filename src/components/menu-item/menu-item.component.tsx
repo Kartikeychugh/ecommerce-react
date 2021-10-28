@@ -1,11 +1,12 @@
 import { withRouter, RouteComponentProps } from "react-router";
 import { ISection } from "../../models";
 import "./menu-item.styles.scss";
-interface IMenuItemProps extends RouteComponentProps {
-  section: ISection;
-}
 
-export const MenuItem = withRouter((props: IMenuItemProps) => {
+type MenuItemProps = {
+  section: ISection;
+} & RouteComponentProps;
+
+export const MenuItem = withRouter((props: MenuItemProps) => {
   const {
     section: { imageUrl, size, title },
   } = props;

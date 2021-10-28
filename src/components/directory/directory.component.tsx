@@ -4,17 +4,15 @@ import { ISection } from "../../models";
 import { MenuItem } from "../menu-item";
 import "./directory.styles.scss";
 
-interface IDirectoryProps {}
-interface IDirectoryState {
+type DirectoryProps = {};
+type DirectoryState = {
   sections: ISection[];
-}
+};
 
-export class Directory extends React.Component<
-  IDirectoryProps,
-  IDirectoryState
-> {
-  constructor(props: IDirectoryProps) {
+export class Directory extends React.Component<DirectoryProps, DirectoryState> {
+  constructor(props: DirectoryProps) {
     super(props);
+
     this.state = {
       sections: [],
     };

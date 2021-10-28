@@ -1,18 +1,19 @@
 import React from "react";
-import { Button, Input } from "../../ui";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { firestoreAPI } from "../../core/firebase";
+import { Button, Input } from "../../core/ui";
 import "./sign-in.styles.scss";
 
-interface ISignInProps {}
-
-interface ISignInState {
+type SignInProps = RouteComponentProps<{ [key: string]: never }>;
+type SignInState = {
   email: string;
   password: string;
   /** To handle allowing update from onChange event directly using name and value */
   [key: string]: string;
-}
+};
 
-export class SignIn extends React.Component<ISignInProps, ISignInState> {
-  constructor(props: ISignInProps) {
+class SignInInternal extends React.Component<SignInProps, SignInState> {
+  constructor(props: SignInProps) {
     super(props);
 
     this.state = {
@@ -44,8 +45,15 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
             onChange={this.handleChange}
             label={"Password"}
           />
-
-          <Button type="submit">Submit Form</Button>
+          <div className="button">
+            <Button type="submit">Submit Form</Button>
+            <Button
+              className="google-sign-in"
+              type="button"
+              onClick={this.signin}>
+              Sign in with Google
+            </Button>
+          </div>
         </form>
       </div>
     );
@@ -53,7 +61,6 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
 
   private handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    console.log(this.state);
   };
 
   private handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -62,4 +69,13 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
 
     this.setState({ [name]: value });
   };
+
+  private signin = () => {
+    firestoreAPI.loginWithGoogle().then(() => {
+      this.props.history.goBack();
+      // console.log(this.props.history.goBack());
+    });
+  };
 }
+
+export const SignIn = withRouter(SignInInternal);
