@@ -4,10 +4,14 @@ import "./header.styles.scss";
 import { firebaseAuth } from "../../core/firebase";
 import { CurrentUser } from "../../models";
 import { connect } from "react-redux";
+
 import { RootState } from "../../core/redux";
+import { CartIcon } from "./cart-icon.component";
+import { CartDropdown } from "../cart-dropdown/cart-dropdown.component";
 
 type HeaderProps = {
   currentUser: CurrentUser;
+  cartOpen: boolean;
 };
 
 const HeaderInternal = (props: HeaderProps) => {
@@ -40,6 +44,8 @@ const HeaderInternal = (props: HeaderProps) => {
             SIGN IN
           </Link>
         )}
+        <CartIcon />
+        {props.cartOpen ? <CartDropdown /> : null}
       </div>
     </div>
   );
@@ -47,4 +53,5 @@ const HeaderInternal = (props: HeaderProps) => {
 
 export const Header = connect((state: RootState) => ({
   currentUser: state.user.currentUser,
+  cartOpen: state.cart.cartOpen,
 }))(HeaderInternal);

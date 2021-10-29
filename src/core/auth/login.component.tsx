@@ -1,14 +1,14 @@
 import { DocumentSnapshot } from "firebase/firestore";
 import React from "react";
-import { CurrentUser, IUser } from "../../../models";
+import { CurrentUser, IUser } from "../../models";
 import {
   createUserProfileDocument,
   subscribeToUserProfile,
-} from "../../../services/db";
-import { firebaseAuth, Unsubscribe, User } from "../../firebase";
+} from "../../services/db";
+import { firebaseAuth, Unsubscribe, User } from "../firebase";
 import { connect } from "react-redux";
-import { RootState } from "../../redux";
-import { setCurrentUser } from "../../redux/user/user.actions";
+import { RootState } from "../redux";
+import { setCurrentUser } from "../redux/user/user.actions";
 
 type LoginProps = {
   currentUser: CurrentUser;
@@ -32,7 +32,7 @@ class LoginInternal extends React.Component<
           subscribeToUserProfile<IUser>(
             user,
             (snapShot: DocumentSnapshot<IUser>) => {
-              this.completeSignIm(snapShot);
+              this.completeSignIn(snapShot);
             }
           );
 
@@ -60,7 +60,7 @@ class LoginInternal extends React.Component<
     });
   }
 
-  private completeSignIm(snapShot: DocumentSnapshot<IUser>) {
+  private completeSignIn(snapShot: DocumentSnapshot<IUser>) {
     const user = snapShot.data();
     if (snapShot.id && user && this.validUserProfile(user)) {
       this.props.setCurrentUser({

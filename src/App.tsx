@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider as ReduxStoreProvider } from "react-redux";
 
 import { store } from "./core/redux";
-import { Layout } from "./core/layout/layout";
+import { Layout } from "./core/layout/layout.component";
 import { Login } from "./core/auth";
 
 type AppState = {};
