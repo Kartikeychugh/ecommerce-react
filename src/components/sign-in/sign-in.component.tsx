@@ -1,11 +1,21 @@
 import React from "react";
+import { Location, History } from "history";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Auth } from "../../core/firebase";
 import { Button, Input } from "../../core/ui";
-import { IUser } from "../../models";
+import { signInWithEmailAndPassword } from "../../services/email-authentication";
+import { signInWithGooglePopUp } from "../../services/google-authentication";
 import "./sign-in.styles.scss";
 
-type SignInProps = RouteComponentProps<{}, {}, { navType: string }> & {};
+type SignInProps = RouteComponentProps<{}, {}, { navType: string }> & {
+  exitSignInPage: (
+    location: Location<{
+      navType: string;
+    }>,
+    history: History<{
+      navType: string;
+    }>
+  ) => void;
+};
 
 type SignInState = {
   email: string;
@@ -32,7 +42,7 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
         <h2>I already have an account</h2>
         <span>Sign in with your email and password</span>
 
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.signInWithEmalAndPassword}>
           <Input
             name="email"
             type="email"
@@ -50,11 +60,11 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
             label={"Password"}
           />
           <div className="button">
-            <Button type="submit">Submit Form</Button>
+            <Button type="submit">Sign In</Button>
             <Button
               className="google-sign-in"
               type="button"
-              onClick={this.signin}>
+              onClick={this.signWithGoogle}>
               Sign in with Google
             </Button>
           </div>
@@ -63,10 +73,6 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     );
   }
 
-  private handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-  };
-
   private handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
@@ -74,19 +80,30 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     this.setState({ [name]: value });
   };
 
-  private signin = () => {
-    Auth.loginWithGoogle()
-      .then(() => {
-        const next = this.props.location?.state?.navType;
-        if (next) {
-          this.props.history.push(next);
-        } else {
-          this.props.history.push("/");
-        }
-      })
-      .catch(() => {
-        console.log("Login failed");
+  private signInWithEmalAndPassword = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const { email, password } = this.state;
+
+    try {
+      await signInWithEmailAndPassword(email, password);
+      this.setState({ password: "", email: "" }, () => {
+        this.props.exitSignInPage(this.props.location, this.props.history);
       });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  private signWithGoogle = async () => {
+    const { location, history } = this.props;
+
+    try {
+      await signInWithGooglePopUp();
+
+      this.props.exitSignInPage(location, history);
+    } catch (e) {
+      console.log(e);
+    }
   };
 }
 

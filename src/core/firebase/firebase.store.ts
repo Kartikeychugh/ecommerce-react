@@ -6,46 +6,25 @@ import {
   DocumentReference,
   DocumentData,
   onSnapshot,
-  DocumentSnapshot,
 } from "firebase/firestore";
+import { firebase_app } from "./firebase.app";
 
-import { getFirebaseApp } from "./firebase.initialiser";
-import { User } from "./firebase.types";
+const store = getFirestore(firebase_app);
 
-const store = getFirestore(getFirebaseApp());
-
-const createUserProfileDocument = async (
-  user: User,
-  additionalData: {} = {}
-) => {
-  const docRef = doc(store, `users/${user.uid}`);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) {
-    try {
-      await setDoc(docRef, {
-        displayName: user.displayName,
-        email: user.email,
-        createdAt: new Date(),
-        ...additionalData,
-      });
-      console.log("Created profile");
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  return docRef;
-};
-
-const subscribeToDocRef = (
+const firebase_getDocRef = (path: string, ...pathSegments: string[]) =>
+  doc(store, path, ...pathSegments);
+const firebase_getDocSnap = (docRef: DocumentReference<DocumentData>) =>
+  getDoc(docRef);
+const firebase_setDocSnap = (
   docRef: DocumentReference<DocumentData>,
-  listener: (docSnap: DocumentSnapshot<DocumentData>) => void
-) => {
-  onSnapshot(docRef, listener);
-};
+  data: {
+    [x: string]: any;
+  }
+) => setDoc(docRef, data);
 
-export const Store = {
-  createUserProfileDocument,
-  subscribeToDocRef,
+export const firebaseStore = {
+  firebase_getDocRef,
+  firebase_getDocSnap,
+  firebase_setDocSnap,
+  firebase_onSnapshot: onSnapshot,
 };

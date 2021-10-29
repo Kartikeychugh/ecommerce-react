@@ -1,12 +1,11 @@
-import { withRouter, RouteComponentProps } from "react-router";
 import { ISection } from "../../models";
 import "./menu-item.styles.scss";
 
 type MenuItemProps = {
   section: ISection;
-} & RouteComponentProps;
+};
 
-export const MenuItem = withRouter((props: MenuItemProps) => {
+export const MenuItem = (props: MenuItemProps) => {
   const {
     section: { imageUrl, size, title },
   } = props;
@@ -24,4 +23,4 @@ export const MenuItem = withRouter((props: MenuItemProps) => {
       </div>
     </div>
   );
-});
+};

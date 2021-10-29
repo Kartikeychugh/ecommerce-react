@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
 import { Crown } from "../../assests";
 import "./header.styles.scss";
-import { Auth } from "../../core/firebase";
-import { IUser } from "../../models";
+import { firebaseAuth } from "../../core/firebase";
+import { CurrentUser } from "../../models";
+import { connect } from "react-redux";
+import { RootState } from "../../core/redux";
 
 type HeaderProps = {
-  currentUser: IUser | null;
+  currentUser: CurrentUser;
 };
 
-export const Header = (props: HeaderProps) => {
+const HeaderInternal = (props: HeaderProps) => {
   const { currentUser } = props;
+
   return (
     <div className="header">
       <Link className="logo-container" to="/">
@@ -25,13 +28,15 @@ export const Header = (props: HeaderProps) => {
         </Link>
 
         {currentUser ? (
-          <div className="option" onClick={() => Auth.signOut()}>
+          <div
+            className="option"
+            onClick={() => firebaseAuth.firebase_signOut()}>
             SIGN OUT
           </div>
         ) : (
           <Link
             className="option"
-            to={{ pathname: "/signin", state: { navType: "/shop" } }}>
+            to={{ pathname: "/signin", state: { navType: "inApp" } }}>
             SIGN IN
           </Link>
         )}
@@ -39,3 +44,7 @@ export const Header = (props: HeaderProps) => {
     </div>
   );
 };
+
+export const Header = connect((state: RootState) => ({
+  currentUser: state.user.currentUser,
+}))(HeaderInternal);
