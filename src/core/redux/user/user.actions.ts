@@ -1,7 +1,9 @@
 import { CurrentUser } from "../../../models";
-import { ReducerAction } from "./user.types";
+import { UserReducerAction } from "./user.types";
 
-export const setCurrentUser = (user: CurrentUser): ReducerAction => ({
+export const setCurrentUser = (
+  user: CurrentUser
+): UserReducerAction<"SET_CURRENT_USER", CurrentUser> => ({
   type: "SET_CURRENT_USER",
-  payload: { currentUser: user },
+  payload: user,
 });

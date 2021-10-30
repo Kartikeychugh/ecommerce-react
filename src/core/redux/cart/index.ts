@@ -1,1 +1,1 @@
-export { toggleCart } from "./cart.actions";
+export { toggleCart, addToCart } from "./cart.actions";

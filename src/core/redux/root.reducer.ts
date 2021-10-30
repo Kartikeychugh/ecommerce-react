@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { userReducer } from "./user";
-import { ReducerManagedState as UserReducerManagedState } from "./user/user.types";
-import { ReducerManagedState as CartReducerManagedState } from "./cart/cart.types";
+import { UserReducerManagedState } from "./user/user.types";
+import { CartReducerManagedState } from "./cart/cart.types";
 import { cartReducer } from "./cart/cart.reducer";
 
 export type RootState = {

@@ -1,7 +1,14 @@
 import { CurrentUser, IUser } from "../../../models";
 
-export type ReducerManagedState = { currentUser: CurrentUser };
-export type ReducerAction = {
-  type: "SET_CURRENT_USER" | "SET_CURRENT_USER_DISPLAYNAME";
-  payload: Partial<ReducerManagedState>;
+export type UserReducerManagedState = { currentUser: CurrentUser };
+
+export type UserReducerAction<
+  T extends UserActionTypes,
+  P extends UserPayloadType
+> = {
+  type: T;
+  payload: P;
 };
+
+export type UserActionTypes = "SET_CURRENT_USER";
+export type UserPayloadType = CurrentUser;

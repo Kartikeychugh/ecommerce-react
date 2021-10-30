@@ -1,16 +1,22 @@
-import { ReducerManagedState, ReducerAction } from "./user.types";
+import { Reducer } from "../redux.types";
+import {
+  UserActionTypes,
+  UserPayloadType,
+  UserReducerAction,
+  UserReducerManagedState,
+} from "./user.types";
 
 const INITIAL_STATE = {
   currentUser: undefined,
 };
 
-export const userReducer: any = (
-  state: ReducerManagedState = INITIAL_STATE,
-  action: ReducerAction
-): ReducerManagedState => {
+export const userReducer: Reducer<
+  UserReducerManagedState,
+  UserReducerAction<UserActionTypes, UserPayloadType>
+> = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "SET_CURRENT_USER":
-      return { ...state, ...action.payload };
+      return { ...state, ...{ currentUser: action.payload } };
 
     default:
       return state;
