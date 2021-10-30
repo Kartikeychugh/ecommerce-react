@@ -1,8 +1,9 @@
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
-import { ShoppingBag } from "../../assests";
-import { toggleCart } from "../../core/redux/cart";
 import "./cart-icon.styles.scss";
+
+import { Dispatch } from "redux";
+import { ShoppingBag } from "../../../assests";
+import { connect } from "react-redux";
+import { toggleCart } from "../../../core/redux";
 
 type CartIconProps = {
   toggleCart: () => void;

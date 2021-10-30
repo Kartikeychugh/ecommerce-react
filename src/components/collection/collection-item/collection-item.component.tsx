@@ -1,9 +1,10 @@
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
-import { addToCart } from "../../core/redux/cart";
-import { Button } from "../../core/ui";
-import { ICollectionItem } from "../../models/collection-data.interface";
 import "./collection-item.styles.scss";
+
+import { Button } from "../../../core/ui";
+import { Dispatch } from "redux";
+import { ICollectionItem } from "../../../models/collection-data.interface";
+import { addToCart } from "../../../core/redux";
+import { connect } from "react-redux";
 
 type CollectionItemProps = {
   item: ICollectionItem;

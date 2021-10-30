@@ -1,4 +1,4 @@
-import { CurrentUser, IUser } from "../../../models";
+import { CurrentUser } from "../../../models";
 
 export type UserReducerManagedState = { currentUser: CurrentUser };
 

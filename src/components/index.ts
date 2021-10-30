@@ -1,5 +1,6 @@
-export { Header } from "./header";
-export { CollectionPreview } from "./collection-preview";
-export { Directory } from "./directory";
-export { SignIn } from "./sign-in";
-export { SignUp } from "./sign-up";
+export { Header } from "./header"; // Fixed header
+export { CollectionPreview } from "./collection"; // shop page  entry
+export { Directory } from "./directory"; // Home page page  entry
+export { SignIn } from "./sign-in"; // sign-in page entry
+export { SignUp } from "./sign-up"; // sign-in page entry
+export { CartDropdown } from "./cart";

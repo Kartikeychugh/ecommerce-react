@@ -1,17 +1,15 @@
-import { Link } from "react-router-dom";
-import { Crown } from "../../assests";
 import "./header.styles.scss";
-import { firebaseAuth } from "../../core/firebase";
-import { CurrentUser } from "../../models";
-import { connect } from "react-redux";
 
+import { CartIcon } from "../cart";
+import { Crown } from "../../assests";
+import { CurrentUser } from "../../models";
+import { Link } from "react-router-dom";
 import { RootState } from "../../core/redux";
-import { CartIcon } from "./cart-icon.component";
-import { CartDropdown } from "../cart-dropdown/cart-dropdown.component";
+import { connect } from "react-redux";
+import { firebaseAuth } from "../../core/firebase";
 
 type HeaderProps = {
   currentUser: CurrentUser;
-  cartOpen: boolean;
 };
 
 const HeaderInternal = (props: HeaderProps) => {
@@ -45,7 +43,6 @@ const HeaderInternal = (props: HeaderProps) => {
           </Link>
         )}
         <CartIcon />
-        {props.cartOpen ? <CartDropdown /> : null}
       </div>
     </div>
   );
@@ -53,5 +50,4 @@ const HeaderInternal = (props: HeaderProps) => {
 
 export const Header = connect((state: RootState) => ({
   currentUser: state.user.currentUser,
-  cartOpen: state.cart.cartOpen,
 }))(HeaderInternal);

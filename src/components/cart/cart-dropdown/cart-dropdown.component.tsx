@@ -1,5 +1,6 @@
-import { Button } from "../../core/ui";
 import "./cart-dropdown.styles.scss";
+
+import { Button } from "../../../core/ui";
 
 export const CartDropdown = () => {
   return (

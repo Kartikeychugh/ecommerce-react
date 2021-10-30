@@ -1,5 +1,5 @@
-import { ISection } from "../../models";
-import "./menu-item.styles.scss";
+import { ISection } from "../../../models";
+import "./directory-menu-item.styles.scss";
 
 type MenuItemProps = {
   section: ISection;

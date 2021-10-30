@@ -1,8 +1,7 @@
-import React from "react";
-
-import { fetchCollectionData } from "../../fake-server";
-import { ICollectionData } from "../../models/collection-data.interface";
 import { CollectionPreview } from "../../components";
+import { ICollectionData } from "../../models/collection-data.interface";
+import React from "react";
+import { fetchCollectionData } from "../../fake-server";
 
 interface IShopPageProps {}
 interface IShopPageState {
@@ -16,9 +15,17 @@ export class ShopPage extends React.Component<IShopPageProps, IShopPageState> {
       collections: [],
     };
   }
+
   public componentDidMount() {
     const collections = fetchCollectionData() as ICollectionData[];
     this.setState({ collections });
+  }
+
+  public shouldComponentUpdate(
+    _nextProps: IShopPageProps,
+    nextState: IShopPageState
+  ) {
+    return nextState !== this.state;
   }
 
   public render() {

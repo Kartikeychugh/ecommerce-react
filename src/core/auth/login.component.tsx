@@ -1,14 +1,15 @@
-import { DocumentSnapshot } from "firebase/firestore";
-import React from "react";
 import { CurrentUser, IUser } from "../../models";
+import { Unsubscribe, User, firebaseAuth } from "../firebase";
 import {
   createUserProfileDocument,
   subscribeToUserProfile,
 } from "../../services/db";
-import { firebaseAuth, Unsubscribe, User } from "../firebase";
-import { connect } from "react-redux";
+
+import { DocumentSnapshot } from "firebase/firestore";
+import React from "react";
 import { RootState } from "../redux";
-import { setCurrentUser } from "../redux/user/user.actions";
+import { connect } from "react-redux";
+import { setCurrentUser } from "../redux";
 
 type LoginProps = {
   currentUser: CurrentUser;

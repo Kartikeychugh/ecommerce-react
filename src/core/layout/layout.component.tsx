@@ -1,18 +1,16 @@
-import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { Dispatch } from "redux";
-import { connect } from "react-redux";
-
-import { Header } from "../../components";
-import { CurrentUser } from "../../models";
+import { CartDropdown, Header } from "../../components";
 import { HomePage, ShopPage, SignInAndSignUpPage } from "../../pages";
+import { Redirect, Route, Switch } from "react-router-dom";
+
+import { CurrentUser } from "../../models";
+import React from "react";
 import { RootState } from "../redux";
-import { setCurrentUser } from "../redux/user/user.actions";
+import { connect } from "react-redux";
 
 type LayoutState = {};
 type LayoutProps = {
+  cartOpen: boolean;
   currentUser: CurrentUser;
-  setCurrentUser: (user: CurrentUser) => void;
 };
 
 class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
@@ -29,7 +27,7 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
       {
         exact: true,
         path: "/",
-        component: HomePage,
+        component: () => <HomePage />,
       },
       { exact: true, path: "/shop", component: () => <ShopPage /> },
       {
@@ -49,6 +47,7 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
         return (
           <>
             <Header />
+            {this.props.cartOpen ? <CartDropdown /> : null}
             <Switch>
               <Route exact={true} path="/" component={HomePage} />
               <Route exact={true} path="/shop" component={ShopPage} />
@@ -78,16 +77,8 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
 const mapStateToProps = (state: RootState) => {
   return {
     currentUser: state.user.currentUser,
+    cartOpen: state.cart.cartOpen,
   };
 };
 
-const mapDispatchtoProps = (dispatch: Dispatch) => {
-  return {
-    setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
-  };
-};
-
-export const Layout = connect(
-  mapStateToProps,
-  mapDispatchtoProps
-)(LayoutInternal);
+export const Layout = connect(mapStateToProps)(LayoutInternal);
