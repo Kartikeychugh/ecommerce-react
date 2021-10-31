@@ -46,10 +46,10 @@ export class Popup extends React.Component<PopupProps, PopupState> {
           <div
             ref={this.targetRef}
             className="target"
-            onClick={this.handleTargetClick}>
+            onClick={this.onTargetClick}>
             {Target}
           </div>
-          {this.state.open ? (
+          {this.getOpen() ? (
             <div
               ref={this.popUpRef}
               className="popup"
@@ -64,9 +64,9 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     );
   }
 
-  private handleTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
+  private onTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    this.toggleOpen(!this.state.open);
+    this.toggleOpen(!this.getOpen());
   };
 
   private calculatePosition() {
@@ -100,6 +100,10 @@ export class Popup extends React.Component<PopupProps, PopupState> {
   }
 
   private toggleOpen(open: boolean) {
+    if (this.props.open !== undefined) {
+      return;
+    }
+
     const { left, top } = this.calculatePosition();
     this.setState({ open, left, top });
   }
@@ -114,4 +118,12 @@ export class Popup extends React.Component<PopupProps, PopupState> {
       };
     });
   };
+
+  private getOpen() {
+    if (this.props.open === undefined) {
+      return this.state.open;
+    }
+
+    return this.props.open;
+  }
 }

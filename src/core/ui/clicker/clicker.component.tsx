@@ -22,6 +22,10 @@ export class Clicker extends React.Component<
     window.addEventListener("click", this.handleClick);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("click", this.handleClick);
+  }
+
   public render() {
     return <div ref={this.containerRef}>{this.props.children}</div>;
   }

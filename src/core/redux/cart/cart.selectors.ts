@@ -21,3 +21,13 @@ export const selectCartOpenState = createSelector(
   [selectCart],
   (cart: RootState["cart"]) => cart.cartOpen
 );
+
+export const selectCartTotal = createSelector(
+  [selectCartItems],
+  (cartItems: RootState["cart"]["cartItems"]) =>
+    cartItems.reduce<number>(
+      (accumulateValue, cartItem) =>
+        accumulateValue + cartItem.price * cartItem.quantity,
+      0
+    )
+);

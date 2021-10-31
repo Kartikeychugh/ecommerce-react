@@ -5,4 +5,5 @@ export {
   selectCartItems,
   selectCartItemCount,
   selectCartOpenState,
+  selectCartTotal,
 } from "./cart.selectors";

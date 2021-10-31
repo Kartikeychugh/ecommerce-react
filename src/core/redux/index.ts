@@ -6,5 +6,6 @@ export {
   selectCartItems,
   selectCartItemCount,
   selectCartOpenState,
+  selectCartTotal,
 } from "./cart";
 export { setCurrentUser, selectCurrentUser } from "./user";

@@ -1,16 +1,18 @@
 import "./cart-dropdown.styles.scss";
 
-import { RootState, selectCartItems } from "../../../core/redux";
+import { RootState, selectCartItems, toggleCart } from "../../../core/redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { Button } from "../../../core/ui";
 import { CartItem } from "../cart-item";
 import { CartItem as CartItemType } from "../../../models";
+import { Dispatch } from "redux";
 import React from "react";
 import { connect } from "react-redux";
 
 type CartDropdownProps = {
   cartItems: CartItemType[];
+  toggleCart: () => void;
 } & RouteComponentProps;
 
 const CartDropdownInternal = (props: CartDropdownProps) => (
@@ -28,6 +30,7 @@ const CartDropdownInternal = (props: CartDropdownProps) => (
     <Button
       onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {
         event.stopPropagation();
+        props.toggleCart();
         props.history.push("/checkout");
       }}>
       GO TO CHECKOUT
@@ -35,10 +38,17 @@ const CartDropdownInternal = (props: CartDropdownProps) => (
   </div>
 );
 
-export const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
   cartItems: selectCartItems(state),
 });
 
-export const CartDropdown = connect(mapStateToProps)(
-  withRouter(CartDropdownInternal)
-);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    toggleCart: () => dispatch(toggleCart()),
+  };
+};
+
+export const CartDropdown = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(CartDropdownInternal));

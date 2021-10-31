@@ -19,11 +19,17 @@ type CartIconProps = {
   cartOpen: boolean;
 };
 
-const CartIconContentInternal = (props: CartIconProps) => (
-  <div id="popup" className="cart-icon">
-    <ShoppingBag className="shopping-icon" />
-    <span className="item-count">{props.cartCount}</span>
-  </div>
+const CartIconInternal = (props: CartIconProps) => (
+  <Popup
+    open={props.cartOpen}
+    width={240}
+    content={() => <CartDropdown />}
+    position="left">
+    <div id="popup" className="cart-icon" onClick={props.toggleCart}>
+      <ShoppingBag className="shopping-icon" />
+      <span className="item-count">{props.cartCount}</span>
+    </div>
+  </Popup>
 );
 
 const mapStateToProps = (state: RootState) => ({
@@ -32,16 +38,11 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  toggleCart: () => dispatch(toggleCart()),
+  toggleCart: () => {
+    dispatch(toggleCart());
+  },
 });
-
-const CartIconContent = connect(
+export const CartIcon = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CartIconContentInternal);
-
-export const CartIcon = () => (
-  <Popup width={240} content={() => <CartDropdown />} position="left">
-    <CartIconContent />
-  </Popup>
-);
+)(CartIconInternal);
