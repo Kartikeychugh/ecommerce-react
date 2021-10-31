@@ -1,19 +1,17 @@
 import "./popup.styles.scss";
 
+import { Clicker } from "..";
 import React from "react";
-import { debouncer } from "../../../utils";
 
 type PopupProps = {
   position: "right" | "left";
   content: () => JSX.Element;
   open?: boolean;
+  width: number;
 };
 
 type PopupState = {
-  popUpOpen: boolean;
-  x: number;
-  y: number;
-  corrected: boolean;
+  open: boolean;
 };
 
 export class Popup extends React.Component<PopupProps, PopupState> {
@@ -27,117 +25,53 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     this.targetRef = React.createRef<HTMLDivElement>();
 
     this.state = {
-      popUpOpen: false,
-      x: 0,
-      y: 0,
-      corrected: true,
+      open: false,
     };
   }
 
-  public componentDidMount() {
-    window.addEventListener("resize", debouncer(this.handleSize, 50));
-    window.addEventListener("click", this.handleOutsideClick);
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener("resize", this.handleSize);
-    window.removeEventListener("click", this.handleOutsideClick);
-  }
-
-  private handleSize = () => {
-    if (!this.popUpRef.current) {
-      return;
-    }
-
-    this.setState((prevState) => {
-      return { ...prevState, corrected: false };
-    });
-  };
-
-  private handleOutsideClick = (e: MouseEvent) => {
-    console.log("triggered");
-
-    if (!this.popUpRef.current) {
-      return;
-    }
-
-    if (this.targetRef.current?.contains(e.target as any)) {
-      return;
-    }
-
-    if (this.popUpRef.current.contains(e.target as any)) {
-      return;
-    }
-
-    this.changeOpenState(false);
-  };
-
   public render() {
-    const { children, content: Content } = this.props;
-    const { popUpOpen } = this.state;
+    const { children: Target, content: PopUpContent } = this.props;
 
     return (
-      <>
+      <Clicker
+        externalClick={() => {
+          this.toggleOpen(false);
+        }}>
         <div
           ref={this.targetRef}
           className="target"
-          onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
-            event.stopPropagation();
-            this.changeOpenState(!popUpOpen);
-          }}>
-          {children}
+          onClick={this.handleTargetClick}>
+          {Target}
         </div>
-        {this.state.popUpOpen ? (
+        {this.state.open ? (
           <div
             ref={this.popUpRef}
             className="popup"
             style={{
-              left: this.state.x,
-              top: this.state.y,
+              ...this.calculatePosition(),
             }}>
-            <Content />
+            <PopUpContent />
           </div>
         ) : null}
-      </>
+      </Clicker>
     );
   }
 
-  public componentDidUpdate() {
-    if (this.state.corrected) {
-      return;
+  private handleTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    this.toggleOpen(!this.state.open);
+  };
+
+  private calculatePosition() {
+    if (!this.targetRef.current) {
+      return { left: 0, top: 0 };
     }
 
-    this.correctPopUpPlacement();
-  }
-
-  public shouldComponentUpdate(_nextProps: PopupProps, nextState: PopupState) {
-    return (
-      nextState.popUpOpen !== this.state.popUpOpen ||
-      nextState.corrected !== this.state.corrected
-    );
-  }
-
-  private changeOpenState(popUpOpen: boolean) {
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        popUpOpen,
-        x: 0,
-        y: 0,
-        corrected: popUpOpen ? false : true,
-      };
-    });
-  }
-
-  private correctPopUpPlacement() {
-    if (!this.targetRef.current || !this.popUpRef.current) {
-      return;
-    }
     const targetLeft = this.targetRef.current.offsetLeft;
     const targetWidth = this.targetRef.current.offsetWidth;
     const targetTop = this.targetRef.current.offsetTop;
     const targetHeight = this.targetRef.current.offsetHeight;
-    const popUpWidth = this.popUpRef.current.offsetWidth;
+    const popUpWidth = this.props.width;
     const windowRightEdge = window.innerWidth - this.grace;
     const windowLeftEdge = this.grace;
 
@@ -146,20 +80,19 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     let shift = 0;
 
     if (this.props.position === "right") {
-      newX = targetLeft + targetWidth;
+      newX = targetLeft;
       const rightEdge = targetLeft + targetWidth + popUpWidth;
       shift = rightEdge - windowRightEdge > 0 ? rightEdge - windowRightEdge : 0;
     } else if (this.props.position === "left") {
-      newX = targetLeft - popUpWidth;
+      newX = targetLeft + targetWidth - popUpWidth;
       const leftEdge = newX;
       shift = windowLeftEdge - leftEdge > 0 ? windowLeftEdge - leftEdge : 0;
     }
 
-    this.setState((prevState) => ({
-      ...prevState,
-      x: newX - shift,
-      y: newY,
-      corrected: true,
-    }));
+    return { left: newX - shift, top: newY };
+  }
+
+  private toggleOpen(open: boolean) {
+    this.setState({ open });
   }
 }

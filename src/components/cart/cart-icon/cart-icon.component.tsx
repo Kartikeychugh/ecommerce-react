@@ -9,8 +9,9 @@ import {
 
 import { CartDropdown } from "../cart-dropdown";
 import { Dispatch } from "redux";
-import { Popup } from "../../../core/ui/popup/popup.component";
+import { Popup } from "../../../core/ui";
 import React from "react";
+import { Resize } from "../../../core/ui/resize";
 import { ShoppingBag } from "../../../assests";
 import { connect } from "react-redux";
 
@@ -42,7 +43,11 @@ const CartIconContent = connect(
 )(CartIconContentInternal);
 
 export const CartIcon = () => (
-  <Popup content={() => <CartDropdown />} position="right">
-    <CartIconContent />
-  </Popup>
+  <Resize
+    content={() => (
+      <Popup width={240} content={() => <CartDropdown />} position="left">
+        <CartIconContent />
+      </Popup>
+    )}
+  />
 );
