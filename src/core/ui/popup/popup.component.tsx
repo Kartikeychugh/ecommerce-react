@@ -2,6 +2,7 @@ import "./popup.styles.scss";
 
 import { Clicker } from "..";
 import React from "react";
+import { Resize } from "../resize";
 
 type PopupProps = {
   position: "right" | "left";
@@ -12,6 +13,8 @@ type PopupProps = {
 
 type PopupState = {
   open: boolean;
+  left: number;
+  top: number;
 };
 
 export class Popup extends React.Component<PopupProps, PopupState> {
@@ -26,6 +29,8 @@ export class Popup extends React.Component<PopupProps, PopupState> {
 
     this.state = {
       open: false,
+      left: 0,
+      top: 0,
     };
   }
 
@@ -33,27 +38,29 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     const { children: Target, content: PopUpContent } = this.props;
 
     return (
-      <Clicker
-        externalClick={() => {
-          this.toggleOpen(false);
-        }}>
-        <div
-          ref={this.targetRef}
-          className="target"
-          onClick={this.handleTargetClick}>
-          {Target}
-        </div>
-        {this.state.open ? (
+      <Resize onResize={this.onResize}>
+        <Clicker
+          externalClick={() => {
+            this.toggleOpen(false);
+          }}>
           <div
-            ref={this.popUpRef}
-            className="popup"
-            style={{
-              ...this.calculatePosition(),
-            }}>
-            <PopUpContent />
+            ref={this.targetRef}
+            className="target"
+            onClick={this.handleTargetClick}>
+            {Target}
           </div>
-        ) : null}
-      </Clicker>
+          {this.state.open ? (
+            <div
+              ref={this.popUpRef}
+              className="popup"
+              style={{
+                ...this.calculatePosition(),
+              }}>
+              <PopUpContent />
+            </div>
+          ) : null}
+        </Clicker>
+      </Resize>
     );
   }
 
@@ -93,6 +100,18 @@ export class Popup extends React.Component<PopupProps, PopupState> {
   }
 
   private toggleOpen(open: boolean) {
-    this.setState({ open });
+    const { left, top } = this.calculatePosition();
+    this.setState({ open, left, top });
   }
+
+  private onResize = () => {
+    const { left, top } = this.calculatePosition();
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        left,
+        top,
+      };
+    });
+  };
 }

@@ -1,18 +1,13 @@
 import React from "react";
 
 type ResizeProps = {
-  content: React.ComponentType;
+  onResize: () => void;
 };
 
 export class Resize extends React.Component<
   React.PropsWithChildren<ResizeProps>,
   {}
 > {
-  constructor(props: React.PropsWithChildren<ResizeProps>) {
-    super(props);
-    this.state = {};
-  }
-
   public componentDidMount() {
     window.addEventListener("resize", this.triggerChange);
   }
@@ -21,15 +16,11 @@ export class Resize extends React.Component<
     window.removeEventListener("resize", this.triggerChange);
   }
 
-  public shouldComponentUpdate() {
-    return true;
-  }
   private triggerChange = () => {
-    this.setState({});
+    this.props.onResize();
   };
 
   public render() {
-    const { content: Content } = this.props;
-    return <Content />;
+    return this.props.children;
   }
 }
