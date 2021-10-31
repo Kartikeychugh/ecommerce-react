@@ -20,3 +20,38 @@ export const addItemToCart: UserReducerStateManagers = (state, payload) => {
 
   return { ...state, cartItems: [...cartItems, { ...payload, quantity: 1 }] };
 };
+
+export const reduceFromCart: UserReducerStateManagers = (state, payload) => {
+  if (payload === null) {
+    return { ...state };
+  }
+
+  const { cartItems } = state;
+  let newCartItems = cartItems.map((cartItem) => {
+    if (cartItem.id === payload.id) {
+      return {
+        ...cartItem,
+        quantity: cartItem.quantity - 1,
+      };
+    } else {
+      return cartItem;
+    }
+  });
+
+  newCartItems = newCartItems.filter((cartItem) => cartItem.quantity > 0);
+  return { ...state, cartItems: newCartItems };
+};
+
+export const removeFromCart: UserReducerStateManagers = (state, payload) => {
+  if (payload === null) {
+    return { ...state };
+  }
+
+  const { cartItems } = state;
+
+  const newCartItems = cartItems.filter(
+    (cartItem) => cartItem.id !== payload.id
+  );
+
+  return { ...state, cartItems: newCartItems };
+};

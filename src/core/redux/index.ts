@@ -3,6 +3,8 @@ export type { RootState } from "./root.reducer";
 export {
   addToCart,
   toggleCart,
+  reduceFromCart,
+  removeFromCart,
   selectCartItems,
   selectCartItemCount,
   selectCartOpenState,

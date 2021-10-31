@@ -4,9 +4,9 @@ import {
   CartReducerAction,
   CartReducerManagedState,
 } from "./cart.types";
+import { addItemToCart, reduceFromCart, removeFromCart } from "./cart.utils";
 
 import { Reducer } from "../redux.types";
-import { addItemToCart } from "./cart.utils";
 
 export const CART_INITIAL_STATE: CartReducerManagedState = {
   cartOpen: false,
@@ -22,6 +22,10 @@ export const cartReducer: Reducer<
       return { ...state, cartOpen: !state.cartOpen };
     case "ADD_ITEM":
       return addItemToCart(state, action.payload);
+    case "REDUCE_ITEM":
+      return reduceFromCart(state, action.payload);
+    case "REMOVE_ITEM":
+      return removeFromCart(state, action.payload);
     default:
       return state;
   }

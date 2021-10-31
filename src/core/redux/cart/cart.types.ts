@@ -1,6 +1,10 @@
 import { CartItem, ICollectionItem } from "../../../models";
 
-export type CartActionTypes = "TOGGLE_CART" | "ADD_ITEM";
+export type CartActionTypes =
+  | "TOGGLE_CART"
+  | "ADD_ITEM"
+  | "REMOVE_ITEM"
+  | "REDUCE_ITEM";
 export type CartPayloadType = null | ICollectionItem;
 
 export type CartReducerManagedState = {
