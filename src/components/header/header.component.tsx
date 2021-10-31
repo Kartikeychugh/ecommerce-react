@@ -1,10 +1,11 @@
 import "./header.styles.scss";
 
+import { RootState, selectCurrentUser } from "../../core/redux";
+
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
 import { CurrentUser } from "../../models";
 import { Link } from "react-router-dom";
-import { RootState } from "../../core/redux";
 import { connect } from "react-redux";
 import { firebaseAuth } from "../../core/firebase";
 
@@ -32,7 +33,10 @@ const HeaderInternal = (props: HeaderProps) => {
         {currentUser ? (
           <div
             className="option"
-            onClick={() => firebaseAuth.firebase_signOut()}>
+            onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
+              event.stopPropagation();
+              firebaseAuth.firebase_signOut();
+            }}>
             SIGN OUT
           </div>
         ) : (
@@ -49,5 +53,5 @@ const HeaderInternal = (props: HeaderProps) => {
 };
 
 export const Header = connect((state: RootState) => ({
-  currentUser: state.user.currentUser,
+  currentUser: selectCurrentUser(state),
 }))(HeaderInternal);

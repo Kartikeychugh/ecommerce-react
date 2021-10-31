@@ -7,12 +7,10 @@ import {
 
 import { DocumentSnapshot } from "firebase/firestore";
 import React from "react";
-import { RootState } from "../redux";
 import { connect } from "react-redux";
 import { setCurrentUser } from "../redux";
 
 type LoginProps = {
-  currentUser: CurrentUser;
   setCurrentUser: (user: CurrentUser) => void;
 };
 
@@ -78,15 +76,8 @@ class LoginInternal extends React.Component<
   }
 }
 
-export const Login = connect(
-  (state: RootState) => {
-    return {
-      currentUser: state.user.currentUser,
-    };
-  },
-  (dispatch) => {
-    return {
-      setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
-    };
-  }
-)(LoginInternal);
+export const Login = connect(null, (dispatch) => {
+  return {
+    setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
+  };
+})(LoginInternal);

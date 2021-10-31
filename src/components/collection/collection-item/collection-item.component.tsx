@@ -31,11 +31,10 @@ const CollectionItemInternal = (props: CollectionItemProps) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    addToCart: (item: ICollectionItem) => dispatch(addToCart(item)),
-  };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addToCart: (item: ICollectionItem) => dispatch(addToCart(item)),
+});
+
 export const CollectionItem = connect(
   null,
   mapDispatchToProps

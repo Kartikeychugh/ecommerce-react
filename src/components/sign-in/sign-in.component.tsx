@@ -1,10 +1,12 @@
-import React from "react";
-import { Location, History } from "history";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import "./sign-in.styles.scss";
+
 import { Button, Input } from "../../core/ui";
+import { History, Location } from "history";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+
+import React from "react";
 import { signInWithEmailAndPassword } from "../../services/email-authentication";
 import { signInWithGooglePopUp } from "../../services/google-authentication";
-import "./sign-in.styles.scss";
 
 type SignInProps = RouteComponentProps<{}, {}, { navType: string }> & {
   exitSignInPage: (
@@ -94,12 +96,14 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     }
   };
 
-  private signWithGoogle = async () => {
+  private signWithGoogle = async (
+    event: React.SyntheticEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
     const { location, history } = this.props;
 
     try {
       await signInWithGooglePopUp();
-
       this.props.exitSignInPage(location, history);
     } catch (e) {
       console.log(e);

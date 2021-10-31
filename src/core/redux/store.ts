@@ -6,5 +6,12 @@ import { rootReducer } from "./root.reducer";
 
 const middlewares = [logger, Thunk];
 
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+const store = createStore(
+  rootReducer,
+  {
+    cart: { cartItems: [], cartOpen: false },
+    user: { currentUser: undefined },
+  },
+  applyMiddleware(...middlewares)
+);
 export default store;
