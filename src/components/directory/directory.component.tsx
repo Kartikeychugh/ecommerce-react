@@ -1,43 +1,28 @@
 import "./directory.styles.scss";
 
+import { RootState, selectSections } from "../../core/redux";
+
 import { ISection } from "../../models";
 import { MenuItem } from "./directory-menu-item";
-import React from "react";
-import { fetchDirectoryData } from "../../fake-server";
+import { connect } from "react-redux";
 
-type DirectoryProps = {};
-type DirectoryState = {
-  sections: ISection[];
-};
+type DirectoryProps = { sections?: ISection[] };
 
-export class Directory extends React.Component<DirectoryProps, DirectoryState> {
-  constructor(props: DirectoryProps) {
-    super(props);
-
-    this.state = {
-      sections: [],
-    };
-  }
-
-  public componentDidMount() {
-    const sections = fetchDirectoryData();
-    this.setState({ sections });
-  }
-
-  public shouldComponentUpdate(
-    _nextProps: DirectoryProps,
-    nextState: DirectoryState
-  ) {
-    return nextState !== this.state;
-  }
-
-  public render() {
-    return (
-      <div className="directory-menu">
-        {this.state.sections.map((section) => (
+const DirectoryInternal = (props: DirectoryProps) => {
+  return (
+    <div className="directory-menu">
+      {props.sections &&
+        props.sections.map((section) => (
           <MenuItem key={section.id} section={section} />
         ))}
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    sections: selectSections(state),
+  };
+};
+
+export const Directory = connect(mapStateToProps)(DirectoryInternal);

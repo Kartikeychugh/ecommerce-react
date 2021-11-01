@@ -33,7 +33,7 @@ export const DirectoryData = [
   },
 ];
 
-export const CollectionData = [
+export const ShopData = [
   {
     id: 1,
     title: "Hats",

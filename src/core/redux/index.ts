@@ -11,3 +11,5 @@ export {
   selectCartTotal,
 } from "./cart";
 export { setCurrentUser, selectCurrentUser } from "./user";
+export { selectSections } from "./directory";
+export { selectShopItems } from "./shop";

@@ -31,7 +31,7 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
             <Switch>
               <Route exact={true} path="/checkout" component={CheckoutPage} />
               <Route exact={true} path="/" component={HomePage} />
-              <Route exact={true} path="/shop" component={ShopPage} />
+              <Route path="/shop" component={ShopPage} />
               <Route exact={true} path="/checkout" component={CheckoutPage} />
               <Route exact={true} path="/signin">
                 {this.props.currentUser !== null ? (
@@ -40,7 +40,7 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
                   <SignInAndSignUpPage />
                 )}
               </Route>
-              <Route path="*" component={() => <div>404</div>} />
+              {/* <Route path="*" component={() => <div>404</div>} /> */}
             </Switch>
           </>
         );

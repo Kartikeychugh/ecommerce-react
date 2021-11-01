@@ -71,6 +71,10 @@ export class Popup extends React.Component<PopupProps, PopupState> {
   }
 
   private changeOpenStatus(openStatus: boolean) {
+    if (this.getOpenStatus() === openStatus) {
+      return;
+    }
+
     if (openStatus) {
       this.onOpen();
     } else {
@@ -183,17 +187,9 @@ export class Popup extends React.Component<PopupProps, PopupState> {
   private onTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
     event.stopPropagation();
     this.changeOpenStatus(!this.getOpenStatus());
-
-    if (this.props.onClick) {
-      this.props.onClick();
-    }
   };
 
   private onExternalClick = () => {
     this.changeOpenStatus(false);
-
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
   };
 }
