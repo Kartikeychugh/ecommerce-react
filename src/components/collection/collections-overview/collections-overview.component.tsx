@@ -7,20 +7,23 @@ import { ICollectionData } from "../../../models";
 import { connect } from "react-redux";
 
 type CollectionsOverviewProps = {
-  shopItems?: ICollectionData[];
+  shopItems: ICollectionData;
 };
 
 const CollectionsOverviewInternal = (props: CollectionsOverviewProps) => {
   return (
     <div className="collection-preview">
-      {props.shopItems && props.shopItems.length
-        ? props.shopItems.map((shopItem) => (
-            <CollectionPreview
-              key={shopItem.id}
-              title={shopItem.title}
-              items={shopItem.items}
-            />
-          ))
+      {props.shopItems
+        ? Object.keys(props.shopItems).map((shopItemKey: string) => {
+            const shopItem = props.shopItems[shopItemKey];
+            return (
+              <CollectionPreview
+                key={shopItem.id}
+                title={shopItem.title}
+                items={shopItem.items}
+              />
+            );
+          })
         : null}
     </div>
   );

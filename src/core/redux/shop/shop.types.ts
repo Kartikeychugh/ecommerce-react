@@ -1,6 +1,6 @@
 import { ICollectionData } from "../../../models";
 
-export type ShopReducerManagedState = { items: ICollectionData[] };
+export type ShopReducerManagedState = { items: ICollectionData };
 
 export type ShopReducerAction<
   T extends ShopActionTypes,

@@ -17,7 +17,7 @@ const ShopPageInternal = (props: ShopPageProps) => {
         component={CollectionsOverview}
       />
       <Route
-        path={`${props.match.path}/:categoryId`}
+        path={`${props.match.path}/:collectionId`}
         component={CollectionPage}
       />
     </div>

@@ -5,9 +5,11 @@ export interface ICollectionItem {
   price: number;
 }
 
-export interface ICollectionData {
+export interface ICollection {
   id: number;
   title: string;
   routeName: string;
   items: ICollectionItem[];
 }
+
+export type ICollectionData = { [key: string]: ICollection };

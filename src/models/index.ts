@@ -4,4 +4,5 @@ export type { CartItem } from "./cart-item.interface";
 export type {
   ICollectionItem,
   ICollectionData,
+  ICollection,
 } from "./collection-data.interface";
