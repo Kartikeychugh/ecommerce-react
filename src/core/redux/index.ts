@@ -1,4 +1,4 @@
-export { default as store } from "./store";
+export { store, persistor } from "./store";
 export type { RootState } from "./root.reducer";
 export {
   addToCart,
