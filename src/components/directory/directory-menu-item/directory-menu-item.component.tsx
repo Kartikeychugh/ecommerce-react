@@ -1,17 +1,23 @@
-import { ISection } from "../../../models";
 import "./directory-menu-item.styles.scss";
+
+import { RouteComponentProps, withRouter } from "react-router-dom";
+
+import { ISection } from "../../../models";
 
 type MenuItemProps = {
   section: ISection;
-};
+} & RouteComponentProps;
 
-export const MenuItem = (props: MenuItemProps) => {
+const MenuItemInternal = (props: MenuItemProps) => {
   const {
     section: { imageUrl, size, title },
   } = props;
 
   return (
     <div
+      onClick={() =>
+        props.history.push(`${props.match.url}${props.section.linkUrl}`)
+      }
       style={{ backgroundImage: `url(${imageUrl})` }}
       className={`${size} menu-item`}>
       <div
@@ -24,3 +30,5 @@ export const MenuItem = (props: MenuItemProps) => {
     </div>
   );
 };
+
+export const MenuItem = withRouter(MenuItemInternal);

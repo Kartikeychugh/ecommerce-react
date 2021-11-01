@@ -1,6 +1,6 @@
 import { Route, RouteComponentProps } from "react-router-dom";
 
-import { CollectionPage } from "../collection/collection.component";
+import { CollectionPage } from "../collection/collection.page";
 import { CollectionsOverview } from "../../components";
 import { ICollectionData } from "../../models/collection-data.interface";
 
