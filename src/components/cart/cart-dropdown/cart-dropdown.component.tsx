@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 
 type CartDropdownProps = {
   cartItems: CartItemType[];
-  toggleCart: () => void;
+  toggleCart: (cartOpen?: boolean) => void;
 } & RouteComponentProps;
 
 const CartDropdownInternal = (props: CartDropdownProps) => (
@@ -44,7 +44,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    toggleCart: () => dispatch(toggleCart()),
+    toggleCart: (cartOpen?: boolean) => dispatch(toggleCart(cartOpen)),
   };
 };
 

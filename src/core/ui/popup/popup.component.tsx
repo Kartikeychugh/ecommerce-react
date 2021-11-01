@@ -1,6 +1,7 @@
 import "./popup.styles.scss";
 
 import { Clicker } from "..";
+import { PopupContentRenderer } from "./popup-content.renderer";
 import React from "react";
 import { Resize } from "../resize";
 
@@ -50,21 +51,15 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     return (
       <Resize onResize={this.onResize}>
         <Clicker externalClick={this.onExternalClick}>
-          <div
-            ref={this.targetRef}
-            className="target"
-            onClick={this.onTargetClick}>
+          <div ref={this.targetRef} onClick={this.onTargetClick}>
             {Target}
           </div>
-          {this.getOpen() && this.targetRef.current ? (
-            <div
+          {this.getOpenStatus() && this.targetRef.current ? (
+            <PopupContentRenderer
+              {...this.calculatePopupPosition()}
               ref={this.popUpRef}
-              className="popup"
-              style={{
-                ...this.calculatePopupPosition(),
-              }}>
-              <PopUpContent />
-            </div>
+              content={PopUpContent}
+            />
           ) : null}
         </Clicker>
       </Resize>
@@ -75,26 +70,13 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     this.updateTargetPosition();
   }
 
-  private onResize = () => {
-    this.updateTargetPosition();
-  };
-
-  private onTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    this.toggleOpen(!this.getOpen());
-
-    if (this.props.onClick) {
-      this.props.onClick();
+  private changeOpenStatus(openStatus: boolean) {
+    if (openStatus) {
+      this.onOpen();
+    } else {
+      this.onClose();
     }
-  };
-
-  private onExternalClick = () => {
-    this.toggleOpen(false);
-
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
-  };
+  }
 
   private calculatePopupPosition() {
     const { targetLeft, targetTop, targetHeight, targetWidth } = this.state;
@@ -119,19 +101,6 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     return { left: newX - shift, top: newY };
   }
 
-  private toggleOpen(open: boolean) {
-    if (this.props.open !== undefined) {
-      return;
-    }
-
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        open,
-      };
-    });
-  }
-
   private updateTargetPosition() {
     if (!this.targetRef.current) {
       return;
@@ -153,11 +122,78 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     });
   }
 
-  private getOpen() {
+  private onOpen = () => {
+    if (this.props.open !== undefined) {
+      if (this.props.onClick) {
+        this.props.onClick();
+      }
+      return;
+    }
+
+    this.setState(
+      (prevState) => {
+        return {
+          ...prevState,
+          open: true,
+        };
+      },
+      () => {
+        if (this.props.onClick) {
+          this.props.onClick();
+        }
+      }
+    );
+  };
+
+  private onClose = () => {
+    if (this.props.open !== undefined) {
+      if (this.props.onClose) {
+        this.props.onClose();
+      }
+      return;
+    }
+
+    this.setState(
+      (prevState) => {
+        return {
+          ...prevState,
+          open: false,
+        };
+      },
+      () => {
+        if (this.props.onClose) {
+          this.props.onClose();
+        }
+      }
+    );
+  };
+
+  private getOpenStatus() {
     if (this.props.open === undefined) {
       return this.state.open;
     }
 
     return this.props.open;
   }
+
+  private onResize = () => {
+    this.updateTargetPosition();
+  };
+
+  private onTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    this.changeOpenStatus(!this.getOpenStatus());
+
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
+  };
+
+  private onExternalClick = () => {
+    this.changeOpenStatus(false);
+
+    if (this.props.onClose) {
+      this.props.onClose();
+    }
+  };
 }

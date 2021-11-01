@@ -14,7 +14,7 @@ import { ShoppingBag } from "../../../assests";
 import { connect } from "react-redux";
 
 type CartIconProps = {
-  toggleCart: () => void;
+  toggleCart: (cartOpen?: boolean) => void;
   cartCount: number;
   cartOpen: boolean;
 };
@@ -22,11 +22,11 @@ type CartIconProps = {
 const CartIconInternal = (props: CartIconProps) => (
   <Popup
     open={props.cartOpen}
-    onClose={props.toggleCart}
+    onClose={() => props.toggleCart(false)}
     width={240}
     content={() => <CartDropdown />}
     position="left">
-    <div id="popup" className="cart-icon" onClick={props.toggleCart}>
+    <div id="popup" className="cart-icon" onClick={() => props.toggleCart()}>
       <ShoppingBag className="shopping-icon" />
       <span className="item-count">{props.cartCount}</span>
     </div>
@@ -39,10 +39,9 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  toggleCart: () => {
-    dispatch(toggleCart());
-  },
+  toggleCart: (cartOpen?: boolean) => dispatch(toggleCart(cartOpen)),
 });
+
 export const CartIcon = connect(
   mapStateToProps,
   mapDispatchToProps

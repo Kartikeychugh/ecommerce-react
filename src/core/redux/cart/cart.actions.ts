@@ -2,10 +2,12 @@ import { CartItem, ICollectionItem } from "../../../models";
 
 import { CartReducerAction } from "./cart.types";
 
-export const toggleCart = (): CartReducerAction<"TOGGLE_CART", null> => {
+export const toggleCart = (
+  cartOpen?: boolean
+): CartReducerAction<"TOGGLE_CART", boolean | null> => {
   return {
     type: "TOGGLE_CART",
-    payload: null,
+    payload: cartOpen !== undefined ? cartOpen : null,
   };
 };
 

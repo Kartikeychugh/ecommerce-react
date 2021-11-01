@@ -1,7 +1,19 @@
 import { UserReducerStateManagers } from "./cart.types";
 
+export const toggleCart: UserReducerStateManagers = (state, payload) => {
+  if (payload === null || typeof payload === "boolean") {
+    if (payload === null) {
+      return { ...state, cartOpen: !state.cartOpen };
+    } else {
+      return { ...state, cartOpen: payload };
+    }
+  } else {
+    return { ...state };
+  }
+};
+
 export const addItemToCart: UserReducerStateManagers = (state, payload) => {
-  if (payload === null) {
+  if (payload === null || typeof payload === "boolean") {
     return { ...state };
   }
 
@@ -22,7 +34,7 @@ export const addItemToCart: UserReducerStateManagers = (state, payload) => {
 };
 
 export const reduceFromCart: UserReducerStateManagers = (state, payload) => {
-  if (payload === null) {
+  if (payload === null || typeof payload === "boolean") {
     return { ...state };
   }
 
@@ -43,7 +55,7 @@ export const reduceFromCart: UserReducerStateManagers = (state, payload) => {
 };
 
 export const removeFromCart: UserReducerStateManagers = (state, payload) => {
-  if (payload === null) {
+  if (payload === null || typeof payload === "boolean") {
     return { ...state };
   }
 

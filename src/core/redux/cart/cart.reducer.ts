@@ -4,7 +4,12 @@ import {
   CartReducerAction,
   CartReducerManagedState,
 } from "./cart.types";
-import { addItemToCart, reduceFromCart, removeFromCart } from "./cart.utils";
+import {
+  addItemToCart,
+  reduceFromCart,
+  removeFromCart,
+  toggleCart,
+} from "./cart.utils";
 
 import { Reducer } from "../redux.types";
 
@@ -19,7 +24,7 @@ export const cartReducer: Reducer<
 > = (state = CART_INITIAL_STATE, action) => {
   switch (action.type) {
     case "TOGGLE_CART":
-      return { ...state, cartOpen: !state.cartOpen };
+      return toggleCart(state, action.payload);
     case "ADD_ITEM":
       return addItemToCart(state, action.payload);
     case "REDUCE_ITEM":

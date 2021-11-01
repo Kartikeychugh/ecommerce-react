@@ -5,7 +5,7 @@ export type CartActionTypes =
   | "ADD_ITEM"
   | "REMOVE_ITEM"
   | "REDUCE_ITEM";
-export type CartPayloadType = null | ICollectionItem;
+export type CartPayloadType = null | ICollectionItem | boolean;
 
 export type CartReducerManagedState = {
   cartOpen: boolean;
