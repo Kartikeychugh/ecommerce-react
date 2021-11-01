@@ -22,6 +22,7 @@ type CartIconProps = {
 const CartIconInternal = (props: CartIconProps) => (
   <Popup
     open={props.cartOpen}
+    onClose={props.toggleCart}
     width={240}
     content={() => <CartDropdown />}
     position="left">

@@ -7,6 +7,8 @@ import { Resize } from "../resize";
 type PopupProps = {
   position: "right" | "left";
   content: () => JSX.Element;
+  onClick?: () => void;
+  onClose?: () => void;
   open?: boolean;
   width: number;
 };
@@ -80,10 +82,18 @@ export class Popup extends React.Component<PopupProps, PopupState> {
   private onTargetClick = (event: React.SyntheticEvent<HTMLDivElement>) => {
     event.stopPropagation();
     this.toggleOpen(!this.getOpen());
+
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
   };
 
   private onExternalClick = () => {
     this.toggleOpen(false);
+
+    if (this.props.onClose) {
+      this.props.onClose();
+    }
   };
 
   private calculatePopupPosition() {
