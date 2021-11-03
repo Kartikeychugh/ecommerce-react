@@ -1,22 +1,26 @@
 import "./button.styles.scss";
 
-interface IButtonProperties {
-  type: "button" | "submit" | "reset" | undefined;
-  className: string;
+import { StyledButton } from "./button.styles";
+
+export interface IButtonProperties {
+  type: "button" | "submit" | "reset";
   onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  googleButton?: boolean;
+  invertedButton?: boolean;
 }
 
 type ButtonProps = React.PropsWithChildren<Partial<IButtonProperties>> &
   Partial<IButtonProperties>;
 
 export const Button = (props: React.PropsWithChildren<ButtonProps>) => {
-  const { children, className, onClick, type } = props;
+  const { type, onClick, children, googleButton, invertedButton } = props;
   return (
-    <button
-      className={`custom-button ${className ? className : ""}`}
-      {...(type ? { type } : {})}
-      {...(onClick ? { onClick } : {})}>
+    <StyledButton
+      googleButton={!!googleButton}
+      invertedButton={!!invertedButton}
+      {...(type ? { type } : { type: "button" })}
+      {...(onClick ? { onClick } : { onClick: () => {} })}>
       {children}
-    </button>
+    </StyledButton>
   );
 };

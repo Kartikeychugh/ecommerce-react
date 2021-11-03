@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore } from "redux";
 
-import { Thunk } from "./middleware/test";
+// import { Thunk } from "./middleware/test";
 import { logger } from "redux-logger";
 import { persistStore } from "redux-persist";
 import { reducer } from "./root.reducer";

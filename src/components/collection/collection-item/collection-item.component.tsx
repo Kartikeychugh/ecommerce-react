@@ -24,7 +24,7 @@ const CollectionItemInternal = (props: CollectionItemProps) => {
         <span className="price">{item.price}</span>
       </div>
 
-      <Button className="inverted" onClick={() => props.addToCart(item)}>
+      <Button invertedButton={true} onClick={() => props.addToCart(item)}>
         ADD TO CART
       </Button>
     </div>

@@ -64,7 +64,7 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
           <div className="button">
             <Button type="submit">Sign In</Button>
             <Button
-              className="google-sign-in"
+              googleButton={true}
               type="button"
               onClick={this.signWithGoogle}>
               Sign in with Google

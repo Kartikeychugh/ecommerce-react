@@ -1,6 +1,9 @@
+// import "./input.styles.scss";
+
+import { FormInput, InputGroup, InputLabel } from "./input.styles";
 import React, { ChangeEventHandler } from "react";
+
 import { AllOrNone } from "../utils";
-import "./input.styles.scss";
 
 interface ICustomInputProps {
   label?: string;
@@ -19,9 +22,8 @@ export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
   (props: IInputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
     const { name, required = false, value, onChange, type, label } = props;
     return (
-      <div className="group">
-        <input
-          className="form-input"
+      <InputGroup>
+        <FormInput
           {...(ref ? { ref } : {})}
           {...(name ? { name } : {})}
           {...(value !== undefined ? { value } : {})}
@@ -30,15 +32,15 @@ export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
           {...(required ? { required } : {})}
         />
         {label ? (
-          <label
+          <InputLabel
             className={`${
               value && value.length > 0 ? "shrink " : ""
             }form-input-label`}
             {...(name ? { htmlFor: name } : {})}>
             {label}
-          </label>
+          </InputLabel>
         ) : null}
-      </div>
+      </InputGroup>
     );
   }
 );

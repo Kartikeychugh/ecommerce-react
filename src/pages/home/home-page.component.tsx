@@ -1,6 +1,7 @@
-import "./home-page.styles.scss";
+// import "./home-page.styles.scss";
 
 import { Directory } from "../../components";
+import { HomePageContainer } from "./home-page.styles";
 import React from "react";
 
 export class HomePage extends React.Component {
@@ -11,9 +12,9 @@ export class HomePage extends React.Component {
 
   public render() {
     return (
-      <div className="homepage">
+      <HomePageContainer>
         <Directory />
-      </div>
+      </HomePageContainer>
     );
   }
 }
