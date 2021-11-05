@@ -15,10 +15,12 @@ const CollectionItemInternal = (props: CollectionItemProps) => {
   const { item } = props;
   return (
     <div className="collection-item">
-      <div
+      {/* <div
         className="image"
         style={{ backgroundImage: `url(${item.imageUrl})` }}
-      />
+      /> */}
+      <img alt="item" src={item.imageUrl} className="image" />
+
       <div className="collection-footer">
         <span className="name">{item.name}</span>
         <span className="price">{item.price}</span>

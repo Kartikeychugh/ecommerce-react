@@ -11,6 +11,7 @@ import { collection, getDocs, orderBy } from "@firebase/firestore";
 
 import { MenuItem } from "./directory-menu-item";
 import React from "react";
+import { WithSpinner } from "../with-spinner/with-spinner.component";
 import { connect } from "react-redux";
 import { store } from "../../core/firebase";
 
@@ -19,23 +20,29 @@ type DirectoryProps = {
   updateSections: (sections: ISection[]) => void;
 };
 
-class DirectoryInternal extends React.Component<DirectoryProps> {
+type DirectoryState = {};
+class DirectoryInternal extends React.Component<
+  DirectoryProps,
+  DirectoryState
+> {
   public componentDidMount() {
-    // if (this.props.sections) {
-    //   return;
-    // }
+    if (this.props.sections) {
+      return;
+    }
 
     this.fetchSections();
   }
 
   public render() {
     return (
-      <div className="directory-menu">
-        {this.props.sections &&
-          this.props.sections.map((section) => (
-            <MenuItem key={section.id} section={section} />
-          ))}
-      </div>
+      <WithSpinner isLoading={!this.props.sections}>
+        <div className="directory-menu">
+          {this.props.sections &&
+            this.props.sections.map((section) => (
+              <MenuItem key={section.id} section={section} />
+            ))}
+        </div>
+      </WithSpinner>
     );
   }
 

@@ -1,4 +1,5 @@
 import { CurrentUser, IUser } from "../../models";
+import { RootState, selectCurrentUser, setCurrentUser } from "../redux";
 import { Unsubscribe, User, firebaseAuth, store } from "../firebase";
 import {
   createUserProfileDocument,
@@ -7,10 +8,11 @@ import {
 
 import { DocumentSnapshot } from "firebase/firestore";
 import React from "react";
+import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
-import { setCurrentUser } from "../redux";
 
 type LoginProps = {
+  currentUser: CurrentUser;
   setCurrentUser: (user: CurrentUser) => void;
 };
 
@@ -49,7 +51,11 @@ class LoginInternal extends React.Component<
   }
 
   public render() {
-    return this.props.children;
+    return (
+      <WithSpinner isLoading={this.props.currentUser === undefined}>
+        {this.props.children}
+      </WithSpinner>
+    );
   }
 
   private async addProfileToFireStore(user: User) {
@@ -77,8 +83,15 @@ class LoginInternal extends React.Component<
   }
 }
 
-export const Login = connect(null, (dispatch) => {
-  return {
-    setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
-  };
-})(LoginInternal);
+export const Login = connect(
+  (state: RootState) => {
+    return {
+      currentUser: selectCurrentUser(state),
+    };
+  },
+  (dispatch) => {
+    return {
+      setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
+    };
+  }
+)(LoginInternal);

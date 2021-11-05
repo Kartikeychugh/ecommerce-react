@@ -16,7 +16,7 @@ const CollectionPageInternal = (props: CollectionsPage) => {
 
   return collection ? (
     <div className="collection-page">
-      <h2 className="title">{collection.title}</h2>
+      <h2 className="title">{collection.title.toUpperCase()}</h2>
       <div className="items">
         {collection.items.map((item) => (
           <CollectionItem key={item.id} item={item} />

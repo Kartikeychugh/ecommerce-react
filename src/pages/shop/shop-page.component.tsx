@@ -15,6 +15,7 @@ import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
 import { ICollectionData } from "../../models";
 import React from "react";
+import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
 import { query } from "firebase/firestore";
 import { store } from "../../core/firebase";
@@ -38,10 +39,14 @@ class ShopPageInternal extends React.Component<ShopPageProps, {}> {
       match: { path },
     } = this.props;
     return (
-      <div className="shop-page">
-        <Route exact path={`${path}`} component={CollectionsOverview} />
-        <Route path={`${path}/:collectionId`} component={CollectionPage} />
-      </div>
+      <WithSpinner isLoading={!this.props.collections}>
+        <div className="shop-page">
+          <Route exact path={`${path}`}>
+            <CollectionsOverview collections={this.props.collections} />
+          </Route>
+          <Route path={`${path}/:collectionId`} component={CollectionPage} />
+        </div>
+      </WithSpinner>
     );
   }
 

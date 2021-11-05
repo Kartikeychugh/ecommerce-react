@@ -1,10 +1,7 @@
 import "./collections-overview.styles.scss";
 
-import { RootState, selectShopCollections } from "../../../core/redux";
-
 import { CollectionData } from "../../../models";
 import { CollectionPreview } from "../collection-preview";
-import { connect } from "react-redux";
 
 type CollectionsOverviewProps = {
   collections: CollectionData;
@@ -12,30 +9,20 @@ type CollectionsOverviewProps = {
 
 const CollectionsOverviewInternal = (props: CollectionsOverviewProps) => {
   const { collections } = props;
-  return (
+  return collections ? (
     <div className="collection-preview">
-      {collections
-        ? Object.keys(collections).map((shopItemKey: string) => {
-            const shopItem = collections[shopItemKey];
-            return (
-              <CollectionPreview
-                key={shopItemKey}
-                title={shopItem.title}
-                items={shopItem.items}
-              />
-            );
-          })
-        : null}
+      {Object.keys(collections).map((shopItemKey: string) => {
+        const shopItem = collections[shopItemKey];
+        return (
+          <CollectionPreview
+            key={shopItemKey}
+            title={shopItem.title.toUpperCase()}
+            items={shopItem.items}
+          />
+        );
+      })}
     </div>
-  );
+  ) : null;
 };
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    collections: selectShopCollections(state),
-  };
-};
-
-export const CollectionsOverview = connect(mapStateToProps)(
-  CollectionsOverviewInternal
-);
+export const CollectionsOverview = CollectionsOverviewInternal;
