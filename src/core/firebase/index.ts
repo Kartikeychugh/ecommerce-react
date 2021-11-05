@@ -1,5 +1,5 @@
 export { firebaseAuth } from "./firebase.auth";
-export { firebaseStore } from "./firebase.store";
+export { store } from "./firebase.store";
 
 export type {
   User,

@@ -1,5 +1,5 @@
 import { CurrentUser, IUser } from "../../models";
-import { Unsubscribe, User, firebaseAuth } from "../firebase";
+import { Unsubscribe, User, firebaseAuth, store } from "../firebase";
 import {
   createUserProfileDocument,
   subscribeToUserProfile,
@@ -29,6 +29,7 @@ class LoginInternal extends React.Component<
            * complete the sign-in
            */
           subscribeToUserProfile<IUser>(
+            store,
             user,
             (snapShot: DocumentSnapshot<IUser>) => {
               this.completeSignIn(snapShot);
@@ -52,7 +53,7 @@ class LoginInternal extends React.Component<
   }
 
   private async addProfileToFireStore(user: User) {
-    await createUserProfileDocument(user, {
+    await createUserProfileDocument(store, user, {
       displayName: user.displayName,
       email: user.email,
       createdAt: new Date(),

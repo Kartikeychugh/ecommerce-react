@@ -1,17 +1,25 @@
-import { DocumentSnapshot } from "firebase/firestore";
+import {
+  DocumentSnapshot,
+  Firestore,
+  doc,
+  getDoc,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
+
 import { User } from "firebase/auth";
-import { firebaseStore } from "../../core/firebase";
 
 export const createUserProfileDocument = async (
+  store: Firestore,
   user: User,
   additionalData: {} = {}
 ) => {
-  const docRef = firebaseStore.firebase_getDocRef(`users/${user.uid}`);
-  const docSnap = await firebaseStore.firebase_getDocSnap(docRef);
+  const docRef = doc(store, `users/${user.uid}`);
+  const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
     try {
-      await firebaseStore.firebase_setDocSnap(docRef, {
+      await setDoc(docRef, {
         displayName: user.displayName,
         email: user.email,
         createdAt: new Date(),
@@ -26,11 +34,15 @@ export const createUserProfileDocument = async (
   return docRef;
 };
 
-export const updateUserProfileDocument = async (user: User, data: {} = {}) => {
-  const docRef = firebaseStore.firebase_getDocRef(`users/${user.uid}`);
+export const updateUserProfileDocument = async (
+  store: Firestore,
+  user: User,
+  data: {} = {}
+) => {
+  const docRef = doc(store, `users/${user.uid}`);
 
   try {
-    await firebaseStore.firebase_setDocSnap(docRef, {
+    await setDoc(docRef, {
       ...data,
     });
     console.log("Updated profile");
@@ -42,13 +54,14 @@ export const updateUserProfileDocument = async (user: User, data: {} = {}) => {
 };
 
 export const subscribeToChanges = (docRef: any, callback: any) => {
-  firebaseStore.firebase_onSnapshot(docRef, callback);
+  onSnapshot(docRef, callback);
 };
 
 export const subscribeToUserProfile = <T>(
+  store: Firestore,
   user: User,
   callback: (snapshot: DocumentSnapshot<T>) => void
 ) => {
-  const docRef = firebaseStore.firebase_getDocRef(`users/${user.uid}`);
+  const docRef = doc(store, `users/${user.uid}`);
   subscribeToChanges(docRef, callback);
 };

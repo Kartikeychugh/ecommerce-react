@@ -1,13 +1,14 @@
-import React from "react";
-import { Location, History } from "history";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { updateUserProfileDocument } from "../../services/db";
-
-import { Input, Button } from "./../../core/ui";
-import { createUserWithEmailAndPassword } from "./../../services/email-authentication";
-
 import "./sign-up.styles.scss";
+
+import { Button, Input } from "./../../core/ui";
+import { History, Location } from "history";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+
+import React from "react";
+import { createUserWithEmailAndPassword } from "./../../services/email-authentication";
+import { store } from "../../core/firebase";
 import { updateProfile } from "@firebase/auth";
+import { updateUserProfileDocument } from "../../services/db";
 
 type SignUpProps = {
   exitSignInPage: (
@@ -101,7 +102,7 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
         displayName
       );
 
-      await updateUserProfileDocument(user, {
+      await updateUserProfileDocument(store, user, {
         displayName: user.displayName,
         email: user.email,
         createdAt: new Date(),

@@ -1,14 +1,14 @@
-export interface IFireBaseDirectorySection {
+export interface IStoreDirectorySection {
   title: string;
   imageUrl: string;
   size?: string;
 }
 
-export interface IFireBaseSections {
-  [key: string]: IFireBaseDirectorySection;
+export interface IStoreDirectorySections {
+  [key: string]: IStoreDirectorySection;
 }
 
-export interface ISection extends IFireBaseDirectorySection {
+export interface ISection extends IStoreDirectorySection {
   id: string;
 }
 

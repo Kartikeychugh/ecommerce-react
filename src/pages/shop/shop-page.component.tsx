@@ -1,5 +1,9 @@
-import { DocumentData, QueryDocumentSnapshot } from "@firebase/firestore";
-import { ICollection, ICollectionData, IStoreCollection } from "../../models";
+import {
+  DocumentData,
+  QueryDocumentSnapshot,
+  collection,
+  getDocs,
+} from "@firebase/firestore";
 import {
   RootState,
   selectShopCollections,
@@ -9,9 +13,11 @@ import { Route, RouteComponentProps } from "react-router-dom";
 
 import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
+import { ICollectionData } from "../../models";
 import React from "react";
 import { connect } from "react-redux";
-import { firebaseStore } from "../../core/firebase";
+import { query } from "firebase/firestore";
+import { store } from "../../core/firebase";
 
 type ShopPageProps = {
   collections: ICollectionData | null;
@@ -19,32 +25,12 @@ type ShopPageProps = {
 } & RouteComponentProps;
 
 class ShopPageInternal extends React.Component<ShopPageProps, {}> {
-  componentDidMount() {
-    // if (this.props.collections) {
-    //   return;
-    // }
+  public componentDidMount() {
+    if (this.props.collections) {
+      return;
+    }
 
-    firebaseStore
-      .firebase_getAllDocs(
-        firebaseStore.firebase_getCollectionRef("collections")
-      )
-      .then((qs) => {
-        const collections: ICollectionData = {};
-        qs.docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-          const data = doc.data() as IStoreCollection;
-
-          const collection: ICollection = {
-            ...data,
-            id: doc.id,
-          };
-
-          collections[collection.id] = collection;
-        });
-        return collections;
-      })
-      .then((collections) => {
-        this.props.setCollections(collections);
-      });
+    this.fetchCollections();
   }
 
   public render() {
@@ -57,6 +43,31 @@ class ShopPageInternal extends React.Component<ShopPageProps, {}> {
         <Route path={`${path}/:collectionId`} component={CollectionPage} />
       </div>
     );
+  }
+
+  private fetchCollections() {
+    getDocs(query(collection(store, "collections")))
+      .then((querySnapshot) => {
+        const docs = querySnapshot.docs;
+        const res: { [key: string]: any } = {};
+
+        docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+          const data = doc.data();
+          res[doc.id] = data;
+        });
+        return res;
+      })
+      .then((storeCollections) => {
+        const collections: ICollectionData = {};
+        Object.keys(storeCollections).forEach((key) => {
+          collections[key] = {
+            ...storeCollections[key],
+            id: key,
+          };
+        });
+
+        this.props.setCollections(collections);
+      });
   }
 }
 

@@ -1,17 +1,18 @@
 import "./directory.styles.scss";
 
-import { IFireBaseDirectorySection, ISection, Sections } from "../../models";
+import { DocumentData, QueryDocumentSnapshot, query } from "firebase/firestore";
+import { ISection, Sections } from "../../models";
 import {
   RootState,
   selectSections,
   updateSectionsState,
 } from "../../core/redux";
-import { getDocs, orderBy } from "@firebase/firestore";
+import { collection, getDocs, orderBy } from "@firebase/firestore";
 
 import { MenuItem } from "./directory-menu-item";
 import React from "react";
 import { connect } from "react-redux";
-import { firebaseStore } from "../../core/firebase";
+import { store } from "../../core/firebase";
 
 type DirectoryProps = {
   sections: Sections;
@@ -19,35 +20,15 @@ type DirectoryProps = {
 };
 
 class DirectoryInternal extends React.Component<DirectoryProps> {
-  componentDidMount() {
-    if (this.props.sections) {
-      return;
-    }
+  public componentDidMount() {
+    // if (this.props.sections) {
+    //   return;
+    // }
 
     this.fetchSections();
   }
 
-  private fetchSections() {
-    const q = firebaseStore.query(
-      firebaseStore.firebase_getCollectionRef("directory"),
-      orderBy("order")
-    );
-
-    getDocs(q).then((querySnapshot) => {
-      const docs = querySnapshot.docs;
-      const sections: ISection[] = [];
-
-      docs.forEach((doc) => {
-        const data = doc.data() as IFireBaseDirectorySection;
-        const section = { ...data, id: doc.id };
-        sections.push(section);
-      });
-
-      this.props.updateSections(sections);
-    });
-  }
-
-  render() {
+  public render() {
     return (
       <div className="directory-menu">
         {this.props.sections &&
@@ -56,6 +37,30 @@ class DirectoryInternal extends React.Component<DirectoryProps> {
           ))}
       </div>
     );
+  }
+
+  private fetchSections() {
+    getDocs(query(collection(store, "directory"), orderBy("order")))
+      .then((querySnapshot) => {
+        const docs = querySnapshot.docs;
+        const res: { [key: string]: any } = {};
+
+        docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+          const data = doc.data();
+          res[doc.id] = data;
+        });
+        return res;
+      })
+      .then((res) => {
+        const sections: ISection[] = [];
+
+        Object.keys(res).forEach((key) => {
+          const section = { ...res[key], id: key };
+          sections.push(section);
+        });
+
+        this.props.updateSections(sections);
+      });
   }
 }
 
