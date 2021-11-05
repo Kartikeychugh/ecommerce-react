@@ -8,19 +8,20 @@ import { RouteComponentProps } from "react-router";
 import { connect } from "react-redux";
 
 type CollectionsPage = {
-  collection: ICollection | undefined;
+  collections: ICollection | null;
 } & RouteComponentProps<{ collectionId: string }>;
 
 const CollectionPageInternal = (props: CollectionsPage) => {
-  const { collection } = props;
+  const { collections } = props;
 
-  return collection ? (
+  return collections ? (
     <div className="collection-page">
-      <h2 className="title">{collection?.title}</h2>
+      <h2 className="title">{collections?.title}</h2>
       <div className="items">
-        {collection.items.map((item) => (
-          <CollectionItem key={item.id} item={item} />
-        ))}
+        {collections &&
+          collections.items.map((item) => (
+            <CollectionItem key={item.id} item={item} />
+          ))}
       </div>
     </div>
   ) : null;

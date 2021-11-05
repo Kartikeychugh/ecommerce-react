@@ -1,6 +1,6 @@
-import { ICollectionData } from "../../../models";
+import { CollectionData, ICollectionData } from "../../../models";
 
-export type ShopReducerManagedState = { items: ICollectionData };
+export type ShopReducerManagedState = { collections: CollectionData };
 
 export type ShopReducerAction<
   T extends ShopActionTypes,
@@ -10,8 +10,8 @@ export type ShopReducerAction<
   payload: P;
 };
 
-export type ShopActionTypes = "";
-export type ShopPayloadType = null;
+export type ShopActionTypes = "FETCH_COLLECTIONS";
+export type ShopPayloadType = ICollectionData;
 
 export type ShopReducerStateManagers = (
   prevState: ShopReducerManagedState,

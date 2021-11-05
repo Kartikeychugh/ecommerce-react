@@ -5,4 +5,5 @@ export type {
   ICollectionItem,
   ICollectionData,
   ICollection,
+  CollectionData,
 } from "./collection-data.interface";

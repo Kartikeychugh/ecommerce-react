@@ -6,10 +6,10 @@ import {
 } from "./shop.types";
 
 import { Reducer } from "react";
-import { ShopData } from "../../../assests/data";
+import { addCollections } from "./shop.utils";
 
 const INITIAL_STATE = {
-  items: ShopData,
+  collections: null,
 };
 
 export const ShopReducer: Reducer<
@@ -17,7 +17,9 @@ export const ShopReducer: Reducer<
   ShopReducerAction<ShopActionTypes, ShopPayloadType>
 > = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case "FETCH_COLLECTIONS":
+      return addCollections(state, action.payload);
     default:
-      return { ...state };
+      return state;
   }
 };

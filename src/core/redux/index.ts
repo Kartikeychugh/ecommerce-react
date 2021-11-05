@@ -12,4 +12,8 @@ export {
 } from "./cart";
 export { setCurrentUser, selectCurrentUser } from "./user";
 export { selectSections } from "./directory";
-export { selectShopItems, selectCollection } from "./shop";
+export {
+  selectShopCollections,
+  selectCollection,
+  setCollections,
+} from "./shop";

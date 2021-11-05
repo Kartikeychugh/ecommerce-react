@@ -36,8 +36,6 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     };
   }
 
-  public componentDidMount() {}
-
   public render() {
     return (
       <div className="sign-in">

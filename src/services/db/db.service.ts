@@ -1,5 +1,5 @@
-import { User } from "firebase/auth";
 import { DocumentSnapshot } from "firebase/firestore";
+import { User } from "firebase/auth";
 import { firebaseStore } from "../../core/firebase";
 
 export const createUserProfileDocument = async (

@@ -12,4 +12,8 @@ export interface ICollection {
   items: ICollectionItem[];
 }
 
-export type ICollectionData = { [key: string]: ICollection };
+export interface ICollectionData {
+  [key: string]: ICollection;
+}
+
+export type CollectionData = ICollectionData | null;

@@ -1,9 +1,8 @@
 import "./button.styles.scss";
 
-import { StyledButton } from "./button.styles";
-
-export interface IButtonProperties {
-  type: "button" | "submit" | "reset";
+interface IButtonProperties {
+  type: "button" | "submit" | "reset" | undefined;
+  className: string;
   onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
   googleButton?: boolean;
   invertedButton?: boolean;
@@ -13,14 +12,15 @@ type ButtonProps = React.PropsWithChildren<Partial<IButtonProperties>> &
   Partial<IButtonProperties>;
 
 export const Button = (props: React.PropsWithChildren<ButtonProps>) => {
-  const { type, onClick, children, googleButton, invertedButton } = props;
+  const { children, onClick, type, googleButton, invertedButton } = props;
   return (
-    <StyledButton
-      googleButton={!!googleButton}
-      invertedButton={!!invertedButton}
-      {...(type ? { type } : { type: "button" })}
-      {...(onClick ? { onClick } : { onClick: () => {} })}>
+    <button
+      className={`custom-button ${googleButton ? "google-sign-in" : ""} ${
+        invertedButton ? "inverted" : ""
+      } `}
+      {...(type ? { type } : {})}
+      {...(onClick ? { onClick } : {})}>
       {children}
-    </StyledButton>
+    </button>
   );
 };

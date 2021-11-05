@@ -3,12 +3,15 @@ import { createSelector } from "reselect";
 
 const selectShop = (state: RootState) => state.shop;
 
-export const selectShopItems = createSelector(
+export const selectShopCollections = createSelector(
   [selectShop],
-  (shop: RootState["shop"]) => shop.items
+  (shop: RootState["shop"]) => shop.collections
 );
 
 export const selectCollection = (collectionUrlParam: string) =>
-  createSelector([selectShopItems], (items: RootState["shop"]["items"]) => {
-    return items[collectionUrlParam];
-  });
+  createSelector(
+    [selectShopCollections],
+    (collections: RootState["shop"]["collections"]) => {
+      return collections && collections[collectionUrlParam];
+    }
+  );

@@ -1,2 +1,3 @@
 export { ShopReducer } from "./shop.reducer";
-export { selectShopItems, selectCollection } from "./shop.selectors";
+export { selectShopCollections, selectCollection } from "./shop.selectors";
+export { setCollections } from "./shop.actions";
