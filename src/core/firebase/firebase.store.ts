@@ -2,6 +2,7 @@ import {
   CollectionReference,
   DocumentData,
   DocumentReference,
+  QueryConstraint,
   addDoc,
   collection,
   doc,
@@ -19,7 +20,7 @@ import {
 
 import { firebase_app } from "./firebase.app";
 
-const store = getFirestore(firebase_app);
+export const store = getFirestore(firebase_app);
 // enableIndexedDbPersistence(store);
 const firebase_getDocRef = (path: string, ...pathSegments: string[]) =>
   doc(store, path, ...pathSegments);
@@ -71,5 +72,8 @@ export const firebaseStore = {
       })
       .catch((e) => console.log(e)),
   getDocsFromCache: (q: any) => getDocsFromCache(q),
-  query: (colRef: CollectionReference<DocumentData>) => query(colRef),
+  query: (
+    colRef: CollectionReference<DocumentData>,
+    ...queryConstraints: QueryConstraint[]
+  ) => query(colRef, ...queryConstraints),
 };

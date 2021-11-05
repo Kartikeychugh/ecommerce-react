@@ -5,14 +5,21 @@ export interface ICollectionItem {
   price: number;
 }
 
-export interface ICollection {
-  id: number;
+export interface IStoreCollection {
+  [key: string]: any;
   title: string;
-  routeName: string;
   items: ICollectionItem[];
 }
 
-export interface ICollectionData {
+export interface IStoreCollectionData {
+  [key: string]: IStoreCollection;
+}
+
+export interface ICollection extends IStoreCollection {
+  id: string;
+}
+
+export interface ICollectionData extends IStoreCollectionData {
   [key: string]: ICollection;
 }
 

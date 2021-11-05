@@ -2,26 +2,25 @@ import "./collection.styles.scss";
 
 import { RootState, selectCollection } from "../../core/redux";
 
-import { CollectionItem } from "../../components/collection/collection-item";
+import { CollectionItem } from "../../components";
 import { ICollection } from "../../models";
 import { RouteComponentProps } from "react-router";
 import { connect } from "react-redux";
 
 type CollectionsPage = {
-  collections: ICollection | null;
+  collection: ICollection | null;
 } & RouteComponentProps<{ collectionId: string }>;
 
 const CollectionPageInternal = (props: CollectionsPage) => {
-  const { collections } = props;
+  const { collection } = props;
 
-  return collections ? (
+  return collection ? (
     <div className="collection-page">
-      <h2 className="title">{collections?.title}</h2>
+      <h2 className="title">{collection.title}</h2>
       <div className="items">
-        {collections &&
-          collections.items.map((item) => (
-            <CollectionItem key={item.id} item={item} />
-          ))}
+        {collection.items.map((item) => (
+          <CollectionItem key={item.id} item={item} />
+        ))}
       </div>
     </div>
   ) : null;

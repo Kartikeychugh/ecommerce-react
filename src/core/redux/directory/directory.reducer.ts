@@ -5,18 +5,20 @@ import {
   DirectoryReducerManagedState,
 } from "./directory.types";
 
-import { DirectoryData } from "../../../assests/data";
 import { Reducer } from "react";
+import { postSections } from "./directory.utils";
 
 const INITIAL_STATE = {
-  sections: DirectoryData,
+  sections: null,
 };
 export const directoryReducer: Reducer<
   DirectoryReducerManagedState,
   DirectoryReducerAction<DirectoryActionTypes, DirectoryPayloadType>
 > = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case "UPDATE_SECTIONS":
+      return postSections(state, action.payload);
     default:
-      return { ...state };
+      return state;
   }
 };

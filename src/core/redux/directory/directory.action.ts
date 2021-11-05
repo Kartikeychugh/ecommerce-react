@@ -1,11 +1,11 @@
 import { DirectoryReducerAction } from "./directory.types";
+import { ISection } from "../../../models";
 
-export const fetchSections = (): DirectoryReducerAction<
-  "FETCH_SECTIONS",
-  null
-> => {
+export const updateSectionsState = (
+  payload: ISection[]
+): DirectoryReducerAction<"UPDATE_SECTIONS", ISection[]> => {
   return {
-    type: "FETCH_SECTIONS",
-    payload: null,
+    type: "UPDATE_SECTIONS",
+    payload,
   };
 };

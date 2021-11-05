@@ -1,7 +1,5 @@
-import {
-  ICollection,
-  ICollectionData,
-} from "../../models/collection-data.interface";
+import { DocumentData, QueryDocumentSnapshot } from "@firebase/firestore";
+import { ICollection, ICollectionData, IStoreCollection } from "../../models";
 import {
   RootState,
   selectShopCollections,
@@ -9,7 +7,7 @@ import {
 } from "../../core/redux";
 import { Route, RouteComponentProps } from "react-router-dom";
 
-import { CollectionPage } from "../collection/collection.page";
+import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
 import React from "react";
 import { connect } from "react-redux";
@@ -22,22 +20,31 @@ type ShopPageProps = {
 
 class ShopPageInternal extends React.Component<ShopPageProps, {}> {
   componentDidMount() {
-    if (!this.props.collections) {
-      firebaseStore
-        .firebase_getAllDocs(
-          firebaseStore.firebase_getCollectionRef("collections")
-        )
-        .then((qs) => {
-          const collections: ICollectionData = {};
-          qs.docs.forEach((doc) => {
-            collections[doc.id] = doc.data() as ICollection;
-          });
-          return collections;
-        })
-        .then((collections) => {
-          this.props.setCollections(collections);
+    // if (this.props.collections) {
+    //   return;
+    // }
+
+    firebaseStore
+      .firebase_getAllDocs(
+        firebaseStore.firebase_getCollectionRef("collections")
+      )
+      .then((qs) => {
+        const collections: ICollectionData = {};
+        qs.docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+          const data = doc.data() as IStoreCollection;
+
+          const collection: ICollection = {
+            ...data,
+            id: doc.id,
+          };
+
+          collections[collection.id] = collection;
         });
-    }
+        return collections;
+      })
+      .then((collections) => {
+        this.props.setCollections(collections);
+      });
   }
 
   public render() {

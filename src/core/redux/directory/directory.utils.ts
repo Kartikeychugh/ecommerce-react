@@ -1,9 +1,9 @@
-import { DirectoryData } from "../../../assests/data";
 import { DirectoryReducerStateManagers } from "./directory.types";
 
-export const fetchSections: DirectoryReducerStateManagers = (
-  state,
-  _payload
-) => {
-  return { ...state, sections: DirectoryData };
+export const postSections: DirectoryReducerStateManagers = (state, payload) => {
+  if (!payload) {
+    return { ...state };
+  }
+
+  return { ...state, sections: payload };
 };

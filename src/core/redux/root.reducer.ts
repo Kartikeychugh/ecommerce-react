@@ -1,13 +1,9 @@
-import {} from "./user";
-
 import { CartReducerManagedState, cartReducer } from "./cart";
+import { DirectoryReducerManagedState, directoryReducer } from "./directory";
 import { Reducer, combineReducers } from "redux";
+import { ShopReducer, ShopReducerManagedState } from "./shop";
 import { UserReducerManagedState, userReducer } from "./user";
 
-import { DirectoryReducerManagedState } from "./directory/directory.types";
-import { ShopReducer } from "./shop";
-import { ShopReducerManagedState } from "./shop/shop.types";
-import { directoryReducer } from "./directory";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -20,7 +16,7 @@ export type RootState = {
 
 const config = {
   key: "root",
-  whitelist: ["cart", "directory", "shop"],
+  whitelist: ["cart", "directory"],
   storage,
 };
 

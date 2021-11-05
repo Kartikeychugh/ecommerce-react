@@ -16,7 +16,7 @@ const MenuItemInternal = (props: MenuItemProps) => {
   return (
     <div
       onClick={() =>
-        props.history.push(`${props.match.url}${props.section.linkUrl}`)
+        props.history.push(`${props.match.url}shop/${props.section.id}`)
       }
       style={{ backgroundImage: `url(${imageUrl})` }}
       className={`${size} menu-item`}>

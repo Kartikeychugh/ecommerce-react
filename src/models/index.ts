@@ -1,4 +1,8 @@
-export type { ISection } from "./sections.interface";
+export type {
+  ISection,
+  Sections,
+  IFireBaseDirectorySection,
+} from "./sections.interface";
 export type { IUser, CurrentUser } from "./user.interface";
 export type { CartItem } from "./cart-item.interface";
 export type {
@@ -6,4 +10,5 @@ export type {
   ICollectionData,
   ICollection,
   CollectionData,
+  IStoreCollection,
 } from "./collection-data.interface";

@@ -1,7 +1,15 @@
-export interface ISection {
+export interface IFireBaseDirectorySection {
   title: string;
   imageUrl: string;
-  id: number;
-  linkUrl: string;
   size?: string;
 }
+
+export interface IFireBaseSections {
+  [key: string]: IFireBaseDirectorySection;
+}
+
+export interface ISection extends IFireBaseDirectorySection {
+  id: string;
+}
+
+export type Sections = ISection[] | null;
