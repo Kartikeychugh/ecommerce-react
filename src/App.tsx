@@ -13,15 +13,11 @@ type AppProps = {};
 class AppInternal extends React.Component<AppProps, AppState> {
   public render() {
     return (
-      <ReduxStoreProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <BrowserRouter>
-            <Login>
-              <Layout />
-            </Login>
-          </BrowserRouter>
-        </PersistGate>
-      </ReduxStoreProvider>
+      <BrowserRouter>
+        <Login>
+          <Layout />
+        </Login>
+      </BrowserRouter>
     );
   }
 }
