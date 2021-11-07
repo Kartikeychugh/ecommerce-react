@@ -2,12 +2,9 @@ import { CollectionData, ICollectionData } from "../../../models";
 
 export type ShopReducerManagedState = { collections: CollectionData };
 
-export type ShopReducerAction<
-  T extends ShopActionTypes,
-  P extends ShopPayloadType
-> = {
-  type: T;
-  payload: P;
+export type ShopReducerAction = {
+  type: ShopActionTypes;
+  payload: ShopPayloadType;
 };
 
 export type ShopActionTypes = "FETCH_COLLECTIONS";

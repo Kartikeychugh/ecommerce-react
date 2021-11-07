@@ -12,12 +12,9 @@ export type CartReducerManagedState = {
   cartItems: CartItem[];
 };
 
-export type CartReducerAction<
-  T extends CartActionTypes,
-  P extends CartPayloadType
-> = {
-  type: T;
-  payload: P;
+export type CartReducerAction = {
+  type: CartActionTypes;
+  payload: CartPayloadType;
 };
 
 export type UserReducerStateManagers = (

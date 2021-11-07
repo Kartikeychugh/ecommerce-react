@@ -1,5 +1,5 @@
 export { store, persistor } from "./store";
-export type { RootState } from "./root.reducer";
+export type { RootState } from "./redux.types";
 export {
   addToCart,
   toggleCart,

@@ -6,7 +6,7 @@ export interface ICollectionItem {
 }
 
 export interface IStoreCollection {
-  [key: string]: any;
+  // [key: string]: any;
   title: string;
   items: ICollectionItem[];
 }

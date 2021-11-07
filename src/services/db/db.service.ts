@@ -1,4 +1,6 @@
 import {
+  DocumentData,
+  DocumentReference,
   DocumentSnapshot,
   Firestore,
   doc,
@@ -53,15 +55,18 @@ export const updateUserProfileDocument = async (
   return docRef;
 };
 
-export const subscribeToChanges = (docRef: any, callback: any) => {
+export const subscribeToChanges = <DocumentData>(
+  docRef: DocumentReference<DocumentData>,
+  callback: (snapshot: DocumentSnapshot<DocumentData>) => void
+) => {
   onSnapshot(docRef, callback);
 };
 
-export const subscribeToUserProfile = <T>(
+export const subscribeToUserProfile = (
   store: Firestore,
   user: User,
-  callback: (snapshot: DocumentSnapshot<T>) => void
+  callback: (snapshot: DocumentSnapshot<DocumentData>) => void
 ) => {
   const docRef = doc(store, `users/${user.uid}`);
-  subscribeToChanges(docRef, callback);
+  subscribeToChanges<DocumentData>(docRef, callback);
 };

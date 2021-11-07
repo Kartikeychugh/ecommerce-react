@@ -3,7 +3,7 @@ import { ISection } from "../../../models";
 
 export const updateSectionsState = (
   payload: ISection[]
-): DirectoryReducerAction<"UPDATE_SECTIONS", ISection[]> => {
+): DirectoryReducerAction => {
   return {
     type: "UPDATE_SECTIONS",
     payload,

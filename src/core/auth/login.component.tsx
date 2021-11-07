@@ -1,4 +1,4 @@
-import { CurrentUser, IUser } from "../../models";
+import { DocumentData, DocumentSnapshot } from "firebase/firestore";
 import { RootState, selectCurrentUser, setCurrentUser } from "../redux";
 import { Unsubscribe, User, firebaseAuth, store } from "../firebase";
 import {
@@ -6,7 +6,7 @@ import {
   subscribeToUserProfile,
 } from "../../services/db";
 
-import { DocumentSnapshot } from "firebase/firestore";
+import { CurrentUser } from "../../models";
 import React from "react";
 import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
@@ -30,10 +30,10 @@ class LoginInternal extends React.Component<
            * When the profile gets updated in backend only then try to
            * complete the sign-in
            */
-          subscribeToUserProfile<IUser>(
+          subscribeToUserProfile(
             store,
             user,
-            (snapShot: DocumentSnapshot<IUser>) => {
+            (snapShot: DocumentSnapshot<DocumentData>) => {
               this.completeSignIn(snapShot);
             }
           );
@@ -66,9 +66,9 @@ class LoginInternal extends React.Component<
     });
   }
 
-  private completeSignIn(snapShot: DocumentSnapshot<IUser>) {
+  private completeSignIn(snapShot: DocumentSnapshot<DocumentData>) {
     const user = snapShot.data();
-    if (snapShot.id && user && this.validUserProfile(user)) {
+    if (snapShot.id && user && this.validUserProfile(user as CurrentUser)) {
       this.props.setCurrentUser({
         id: snapShot.id,
         email: user.email,

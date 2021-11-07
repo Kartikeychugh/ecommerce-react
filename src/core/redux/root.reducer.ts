@@ -1,18 +1,12 @@
-import { CartReducerManagedState, cartReducer } from "./cart";
-import { DirectoryReducerManagedState, directoryReducer } from "./directory";
-import { Reducer, combineReducers } from "redux";
-import { ShopReducer, ShopReducerManagedState } from "./shop";
-import { UserReducerManagedState, userReducer } from "./user";
+import { AnyAction, combineReducers } from "redux";
 
+import { RootState } from "./redux.types";
+import { ShopReducer } from "./shop";
+import { cartReducer } from "./cart";
+import { directoryReducer } from "./directory";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-
-export type RootState = {
-  user: UserReducerManagedState;
-  cart: CartReducerManagedState;
-  directory: DirectoryReducerManagedState;
-  shop: ShopReducerManagedState;
-};
+import { userReducer } from "./user";
 
 const config = {
   key: "root",
@@ -20,11 +14,11 @@ const config = {
   storage,
 };
 
-const rootReducer: Reducer<RootState> = combineReducers({
+const rootReducer = combineReducers<RootState | {}, AnyAction>({
   user: userReducer,
   cart: cartReducer,
   directory: directoryReducer,
   shop: ShopReducer,
-}) as any;
+});
 
 export const reducer = persistReducer(config, rootReducer);

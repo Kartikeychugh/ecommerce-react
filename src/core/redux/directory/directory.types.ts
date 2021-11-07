@@ -4,12 +4,9 @@ export type DirectoryReducerManagedState = {
   sections: Sections;
 };
 
-export type DirectoryReducerAction<
-  T extends DirectoryActionTypes,
-  P extends DirectoryPayloadType
-> = {
-  type: T;
-  payload: P;
+export type DirectoryReducerAction = {
+  type: DirectoryActionTypes;
+  payload: DirectoryPayloadType;
 };
 
 export type DirectoryActionTypes = "UPDATE_SECTIONS";

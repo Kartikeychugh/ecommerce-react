@@ -3,7 +3,7 @@ import { ShopReducerAction } from "./shop.types";
 
 export const setCollections = (
   collections: ICollectionData
-): ShopReducerAction<"FETCH_COLLECTIONS", ICollectionData> => ({
+): ShopReducerAction => ({
   type: "FETCH_COLLECTIONS",
   payload: collections,
 });

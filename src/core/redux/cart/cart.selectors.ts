@@ -1,3 +1,4 @@
+import { CartReducerManagedState } from ".";
 import { RootState } from "..";
 import { createSelector } from "reselect";
 
@@ -5,7 +6,7 @@ const selectCart = (state: RootState) => state.cart;
 
 export const selectCartItems = createSelector(
   [selectCart],
-  (cart: RootState["cart"]) => cart.cartItems
+  (cart: CartReducerManagedState) => cart.cartItems
 );
 
 export const selectCartItemCount = createSelector(

@@ -1,6 +1,4 @@
 import {
-  DirectoryActionTypes,
-  DirectoryPayloadType,
   DirectoryReducerAction,
   DirectoryReducerManagedState,
 } from "./directory.types";
@@ -13,7 +11,7 @@ const INITIAL_STATE = {
 };
 export const directoryReducer: Reducer<
   DirectoryReducerManagedState,
-  DirectoryReducerAction<DirectoryActionTypes, DirectoryPayloadType>
+  DirectoryReducerAction
 > = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "UPDATE_SECTIONS":

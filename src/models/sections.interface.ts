@@ -1,4 +1,5 @@
 export interface IStoreDirectorySection {
+  [field: string]: string | undefined;
   title: string;
   imageUrl: string;
   size?: string;
