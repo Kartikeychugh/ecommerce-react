@@ -11,9 +11,9 @@ export {
   selectCartTotal,
 } from "./cart";
 export { setCurrentUser, selectCurrentUser } from "./user";
-export { selectSections, updateSectionsState } from "./directory";
+export { selectSections, fetchSectionsAsync } from "./directory";
 export {
   selectShopCollections,
   selectCollection,
-  setCollections,
+  fetchCollectionsStart,
 } from "./shop";

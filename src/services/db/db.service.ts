@@ -59,7 +59,7 @@ export const subscribeToChanges = <DocumentData>(
   docRef: DocumentReference<DocumentData>,
   callback: (snapshot: DocumentSnapshot<DocumentData>) => void
 ) => {
-  onSnapshot(docRef, callback);
+  return onSnapshot(docRef, callback);
 };
 
 export const subscribeToUserProfile = (
@@ -68,5 +68,5 @@ export const subscribeToUserProfile = (
   callback: (snapshot: DocumentSnapshot<DocumentData>) => void
 ) => {
   const docRef = doc(store, `users/${user.uid}`);
-  subscribeToChanges<DocumentData>(docRef, callback);
+  return subscribeToChanges<DocumentData>(docRef, callback);
 };

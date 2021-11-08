@@ -1,23 +1,20 @@
 import "./directory.styles.scss";
 
-import { DocumentData, QueryDocumentSnapshot, query } from "firebase/firestore";
-import { ISection, Sections } from "../../models";
 import {
   RootState,
+  fetchSectionsAsync,
   selectSections,
-  updateSectionsState,
 } from "../../core/redux";
-import { collection, getDocs, orderBy } from "@firebase/firestore";
 
 import { MenuItem } from "./directory-menu-item";
 import React from "react";
+import { Sections } from "../../models";
 import { WithSpinner } from "../with-spinner/with-spinner.component";
 import { connect } from "react-redux";
-import { store } from "../../core/firebase";
 
 type DirectoryProps = {
   sections: Sections;
-  updateSections: (sections: ISection[]) => void;
+  fetchSectionsAsync: () => void;
 };
 
 type DirectoryState = {};
@@ -47,27 +44,7 @@ class DirectoryInternal extends React.Component<
   }
 
   private fetchSections() {
-    getDocs(query(collection(store, "directory"), orderBy("order")))
-      .then((querySnapshot) => {
-        const docs = querySnapshot.docs;
-        const res: { [key: string]: any } = {};
-
-        docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-          const data = doc.data();
-          res[doc.id] = data;
-        });
-        return res;
-      })
-      .then((res) => {
-        const sections: ISection[] = [];
-
-        Object.keys(res).forEach((key) => {
-          const section = { ...res[key], id: key };
-          sections.push(section);
-        });
-
-        this.props.updateSections(sections);
-      });
+    this.props.fetchSectionsAsync();
   }
 }
 
@@ -77,10 +54,10 @@ export const Directory = connect(
       sections: selectSections(state),
     };
   },
-  (dispatch) => {
+  (dispatch: any) => {
     return {
-      updateSections: (sections: ISection[]) => {
-        dispatch(updateSectionsState(sections));
+      fetchSectionsAsync: () => {
+        dispatch(fetchSectionsAsync());
       },
     };
   }

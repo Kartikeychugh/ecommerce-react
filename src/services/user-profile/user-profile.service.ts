@@ -1,4 +1,4 @@
-import { firebaseAuth, User } from "./../../core/firebase";
+import { User, firebaseAuth } from "./../../core/firebase";
 
 export const updateProfile = (
   user: User,

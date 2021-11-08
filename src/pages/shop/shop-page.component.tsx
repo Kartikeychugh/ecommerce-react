@@ -1,14 +1,4 @@
-import {
-  DocumentData,
-  QueryDocumentSnapshot,
-  collection,
-  getDocs,
-} from "@firebase/firestore";
-import {
-  RootState,
-  selectShopCollections,
-  setCollections,
-} from "../../core/redux";
+import { RootState, selectShopCollections } from "../../core/redux";
 import { Route, RouteComponentProps } from "react-router-dom";
 
 import { CollectionPage } from "../collection";
@@ -17,12 +7,11 @@ import { ICollectionData } from "../../models";
 import React from "react";
 import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
-import { query } from "firebase/firestore";
-import { store } from "../../core/firebase";
+import { fetchCollectionsAsync } from "../../core/redux/shop/shop.actions";
 
 type ShopPageProps = {
   collections: ICollectionData | null;
-  setCollections: (collections: ICollectionData) => void;
+  fetchCollections: () => void;
 } & RouteComponentProps;
 
 class ShopPageInternal extends React.Component<ShopPageProps, {}> {
@@ -51,28 +40,7 @@ class ShopPageInternal extends React.Component<ShopPageProps, {}> {
   }
 
   private fetchCollections() {
-    getDocs(query(collection(store, "collections")))
-      .then((querySnapshot) => {
-        const docs = querySnapshot.docs;
-        const res: { [key: string]: any } = {};
-
-        docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-          const data = doc.data();
-          res[doc.id] = data;
-        });
-        return res;
-      })
-      .then((storeCollections) => {
-        const collections: ICollectionData = {};
-        Object.keys(storeCollections).forEach((key) => {
-          collections[key] = {
-            ...storeCollections[key],
-            id: key,
-          };
-        });
-
-        this.props.setCollections(collections);
-      });
+    this.props.fetchCollections();
   }
 }
 
@@ -82,10 +50,11 @@ export const ShopPage = connect(
       collections: selectShopCollections(state),
     };
   },
-  (dispatch) => {
+  (dispatch: any) => {
     return {
-      setCollections: (collections: ICollectionData) =>
-        dispatch(setCollections(collections)),
+      fetchCollections: () => {
+        dispatch(fetchCollectionsAsync());
+      },
     };
   }
 )(ShopPageInternal);

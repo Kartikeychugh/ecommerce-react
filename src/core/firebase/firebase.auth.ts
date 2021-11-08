@@ -1,19 +1,28 @@
 import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  getAuth,
-  signOut,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  NextOrObserver,
-  ErrorFn,
   CompleteFn,
-  updateProfile,
+  ErrorFn,
+  GoogleAuthProvider,
+  NextOrObserver,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
   updateCurrentUser,
+  updateProfile,
 } from "@firebase/auth";
-import { firebase_app } from "./firebase.app";
+
 import { User } from "./firebase.types";
+import { firebase_app } from "./firebase.app";
+
+// import { DocumentData, DocumentSnapshot } from "firebase/firestore";
+// import { setCurrentUser, store } from "../redux";
+
+// import { CurrentUser } from "../../models";
+// import { doc } from "@firebase/firestore";
+// import { store as firebaseStore } from "./firebase.store";
+// import { subscribeToChanges } from "../../services/db";
 
 /** AUTH INSTANCE */
 const firebase_auth = getAuth(firebase_app);
@@ -61,6 +70,30 @@ export const firebase_updateProfile = (
 
 export const firebase_updateCurrentUser = (user: User | null) =>
   updateCurrentUser(firebase_auth, user);
+
+// firebase_onAuthStateChanged(async (user) => {
+//   if (user) {
+//     const docRef = doc(firebaseStore, `users/${user.uid}`);
+//     subscribeToChanges<DocumentData>(
+//       docRef,
+//       (snapShot: DocumentSnapshot<DocumentData>) => {
+//         const user = snapShot.data();
+//         if (snapShot.id && user && user.email && user.displayName) {
+//           store.dispatch(
+//             setCurrentUser({
+//               id: snapShot.id,
+//               email: user.email,
+//               displayName: user.displayName,
+//               createdAt: user.createdAt,
+//             })
+//           );
+//         }
+//       }
+//     );
+//   } else {
+//     store.dispatch(setCurrentUser(user));
+//   }
+// });
 
 export const firebaseAuth = {
   firebase_signInWithGooglePopup,

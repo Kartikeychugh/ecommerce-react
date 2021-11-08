@@ -1,9 +1,13 @@
+import { DirectoryReducerManagedState } from ".";
 import { DirectoryReducerStateManagers } from "./directory.types";
 
-export const postSections: DirectoryReducerStateManagers = (state, payload) => {
+export const postSections: DirectoryReducerStateManagers = (
+  state,
+  payload: DirectoryReducerManagedState["sections"] | undefined
+) => {
   if (!payload) {
-    return { ...state };
+    return { ...state, isFetching: false };
   }
 
-  return { ...state, sections: payload };
+  return { ...state, sections: payload, isFetching: false };
 };

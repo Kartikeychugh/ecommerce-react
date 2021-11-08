@@ -35,7 +35,7 @@ export class WithSpinner extends React.Component<
           console.log("Spinner: Showing spinner now");
         }
       });
-    }, 500);
+    }, 0);
   }
 
   public render() {
@@ -50,9 +50,7 @@ export class WithSpinner extends React.Component<
   }
 
   private getLoadingContent = () =>
-    this.state.waiting ? (
-      <h1>Waiting</h1>
-    ) : (
+    this.state.waiting ? null : (
       <SpinnerOverlay>
         <SpinnerContainer />
       </SpinnerOverlay>

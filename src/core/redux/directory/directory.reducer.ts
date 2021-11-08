@@ -8,13 +8,16 @@ import { postSections } from "./directory.utils";
 
 const INITIAL_STATE = {
   sections: null,
+  isFetching: false,
 };
 export const directoryReducer: Reducer<
   DirectoryReducerManagedState,
   DirectoryReducerAction
 > = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "UPDATE_SECTIONS":
+    case "FETCH_SECTIONS_START":
+      return { ...state, isFetching: true };
+    case "FETCH_SECTIONS_SUCCESS":
       return postSections(state, action.payload);
     default:
       return state;

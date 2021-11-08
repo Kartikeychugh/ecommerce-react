@@ -1,69 +1,82 @@
-import { DocumentData, DocumentSnapshot } from "firebase/firestore";
-import { RootState, selectCurrentUser, setCurrentUser } from "../redux";
-import { Unsubscribe, User, firebaseAuth, store } from "../firebase";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  getFirestore,
+} from "firebase/firestore";
+import { Unsubscribe, User } from "../firebase";
 import {
   createUserProfileDocument,
   subscribeToUserProfile,
 } from "../../services/db";
 
 import { CurrentUser } from "../../models";
+import { FirebaseApp } from "@firebase/app";
 import React from "react";
-import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
+import { setCurrentUser } from "../redux";
+import { withFirebaseapp } from "../firebase/provider/firebase-app.provider";
+import { withUser } from "./with-user.component";
 
-type LoginProps = {
-  currentUser: CurrentUser;
+type DispatchProps = {
   setCurrentUser: (user: CurrentUser) => void;
 };
 
+type LoginOwnProps = {};
+
+type FirebaseAppProps = {
+  firebaseApp: FirebaseApp;
+};
+
+type UserProps = {
+  user: User | null | undefined;
+};
 class LoginInternal extends React.Component<
-  React.PropsWithChildren<LoginProps>,
+  React.PropsWithChildren<
+    DispatchProps & LoginOwnProps & FirebaseAppProps & UserProps
+  >,
   {}
 > {
-  private unsubscribeAuth: Unsubscribe | undefined;
+  private unsubscribe: Unsubscribe | undefined;
 
-  public componentDidMount() {
-    this.unsubscribeAuth = firebaseAuth.firebase_onAuthStateChanged(
-      async (user) => {
-        if (user) {
-          /**
-           * When the profile gets updated in backend only then try to
-           * complete the sign-in
-           */
-          subscribeToUserProfile(
-            store,
-            user,
-            (snapShot: DocumentSnapshot<DocumentData>) => {
-              this.completeSignIn(snapShot);
-            }
-          );
-
-          await this.addProfileToFireStore(user);
-        } else {
-          this.props.setCurrentUser(user);
+  public componentDidUpdate() {
+    const { user } = this.props;
+    if (user) {
+      /**
+       * When the profile gets updated in backend only then try to
+       * complete the sign-in
+       */
+      this.unsubscribe = subscribeToUserProfile(
+        getFirestore(this.props.firebaseApp),
+        user,
+        (snapShot: DocumentSnapshot<DocumentData>) => {
+          this.completeSignIn(snapShot);
         }
-      }
-    );
+      );
+
+      this.addProfileToFireStore(user);
+    } else {
+      this.props.setCurrentUser(user);
+    }
   }
 
   public componentWillUnmount() {
-    this.unsubscribeAuth && this.unsubscribeAuth();
+    this.unsubscribe && this.unsubscribe();
   }
 
   public render() {
-    return (
-      <WithSpinner isLoading={this.props.currentUser === undefined}>
-        {this.props.children}
-      </WithSpinner>
-    );
+    return this.props.children;
   }
 
   private async addProfileToFireStore(user: User) {
-    await createUserProfileDocument(store, user, {
-      displayName: user.displayName,
-      email: user.email,
-      createdAt: new Date(),
-    });
+    await createUserProfileDocument(
+      getFirestore(this.props.firebaseApp),
+      user,
+      {
+        displayName: user.displayName,
+        email: user.email,
+        createdAt: new Date(),
+      }
+    );
   }
 
   private completeSignIn(snapShot: DocumentSnapshot<DocumentData>) {
@@ -83,15 +96,8 @@ class LoginInternal extends React.Component<
   }
 }
 
-export const Login = connect(
-  (state: RootState) => {
-    return {
-      currentUser: selectCurrentUser(state),
-    };
-  },
-  (dispatch) => {
-    return {
-      setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
-    };
-  }
-)(LoginInternal);
+export const Login = connect(null, (dispatch) => {
+  return {
+    setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
+  };
+})(withFirebaseapp(withUser(LoginInternal)));

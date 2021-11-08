@@ -10,6 +10,7 @@ import { RootState, selectCartOpenState, selectCurrentUser } from "../redux";
 import { CurrentUser } from "../../models";
 import { Header } from "../../components";
 import React from "react";
+import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
 
 type LayoutState = {};
@@ -20,31 +21,25 @@ type LayoutProps = {
 
 class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
   public render() {
-    switch (this.props.currentUser) {
-      case undefined:
-        return "Loading...";
-      case null:
-      default:
-        return (
-          <>
-            <Header />
-            <Switch>
-              <Route exact={true} path="/checkout" component={CheckoutPage} />
-              <Route exact={true} path="/" component={HomePage} />
-              <Route path="/shop" component={ShopPage} />
-              <Route exact={true} path="/checkout" component={CheckoutPage} />
-              <Route exact={true} path="/signin">
-                {this.props.currentUser !== null ? (
-                  <Redirect to="/" />
-                ) : (
-                  <SignInAndSignUpPage />
-                )}
-              </Route>
-              {/* <Route path="*" component={() => <div>404</div>} /> */}
-            </Switch>
-          </>
-        );
-    }
+    return (
+      <WithSpinner isLoading={this.props.currentUser === undefined}>
+        <Header />
+        <Switch>
+          <Route exact={true} path="/checkout" component={CheckoutPage} />
+          <Route exact={true} path="/" component={HomePage} />
+          <Route path="/shop" component={ShopPage} />
+          <Route exact={true} path="/checkout" component={CheckoutPage} />
+          <Route exact={true} path="/signin">
+            {this.props.currentUser !== null ? (
+              <Redirect to="/" />
+            ) : (
+              <SignInAndSignUpPage />
+            )}
+          </Route>
+          {/* <Route path="*" component={() => <div>404</div>} /> */}
+        </Switch>
+      </WithSpinner>
+    );
   }
 }
 
