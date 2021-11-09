@@ -23,13 +23,9 @@ export const fetchCollectionsSuccess = (
 });
 
 export const fetchCollectionsAsync = (
-  firebaseStore: Firestore | undefined
+  firebaseStore: Firestore
 ): ReducerThunk => {
   return async (dispatch, _getState) => {
-    if (!firebaseStore) {
-      return;
-    }
-
     dispatch(fetchCollectionsStart());
     getDocs(query(collection(firebaseStore, "collections")))
       .then((querySnapshot) => {

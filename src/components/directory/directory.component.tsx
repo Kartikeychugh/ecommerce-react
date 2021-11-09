@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 
 type DirectoryProps = {
   sections: Sections;
-  fetchSectionsAsync: (firebaseStore: Firestore | undefined) => void;
+  fetchSectionsAsync: (firebaseStore: Firestore) => void;
 } & WithFirebaseProps;
 
 type DirectoryState = {};
@@ -58,7 +58,7 @@ export const Directory = connect(
   },
   (dispatch: any) => {
     return {
-      fetchSectionsAsync: (firebaseStore: Firestore | undefined) => {
+      fetchSectionsAsync: (firebaseStore: Firestore) => {
         dispatch(fetchSectionsAsync(firebaseStore));
       },
     };

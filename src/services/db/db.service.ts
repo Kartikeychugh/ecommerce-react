@@ -12,14 +12,10 @@ import {
 import { User } from "firebase/auth";
 
 export const createUserProfileDocument = async (
-  store: Firestore | undefined,
+  store: Firestore,
   user: User,
   additionalData: {} = {}
 ) => {
-  if (!store) {
-    throw new Error("Store not initialised");
-  }
-
   const docRef = doc(store, `users/${user.uid}`);
   const docSnap = await getDoc(docRef);
 
@@ -41,13 +37,10 @@ export const createUserProfileDocument = async (
 };
 
 export const updateUserProfileDocument = async (
-  store: Firestore | undefined,
+  store: Firestore,
   user: User,
   data: {} = {}
 ) => {
-  if (!store) {
-    throw new Error("Store not initialised");
-  }
   const docRef = doc(store, `users/${user.uid}`);
 
   try {
@@ -70,14 +63,10 @@ export const subscribeToChanges = <DocumentData>(
 };
 
 export const subscribeToUserProfile = (
-  store: Firestore | undefined,
+  store: Firestore,
   user: User,
   callback: (snapshot: DocumentSnapshot<DocumentData>) => void
 ) => {
-  if (!store) {
-    throw new Error("Store not initialised");
-  }
-
   const docRef = doc(store, `users/${user.uid}`);
   return subscribeToChanges<DocumentData>(docRef, callback);
 };

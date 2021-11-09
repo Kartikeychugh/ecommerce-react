@@ -13,7 +13,7 @@ import { fetchCollectionsAsync } from "../../core/redux/shop/shop.actions";
 
 type ShopPageProps = {
   collections: ICollectionData | null;
-  fetchCollections: (firebaseStore: Firestore | undefined) => void;
+  fetchCollections: (firebaseStore: Firestore) => void;
 } & RouteComponentProps &
   WithFirebaseProps;
 
@@ -55,7 +55,7 @@ export const ShopPage = connect(
   },
   (dispatch: any) => {
     return {
-      fetchCollections: (firebaseStore: Firestore | undefined) => {
+      fetchCollections: (firebaseStore: Firestore) => {
         dispatch(fetchCollectionsAsync(firebaseStore));
       },
     };

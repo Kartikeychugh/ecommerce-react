@@ -18,14 +18,8 @@ export const fetchSectionsStart = (): DirectoryReducerAction => {
   };
 };
 
-export const fetchSectionsAsync = (
-  firebaseStore: Firestore | undefined
-): ReducerThunk => {
+export const fetchSectionsAsync = (firebaseStore: Firestore): ReducerThunk => {
   return async (dispatch) => {
-    if (!firebaseStore) {
-      return;
-    }
-
     dispatch(fetchSectionsStart());
     getDocs(query(collection(firebaseStore, "directory"), orderBy("order")))
       .then((querySnapshot) => {
