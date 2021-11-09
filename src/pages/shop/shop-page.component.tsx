@@ -1,8 +1,10 @@
 import { RootState, selectShopCollections } from "../../core/redux";
 import { Route, RouteComponentProps } from "react-router-dom";
+import { WithFirebaseProps, withFirebase } from "../../core/firebase";
 
 import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
+import { Firestore } from "@firebase/firestore";
 import { ICollectionData } from "../../models";
 import React from "react";
 import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
@@ -11,8 +13,9 @@ import { fetchCollectionsAsync } from "../../core/redux/shop/shop.actions";
 
 type ShopPageProps = {
   collections: ICollectionData | null;
-  fetchCollections: () => void;
-} & RouteComponentProps;
+  fetchCollections: (firebaseStore: Firestore | undefined) => void;
+} & RouteComponentProps &
+  WithFirebaseProps;
 
 class ShopPageInternal extends React.Component<ShopPageProps, {}> {
   public componentDidMount() {
@@ -40,7 +43,7 @@ class ShopPageInternal extends React.Component<ShopPageProps, {}> {
   }
 
   private fetchCollections() {
-    this.props.fetchCollections();
+    this.props.fetchCollections(this.props.firebaseStore);
   }
 }
 
@@ -52,9 +55,9 @@ export const ShopPage = connect(
   },
   (dispatch: any) => {
     return {
-      fetchCollections: () => {
-        dispatch(fetchCollectionsAsync());
+      fetchCollections: (firebaseStore: Firestore | undefined) => {
+        dispatch(fetchCollectionsAsync(firebaseStore));
       },
     };
   }
-)(ShopPageInternal);
+)(withFirebase(ShopPageInternal));

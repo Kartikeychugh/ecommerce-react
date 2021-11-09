@@ -1,7 +1,7 @@
-import { Location, History } from "history";
-
-import { SignIn, SignUp } from "../../components";
 import "./sign-in-and-sign-up.styles.scss";
+
+import { History, Location } from "history";
+import { SignIn, SignUp } from "../../components";
 
 interface ISignInAndSignUpPageProps {}
 

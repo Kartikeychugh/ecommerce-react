@@ -3,11 +3,16 @@ import "./sign-up.styles.scss";
 import { Button, Input } from "./../../core/ui";
 import { History, Location } from "history";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import {
+  WithFirebaseAuthProps,
+  WithFirebaseProps,
+  WithFirebaseUserProps,
+  withFirebase,
+  withFirebaseAuth,
+  withFirebaseUser,
+} from "../../core/firebase";
 
 import React from "react";
-import { createUserWithEmailAndPassword } from "./../../services/email-authentication";
-import { store } from "../../core/firebase";
-import { updateProfile } from "@firebase/auth";
 import { updateUserProfileDocument } from "../../services/db";
 
 type SignUpProps = {
@@ -19,17 +24,19 @@ type SignUpProps = {
       navType: string;
     }>
   ) => void;
-} & RouteComponentProps<{}, {}, { navType: string }>;
+} & WithFirebaseProps &
+  WithFirebaseAuthProps &
+  WithFirebaseUserProps &
+  RouteComponentProps<{}, {}, { navType: string }>;
 
-type SignUpState = {
+interface SignUpState {
   /** To handle allowing update from onChange event directly using name and value */
   [key: string]: string;
-} & {
   displayName: string;
   email: string;
   password: string;
   confirmPassword: string;
-};
+}
 
 class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
   constructor(props: SignUpProps) {
@@ -96,19 +103,20 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
     }
 
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        email,
-        password,
-        displayName
-      );
+      const { user } = await this.props
+        .createUserWithEmailAndPassword(email, password)
+        .then(async (userCredential) => {
+          await this.props.updateProfile(userCredential.user, { displayName });
+          return userCredential;
+        });
 
-      await updateUserProfileDocument(store, user, {
+      await updateUserProfileDocument(this.props.firebaseStore, user, {
         displayName: user.displayName,
         email: user.email,
         createdAt: new Date(),
       });
 
-      await updateProfile(user, { displayName });
+      await this.props.updateProfile(user, { displayName });
 
       this.setState(
         {
@@ -134,4 +142,6 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
   };
 }
 
-export const SignUp = withRouter(SignUpInternal);
+export const SignUp = withRouter(
+  withFirebaseUser(withFirebaseAuth(withFirebase(SignUpInternal)))
+);

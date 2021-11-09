@@ -1,9 +1,9 @@
 import {
   DocumentData,
+  Firestore,
   QueryDocumentSnapshot,
   collection,
   getDocs,
-  getFirestore,
   query,
 } from "@firebase/firestore";
 
@@ -22,10 +22,16 @@ export const fetchCollectionsSuccess = (
   payload,
 });
 
-export const fetchCollectionsAsync = (): ReducerThunk => {
-  return async (dispatch, _getState, { firebase_app }) => {
+export const fetchCollectionsAsync = (
+  firebaseStore: Firestore | undefined
+): ReducerThunk => {
+  return async (dispatch, _getState) => {
+    if (!firebaseStore) {
+      return;
+    }
+
     dispatch(fetchCollectionsStart());
-    getDocs(query(collection(getFirestore(firebase_app), "collections")))
+    getDocs(query(collection(firebaseStore, "collections")))
       .then((querySnapshot) => {
         const docs = querySnapshot.docs;
         const res: { [key: string]: any } = {};

@@ -1,9 +1,9 @@
 import {
   DocumentData,
+  Firestore,
   QueryDocumentSnapshot,
   collection,
   getDocs,
-  getFirestore,
   orderBy,
   query,
 } from "@firebase/firestore";
@@ -18,15 +18,16 @@ export const fetchSectionsStart = (): DirectoryReducerAction => {
   };
 };
 
-export const fetchSectionsAsync = (): ReducerThunk => {
-  return async (dispatch, getState, { firebase_app }) => {
+export const fetchSectionsAsync = (
+  firebaseStore: Firestore | undefined
+): ReducerThunk => {
+  return async (dispatch) => {
+    if (!firebaseStore) {
+      return;
+    }
+
     dispatch(fetchSectionsStart());
-    getDocs(
-      query(
-        collection(getFirestore(firebase_app), "directory"),
-        orderBy("order")
-      )
-    )
+    getDocs(query(collection(firebaseStore, "directory"), orderBy("order")))
       .then((querySnapshot) => {
         const docs = querySnapshot.docs;
         const res: { [key: string]: any } = {};

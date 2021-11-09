@@ -19,8 +19,5 @@ export type RootState = {
 
 export type ReducerThunk = (
   dispatch: Dispatch,
-  getState: () => RootState,
-  extraArguments: {
-    firebase_app: FirebaseApp;
-  }
+  getState: () => RootState
 ) => Promise<any>;

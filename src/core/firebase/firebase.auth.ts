@@ -96,12 +96,8 @@ export const firebase_updateCurrentUser = (user: User | null) =>
 // });
 
 export const firebaseAuth = {
-  firebase_signInWithGooglePopup,
-  firebase_createUserWithEmailAndPassword,
-  firebase_signInWithEmailAndPassword,
-  firebase_signOut,
-  firebase_onAuthStateChanged,
-  firebase_updateProfile,
-  firebase_updateCurrentUser,
-  firebase_currentUser: () => firebase_auth.currentUser,
+  // firebase_signInWithGooglePopup,
+  // firebase_createUserWithEmailAndPassword,
+  // firebase_signInWithEmailAndPassword,
+  // firebase_updateProfile,
 };

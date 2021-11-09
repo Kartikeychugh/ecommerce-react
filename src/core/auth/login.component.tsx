@@ -1,39 +1,29 @@
+import { DocumentData, DocumentSnapshot } from "firebase/firestore";
+import { Unsubscribe, User } from "@firebase/auth";
 import {
-  DocumentData,
-  DocumentSnapshot,
-  getFirestore,
-} from "firebase/firestore";
-import { Unsubscribe, User } from "../firebase";
+  WithFirebaseProps,
+  WithFirebaseUserProps,
+  withFirebase,
+  withFirebaseUser,
+} from "../firebase";
 import {
   createUserProfileDocument,
   subscribeToUserProfile,
 } from "../../services/db";
 
 import { CurrentUser } from "../../models";
-import { FirebaseApp } from "@firebase/app";
 import React from "react";
 import { connect } from "react-redux";
 import { setCurrentUser } from "../redux";
-import { withFirebaseapp } from "../firebase/provider/firebase-app.provider";
-import { withUser } from "./with-user.component";
 
 type DispatchProps = {
   setCurrentUser: (user: CurrentUser) => void;
 };
 
-type LoginOwnProps = {};
+type LoginProps = DispatchProps & WithFirebaseProps & WithFirebaseUserProps;
 
-type FirebaseAppProps = {
-  firebaseApp: FirebaseApp;
-};
-
-type UserProps = {
-  user: User | null | undefined;
-};
 class LoginInternal extends React.Component<
-  React.PropsWithChildren<
-    DispatchProps & LoginOwnProps & FirebaseAppProps & UserProps
-  >,
+  React.PropsWithChildren<LoginProps>,
   {}
 > {
   private unsubscribe: Unsubscribe | undefined;
@@ -46,7 +36,7 @@ class LoginInternal extends React.Component<
        * complete the sign-in
        */
       this.unsubscribe = subscribeToUserProfile(
-        getFirestore(this.props.firebaseApp),
+        this.props.firebaseStore,
         user,
         (snapShot: DocumentSnapshot<DocumentData>) => {
           this.completeSignIn(snapShot);
@@ -68,15 +58,11 @@ class LoginInternal extends React.Component<
   }
 
   private async addProfileToFireStore(user: User) {
-    await createUserProfileDocument(
-      getFirestore(this.props.firebaseApp),
-      user,
-      {
-        displayName: user.displayName,
-        email: user.email,
-        createdAt: new Date(),
-      }
-    );
+    await createUserProfileDocument(this.props.firebaseStore, user, {
+      displayName: user.displayName,
+      email: user.email,
+      createdAt: new Date(),
+    });
   }
 
   private completeSignIn(snapShot: DocumentSnapshot<DocumentData>) {
@@ -100,4 +86,4 @@ export const Login = connect(null, (dispatch) => {
   return {
     setCurrentUser: (user: CurrentUser) => dispatch(setCurrentUser(user)),
   };
-})(withFirebaseapp(withUser(LoginInternal)));
+})(withFirebase(withFirebaseUser(LoginInternal)));

@@ -3,12 +3,11 @@ import "./sign-in.styles.scss";
 import { Button, Input } from "../../core/ui";
 import { History, Location } from "history";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
 
 import React from "react";
-import { signInWithEmailAndPassword } from "../../services/email-authentication";
-import { signInWithGooglePopUp } from "../../services/google-authentication";
 
-type SignInProps = RouteComponentProps<{}, {}, { navType: string }> & {
+type SignInProps = {
   exitSignInPage: (
     location: Location<{
       navType: string;
@@ -17,7 +16,8 @@ type SignInProps = RouteComponentProps<{}, {}, { navType: string }> & {
       navType: string;
     }>
   ) => void;
-};
+} & WithFirebaseAuthProps &
+  RouteComponentProps<{}, {}, { navType: string }>;
 
 type SignInState = {
   email: string;
@@ -85,7 +85,7 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     const { email, password } = this.state;
 
     try {
-      await signInWithEmailAndPassword(email, password);
+      await this.props.signInWithEmailAndPassword(email, password);
       this.setState({ password: "", email: "" }, () => {
         this.props.exitSignInPage(this.props.location, this.props.history);
       });
@@ -101,7 +101,7 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     const { location, history } = this.props;
 
     try {
-      await signInWithGooglePopUp();
+      await this.props.signInWithGooglePopup();
       this.props.exitSignInPage(location, history);
     } catch (e) {
       console.log(e);
@@ -109,4 +109,4 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
   };
 }
 
-export const SignIn = withRouter(SignInInternal);
+export const SignIn = withRouter(withFirebaseAuth(SignInInternal));

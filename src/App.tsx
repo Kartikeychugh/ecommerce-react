@@ -1,9 +1,9 @@
 import { BrowserRouter } from "react-router-dom";
-import { FirebaseApp } from "./core/firebase/provider/firebase-app.context";
+import { FirebaseProvider } from "./core/firebase";
 import { Layout } from "./core/layout/layout.component";
 import { Login } from "./core/auth";
 import React from "react";
-import { firebase_app } from "./core/firebase/firebase.app";
+import { firebaseConfig } from "./core/firebase/firebase.config";
 
 type AppState = {};
 type AppProps = {};
@@ -12,11 +12,11 @@ class AppInternal extends React.Component<AppProps, AppState> {
   public render() {
     return (
       <BrowserRouter>
-        <FirebaseApp.Provider value={firebase_app}>
+        <FirebaseProvider config={firebaseConfig}>
           <Login>
             <Layout />
           </Login>
-        </FirebaseApp.Provider>
+        </FirebaseProvider>
       </BrowserRouter>
     );
   }

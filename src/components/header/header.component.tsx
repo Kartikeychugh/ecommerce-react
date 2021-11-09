@@ -7,16 +7,16 @@ import {
   OptionsContainer,
 } from "./header.styles";
 import { RootState, selectCurrentUser } from "../../core/redux";
+import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
 
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
 import { CurrentUser } from "../../models";
 import { connect } from "react-redux";
-import { firebaseAuth } from "../../core/firebase";
 
 type HeaderProps = {
   currentUser: CurrentUser;
-};
+} & WithFirebaseAuthProps;
 
 const HeaderInternal = (props: HeaderProps) => {
   const { currentUser } = props;
@@ -35,7 +35,7 @@ const HeaderInternal = (props: HeaderProps) => {
             as="div"
             onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
               event.stopPropagation();
-              firebaseAuth.firebase_signOut();
+              props.signOut();
             }}>
             SIGN OUT
           </OptionLink>
@@ -52,4 +52,4 @@ const HeaderInternal = (props: HeaderProps) => {
 
 export const Header = connect((state: RootState) => ({
   currentUser: selectCurrentUser(state),
-}))(HeaderInternal);
+}))(withFirebaseAuth(HeaderInternal));
