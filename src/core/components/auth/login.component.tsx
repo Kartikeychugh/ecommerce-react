@@ -5,16 +5,16 @@ import {
   WithFirebaseUserProps,
   withFirebase,
   withFirebaseUser,
-} from "../firebase";
+} from "../../firebase";
 import {
   createUserProfileDocument,
   subscribeToUserProfile,
-} from "../../services/db";
+} from "../../../services/db";
 
-import { CurrentUser } from "../../models";
+import { CurrentUser } from "../../../models";
 import React from "react";
 import { connect } from "react-redux";
-import { setCurrentUser } from "../redux";
+import { setCurrentUser } from "../../redux";
 
 type DispatchProps = {
   setCurrentUser: (user: CurrentUser) => void;

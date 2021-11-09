@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { FirebaseProvider } from "./core/firebase";
-import { Layout } from "./core/layout/layout.component";
-import { Login } from "./core/auth";
+import { Layout } from "./core/components/layout/layout.component";
+import { Login } from "./core/components/auth";
 import React from "react";
 import { firebaseConfig } from "./core/firebase/firebase.config";
 

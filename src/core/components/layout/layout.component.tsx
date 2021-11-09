@@ -3,14 +3,14 @@ import {
   HomePage,
   ShopPage,
   SignInAndSignUpPage,
-} from "../../pages";
+} from "../../../pages";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { RootState, selectCartOpenState, selectCurrentUser } from "../redux";
+import { RootState, selectCartOpenState, selectCurrentUser } from "../../redux";
 
-import { CurrentUser } from "../../models";
-import { Header } from "../../components";
+import { CurrentUser } from "../../../models";
+import { Header } from "../../../components";
 import React from "react";
-import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
+import { WithSpinner } from "../../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
 
 type LayoutState = {};
