@@ -1,4 +1,4 @@
-import { RootState } from "..";
+import { RootState } from "../../";
 import { createSelector } from "reselect";
 
 const selectDirectory = (state: RootState) => state.directory;

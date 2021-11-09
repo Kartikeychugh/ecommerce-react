@@ -9,11 +9,11 @@ export {
   selectCartItemCount,
   selectCartOpenState,
   selectCartTotal,
-} from "./cart";
-export { setCurrentUser, selectCurrentUser } from "./user";
-export { selectSections, fetchSectionsAsync } from "./directory";
+} from "./reducers/cart";
+export { setCurrentUser, selectCurrentUser } from "./reducers/user";
+export { selectSections, fetchSectionsAsync } from "./reducers/directory";
 export {
   selectShopCollections,
   selectCollection,
   fetchCollectionsStart,
-} from "./shop";
+} from "./reducers/shop";

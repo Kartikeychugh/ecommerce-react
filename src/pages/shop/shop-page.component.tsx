@@ -9,7 +9,7 @@ import { ICollectionData } from "../../models";
 import React from "react";
 import { WithSpinner } from "../../components/with-spinner/with-spinner.component";
 import { connect } from "react-redux";
-import { fetchCollectionsAsync } from "../../core/redux/shop/shop.actions";
+import { fetchCollectionsAsync } from "../../core/redux/reducers/shop/shop.actions";
 
 type ShopPageProps = {
   collections: ICollectionData | null;

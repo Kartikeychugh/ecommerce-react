@@ -1,4 +1,4 @@
-import { Sections } from "../../../models";
+import { Sections } from "../../../../models";
 
 export type DirectoryReducerManagedState = {
   sections: Sections;

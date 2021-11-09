@@ -1,4 +1,4 @@
-import { CartItem, ICollectionItem } from "../../../models";
+import { CartItem, ICollectionItem } from "../../../../models";
 
 export type CartActionTypes =
   | "TOGGLE_CART"

@@ -7,8 +7,8 @@ import {
   query,
 } from "@firebase/firestore";
 
-import { ICollectionData } from "../../../models";
-import { ReducerThunk } from "../redux.types";
+import { ICollectionData } from "../../../../models";
+import { ReducerThunk } from "../../redux.types";
 import { ShopReducerAction } from "./shop.types";
 
 export const fetchCollectionsStart = (): ShopReducerAction => ({

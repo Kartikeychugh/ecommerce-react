@@ -1,4 +1,4 @@
-import { CurrentUser } from "../../../models";
+import { CurrentUser } from "../../../../models";
 import { UserReducerAction } from "./user.types";
 
 export const setCurrentUser = (user: CurrentUser): UserReducerAction => ({

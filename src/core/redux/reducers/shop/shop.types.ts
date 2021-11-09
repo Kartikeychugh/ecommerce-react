@@ -1,4 +1,4 @@
-import { CollectionData, ICollectionData } from "../../../models";
+import { CollectionData, ICollectionData } from "../../../../models";
 
 export type ShopReducerManagedState = {
   collections: CollectionData;

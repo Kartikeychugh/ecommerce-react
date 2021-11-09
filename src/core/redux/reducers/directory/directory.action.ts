@@ -9,8 +9,8 @@ import {
 } from "@firebase/firestore";
 
 import { DirectoryReducerAction } from "./directory.types";
-import { ISection } from "../../../models";
-import { ReducerThunk } from "../redux.types";
+import { ISection } from "../../../../models";
+import { ReducerThunk } from "../../redux.types";
 
 export const fetchSectionsStart = (): DirectoryReducerAction => {
   return {

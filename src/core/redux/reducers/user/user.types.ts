@@ -1,5 +1,5 @@
-import { CurrentUser } from "../../../models";
-import { Reducer } from "../redux.types";
+import { CurrentUser } from "../../../../models";
+import { Reducer } from "../../redux.types";
 
 export type UserReducerManagedState = { currentUser: CurrentUser };
 

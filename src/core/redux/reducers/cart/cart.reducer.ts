@@ -6,7 +6,7 @@ import {
   toggleCart,
 } from "./cart.utils";
 
-import { Reducer } from "../redux.types";
+import { Reducer } from "../../redux.types";
 
 export const CART_INITIAL_STATE: CartReducerManagedState = {
   cartOpen: false,

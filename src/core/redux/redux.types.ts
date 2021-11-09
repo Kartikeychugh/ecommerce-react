@@ -1,9 +1,8 @@
-import { CartReducerManagedState } from "./cart";
-import { DirectoryReducerManagedState } from "./directory";
+import { CartReducerManagedState } from "./reducers/cart";
+import { DirectoryReducerManagedState } from "./reducers/directory";
 import { Dispatch } from "redux";
-import { FirebaseApp } from "firebase/app";
-import { ShopReducerManagedState } from "./shop";
-import { UserReducerManagedState } from "./user";
+import { ShopReducerManagedState } from "./reducers/shop";
+import { UserReducerManagedState } from "./reducers/user";
 
 export type Reducer<ReducerManagedState, ReducerAction> = (
   state: ReducerManagedState,
