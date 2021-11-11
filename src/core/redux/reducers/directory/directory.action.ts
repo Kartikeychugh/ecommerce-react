@@ -1,6 +1,5 @@
 import {
   DocumentData,
-  Firestore,
   QueryDocumentSnapshot,
   collection,
   getDocs,
@@ -18,10 +17,12 @@ export const fetchSectionsStart = (): DirectoryReducerAction => {
   };
 };
 
-export const fetchSectionsAsync = (firebaseStore: Firestore): ReducerThunk => {
-  return async (dispatch) => {
+export const fetchSectionsAsync = (): ReducerThunk => {
+  return async (dispatch, _getState, extraArgs) => {
     dispatch(fetchSectionsStart());
-    getDocs(query(collection(firebaseStore, "directory"), orderBy("order")))
+    getDocs(
+      query(collection(extraArgs.firebaseStore, "directory"), orderBy("order"))
+    )
       .then((querySnapshot) => {
         const docs = querySnapshot.docs;
         const res: { [key: string]: any } = {};

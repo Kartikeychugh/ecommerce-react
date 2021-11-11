@@ -5,12 +5,15 @@ import { persistStore } from "redux-persist";
 import { reducer } from "./root.reducer";
 import thunk from "redux-thunk";
 
-const middlewares = [];
-middlewares.push(thunk);
+export const createReduxStore = (extraArgumentsForThunk = {}) => {
+  const middlewares = [];
+  middlewares.push(thunk.withExtraArgument(extraArgumentsForThunk));
 
-if (process.env.NODE_ENV === "development") {
-  middlewares.push(logger);
-}
+  if (process.env.NODE_ENV === "development") {
+    middlewares.push(logger);
+  }
 
-export const store = createStore(reducer, applyMiddleware(...middlewares));
-export const persistor = persistStore(store);
+  const store = createStore(reducer, applyMiddleware(...middlewares));
+  const persistor = persistStore(store);
+  return { store, persistor };
+};

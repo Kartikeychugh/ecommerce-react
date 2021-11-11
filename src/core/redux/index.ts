@@ -1,4 +1,4 @@
-export { store, persistor } from "./store";
+export { createReduxStore } from "./store";
 export type { RootState } from "./redux.types";
 export {
   addToCart,
@@ -17,3 +17,4 @@ export {
   selectCollection,
   fetchCollectionsStart,
 } from "./reducers/shop";
+export { ReduxProvider } from "./provider";

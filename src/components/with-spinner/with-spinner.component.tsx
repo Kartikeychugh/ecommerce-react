@@ -35,7 +35,7 @@ export class WithSpinner extends React.Component<
           console.log("Spinner: Showing spinner now");
         }
       });
-    }, 0);
+    }, 500);
   }
 
   public render() {

@@ -1,6 +1,7 @@
 import { CartReducerManagedState } from "./reducers/cart";
 import { DirectoryReducerManagedState } from "./reducers/directory";
 import { Dispatch } from "redux";
+import { Firestore } from "@firebase/firestore";
 import { ShopReducerManagedState } from "./reducers/shop";
 import { UserReducerManagedState } from "./reducers/user";
 
@@ -18,5 +19,6 @@ export type RootState = {
 
 export type ReducerThunk = (
   dispatch: Dispatch,
-  getState: () => RootState
+  getState: () => RootState,
+  extraArgs: { firebaseStore: Firestore }
 ) => Promise<any>;

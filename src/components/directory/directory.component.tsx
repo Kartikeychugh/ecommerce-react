@@ -5,9 +5,7 @@ import {
   fetchSectionsAsync,
   selectSections,
 } from "../../core/redux";
-import { WithFirebaseProps, withFirebase } from "../../core/firebase";
 
-import { Firestore } from "@firebase/firestore";
 import { MenuItem } from "./directory-menu-item";
 import React from "react";
 import { Sections } from "../../models";
@@ -16,8 +14,8 @@ import { connect } from "react-redux";
 
 type DirectoryProps = {
   sections: Sections;
-  fetchSectionsAsync: (firebaseStore: Firestore) => void;
-} & WithFirebaseProps;
+  fetchSectionsAsync: () => void;
+};
 
 type DirectoryState = {};
 class DirectoryInternal extends React.Component<
@@ -46,7 +44,7 @@ class DirectoryInternal extends React.Component<
   }
 
   private fetchSections() {
-    this.props.fetchSectionsAsync(this.props.firebaseStore);
+    this.props.fetchSectionsAsync();
   }
 }
 
@@ -58,9 +56,9 @@ export const Directory = connect(
   },
   (dispatch: any) => {
     return {
-      fetchSectionsAsync: (firebaseStore: Firestore) => {
-        dispatch(fetchSectionsAsync(firebaseStore));
+      fetchSectionsAsync: () => {
+        dispatch(fetchSectionsAsync());
       },
     };
   }
-)(withFirebase(DirectoryInternal));
+)(DirectoryInternal);
