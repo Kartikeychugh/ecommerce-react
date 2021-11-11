@@ -1,33 +1,11 @@
 import "./sign-up.styles.scss";
 
 import { Button, Input } from "./../../core/ui";
-import { History, Location } from "history";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import {
-  WithFirebaseAuthProps,
-  WithFirebaseProps,
-  WithFirebaseUserProps,
-  withFirebase,
-  withFirebaseAuth,
-  withFirebaseUser,
-} from "../../core/firebase";
+import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
 
 import React from "react";
-import { updateUserProfileDocument } from "../../services/db";
 
-type SignUpProps = {
-  exitSignInPage: (
-    location: Location<{
-      navType: string;
-    }>,
-    history: History<{
-      navType: string;
-    }>
-  ) => void;
-} & WithFirebaseProps &
-  WithFirebaseAuthProps &
-  WithFirebaseUserProps &
-  RouteComponentProps<{}, {}, { navType: string }>;
+interface SignUpProps {}
 
 interface SignUpState {
   /** To handle allowing update from onChange event directly using name and value */
@@ -38,8 +16,11 @@ interface SignUpState {
   confirmPassword: string;
 }
 
-class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
-  constructor(props: SignUpProps) {
+class SignUpInternal extends React.Component<
+  SignUpProps & WithFirebaseAuthProps,
+  SignUpState
+> {
+  constructor(props: SignUpProps & WithFirebaseAuthProps) {
     super(props);
 
     this.state = {
@@ -103,32 +84,18 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
     }
 
     try {
-      const { user } = await this.props
-        .createUserWithEmailAndPassword(email, password)
-        .then(async (userCredential) => {
-          await this.props.updateProfile(userCredential.user, { displayName });
-          return userCredential;
-        });
-
-      await updateUserProfileDocument(this.props.firebaseStore, user, {
-        displayName: user.displayName,
-        email: user.email,
-        createdAt: new Date(),
-      });
-
-      await this.props.updateProfile(user, { displayName });
-
-      this.setState(
-        {
-          displayName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        },
-        () => {
-          this.props.exitSignInPage(this.props.location, this.props.history);
-        }
+      await this.props.createUserWithEmailAndPassword(
+        email,
+        password,
+        displayName
       );
+
+      this.setState({
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     } catch (e) {
       console.log(e);
     }
@@ -142,6 +109,4 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
   };
 }
 
-export const SignUp = withRouter(
-  withFirebaseUser(withFirebaseAuth(withFirebase(SignUpInternal)))
-);
+export const SignUp = withFirebaseAuth(SignUpInternal);

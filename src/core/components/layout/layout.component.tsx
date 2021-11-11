@@ -36,7 +36,7 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
               <SignInAndSignUpPage />
             )}
           </Route>
-          {/* <Route path="*" component={() => <div>404</div>} /> */}
+          <Route path="*" component={() => <div>404</div>} />
         </Switch>
       </WithSpinner>
     );

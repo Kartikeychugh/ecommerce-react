@@ -1,23 +1,11 @@
 import "./sign-in.styles.scss";
 
 import { Button, Input } from "../../core/ui";
-import { History, Location } from "history";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
 
 import React from "react";
 
-type SignInProps = {
-  exitSignInPage: (
-    location: Location<{
-      navType: string;
-    }>,
-    history: History<{
-      navType: string;
-    }>
-  ) => void;
-} & WithFirebaseAuthProps &
-  RouteComponentProps<{}, {}, { navType: string }>;
+interface SignInProps {}
 
 type SignInState = {
   email: string;
@@ -26,8 +14,11 @@ type SignInState = {
   [key: string]: string;
 };
 
-class SignInInternal extends React.Component<SignInProps, SignInState> {
-  constructor(props: SignInProps) {
+class SignInInternal extends React.Component<
+  SignInProps & WithFirebaseAuthProps,
+  SignInState
+> {
+  constructor(props: SignInProps & WithFirebaseAuthProps) {
     super(props);
 
     this.state = {
@@ -86,9 +77,7 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
 
     try {
       await this.props.signInWithEmailAndPassword(email, password);
-      this.setState({ password: "", email: "" }, () => {
-        this.props.exitSignInPage(this.props.location, this.props.history);
-      });
+      this.setState({ password: "", email: "" });
     } catch (e) {
       console.log(e);
     }
@@ -98,15 +87,13 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
     event: React.SyntheticEvent<HTMLButtonElement>
   ) => {
     event.stopPropagation();
-    const { location, history } = this.props;
 
     try {
       await this.props.signInWithGooglePopup();
-      this.props.exitSignInPage(location, history);
     } catch (e) {
       console.log(e);
     }
   };
 }
 
-export const SignIn = withRouter(withFirebaseAuth(SignInInternal));
+export const SignIn = withFirebaseAuth(SignInInternal);
