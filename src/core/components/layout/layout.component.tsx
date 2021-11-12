@@ -5,9 +5,9 @@ import {
   SignInAndSignUpPage,
 } from "../../../pages";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { RootState, selectCartOpenState, selectCurrentUser } from "../../redux";
+import { RootState, selectCartOpenState } from "../../redux";
+import { WithFirebaseUserProps, withFirebaseUser } from "../../firebase";
 
-import { CurrentUser } from "../../../models";
 import { Header } from "../../../components";
 import React from "react";
 import { WithSpinner } from "../../../components/with-spinner/with-spinner.component";
@@ -16,13 +16,12 @@ import { connect } from "react-redux";
 type LayoutState = {};
 type LayoutProps = {
   cartOpen: boolean;
-  currentUser: CurrentUser;
-};
+} & WithFirebaseUserProps;
 
 class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
   public render() {
     return (
-      <WithSpinner isLoading={this.props.currentUser === undefined}>
+      <WithSpinner isLoading={this.props.user === undefined}>
         <Header />
         <Switch>
           <Route exact={true} path="/checkout" component={CheckoutPage} />
@@ -30,7 +29,7 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
           <Route path="/shop" component={ShopPage} />
           <Route exact={true} path="/checkout" component={CheckoutPage} />
           <Route exact={true} path="/signin">
-            {this.props.currentUser !== null ? (
+            {this.props.user !== null ? (
               <Redirect to="/" />
             ) : (
               <SignInAndSignUpPage />
@@ -45,9 +44,10 @@ class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    currentUser: selectCurrentUser(state),
     cartOpen: selectCartOpenState(state),
   };
 };
 
-export const Layout = connect(mapStateToProps)(LayoutInternal);
+export const Layout = connect(mapStateToProps)(
+  withFirebaseUser(LayoutInternal)
+);

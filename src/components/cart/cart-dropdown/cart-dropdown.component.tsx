@@ -25,7 +25,6 @@ const CartDropdownInternal = (props: CartDropdownProps) => (
       ) : (
         <span className="empty-message">Ek paisa nahi kharcha tune.</span>
       )}
-      {}
     </div>
     <Button
       onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {

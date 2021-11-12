@@ -1,11 +1,3 @@
-import {
-  DocumentData,
-  QueryDocumentSnapshot,
-  collection,
-  getDocs,
-  query,
-} from "@firebase/firestore";
-
 import { ICollectionData } from "../../../../models";
 import { ReducerThunk } from "../../redux.types";
 import { ShopReducerAction } from "./shop.types";
@@ -22,19 +14,10 @@ export const fetchCollectionsSuccess = (
 });
 
 export const fetchCollectionsAsync = (): ReducerThunk => {
-  return async (dispatch, _getState, extraArgs) => {
+  return async (dispatch, _getState, { firebaseStoreService }) => {
     dispatch(fetchCollectionsStart());
-    getDocs(query(collection(extraArgs.firebaseStore, "collections")))
-      .then((querySnapshot) => {
-        const docs = querySnapshot.docs;
-        const res: { [key: string]: any } = {};
-
-        docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-          const data = doc.data();
-          res[doc.id] = data;
-        });
-        return res;
-      })
+    firebaseStoreService
+      .getDocuments("collections")
       .then((storeCollections) => {
         const collections: ICollectionData = {};
 

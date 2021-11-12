@@ -1,8 +1,9 @@
+import { FirebaseStoreService, withFirebase } from "../../firebase";
+
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import React from "react";
 import { createReduxStore } from "../store";
-import { withFirebase } from "../../firebase";
 
 interface IReduxProviderProps {}
 interface IReduxProviderState {}
@@ -14,7 +15,7 @@ export class ReduxProvider extends React.Component<
   render() {
     const Component = withFirebase((props) => {
       const { store, persistor } = createReduxStore({
-        firebaseStore: props.firebaseStore,
+        firebaseStoreService: new FirebaseStoreService(props.firebaseStore),
       });
       return (
         <Provider store={store}>

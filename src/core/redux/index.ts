@@ -10,7 +10,6 @@ export {
   selectCartOpenState,
   selectCartTotal,
 } from "./reducers/cart";
-export { setCurrentUser, selectCurrentUser } from "./reducers/user";
 export { selectSections, fetchSectionsAsync } from "./reducers/directory";
 export {
   selectShopCollections,

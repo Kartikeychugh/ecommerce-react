@@ -8,7 +8,7 @@ import {
 } from "@firebase/firestore";
 import { Unsubscribe, User, onAuthStateChanged } from "@firebase/auth";
 
-import { CurrentUser } from "../../../../models";
+import { CurrentUser } from "../../firebase.types";
 import { FirebaseConsumer } from "../firebase.context";
 import React from "react";
 import { WithFirebaseProps } from "./";

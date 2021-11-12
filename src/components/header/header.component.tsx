@@ -6,20 +6,20 @@ import {
   OptionLink,
   OptionsContainer,
 } from "./header.styles";
-import { RootState, selectCurrentUser } from "../../core/redux";
-import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
+import {
+  WithFirebaseAuthProps,
+  WithFirebaseUserProps,
+  withFirebaseAuth,
+  withFirebaseUser,
+} from "../../core/firebase";
 
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
-import { CurrentUser } from "../../models";
-import { connect } from "react-redux";
 
-type HeaderProps = {
-  currentUser: CurrentUser;
-} & WithFirebaseAuthProps;
+type HeaderProps = {} & WithFirebaseAuthProps & WithFirebaseUserProps;
 
 const HeaderInternal = (props: HeaderProps) => {
-  const { currentUser } = props;
+  const { user } = props;
 
   return (
     <HeaderContainer>
@@ -30,7 +30,7 @@ const HeaderInternal = (props: HeaderProps) => {
       <OptionsContainer>
         <OptionLink to="/shop">SHOP</OptionLink>
         <OptionLink to="/shop">CONTACT</OptionLink>
-        {currentUser ? (
+        {user ? (
           <OptionLink
             as="div"
             onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
@@ -50,6 +50,4 @@ const HeaderInternal = (props: HeaderProps) => {
   );
 };
 
-export const Header = connect((state: RootState) => ({
-  currentUser: selectCurrentUser(state),
-}))(withFirebaseAuth(HeaderInternal));
+export const Header = withFirebaseAuth(withFirebaseUser(HeaderInternal));
