@@ -2,13 +2,13 @@ import {
   FirebaseAuthProvider,
   FirebaseProvider,
   FirebaseUserProvider,
-  firebaseConfig,
-} from "./core/firebase";
+} from "./core";
 
 import { BrowserRouter } from "react-router-dom";
 import { Layout } from "./core/components";
 import React from "react";
 import { ReduxProvider } from "./core/redux";
+import { firebaseConfig } from "./firebase.config";
 
 type AppState = {};
 type AppProps = {};
