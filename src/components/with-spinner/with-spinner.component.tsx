@@ -4,6 +4,7 @@ import React from "react";
 
 type WithSpinnerPropsType = {
   isLoading: boolean;
+  render?: React.ComponentType;
 };
 
 type WithSpinnerStateType = {
@@ -30,6 +31,8 @@ export class WithSpinner extends React.Component<
         clearTimeout(this.timer);
       }
 
+      console.log("Updating state:", "withSpinner");
+
       this.setState({ waiting: false }, () => {
         if (this.props.isLoading) {
           console.log("Spinner: Showing spinner now");
@@ -39,14 +42,20 @@ export class WithSpinner extends React.Component<
   }
 
   public render() {
-    const { isLoading, children } = this.props;
+    const { isLoading, children, render: Render } = this.props;
 
     if (!isLoading && this.timer && this.state.waiting) {
       console.log("Spinner: Stopped in between");
       clearTimeout(this.timer);
     }
 
-    return isLoading ? this.getLoadingContent() : children;
+    return isLoading ? (
+      this.getLoadingContent()
+    ) : Render ? (
+      <Render />
+    ) : (
+      children
+    );
   }
 
   private getLoadingContent = () =>

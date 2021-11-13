@@ -36,7 +36,12 @@ class SignUpInternal extends React.Component<
       <div className="sign-up">
         <h2 className="title">I do not have a account</h2>
         <span>Sign up with your email and password</span>
-        <form className="sign-up-form" onSubmit={this.signUp}>
+        <form
+          className="sign-up-form"
+          onSubmit={(event: React.SyntheticEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            this.signUp(this.props.createUserWithEmailAndPassword);
+          }}>
           <Input
             type="text"
             name="displayName"
@@ -75,8 +80,9 @@ class SignUpInternal extends React.Component<
     );
   }
 
-  private signUp = async (event: React.SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  private signUp = async (
+    createUserWithEmailAndPassword: WithFirebaseAuthProps["createUserWithEmailAndPassword"]
+  ) => {
     const { email, password, displayName, confirmPassword } = this.state;
 
     if (password !== confirmPassword) {
@@ -84,18 +90,7 @@ class SignUpInternal extends React.Component<
     }
 
     try {
-      await this.props.createUserWithEmailAndPassword(
-        email,
-        password,
-        displayName
-      );
-
-      this.setState({
-        displayName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+      await createUserWithEmailAndPassword(email, password, displayName);
     } catch (e) {
       console.log(e);
     }
@@ -104,6 +99,8 @@ class SignUpInternal extends React.Component<
   private handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
+
+    console.log("Updating state:", "signup");
 
     this.setState({ [name]: value });
   };

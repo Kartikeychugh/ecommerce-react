@@ -1,22 +1,13 @@
-import { Auth, GoogleAuthProvider, getAuth } from "@firebase/auth";
-import { FirebaseApp, FirebaseOptions, initializeApp } from "@firebase/app";
-import { Firestore, getFirestore } from "@firebase/firestore";
+import { Firebase, FirebaseContext } from "../contexts";
+import { FirebaseOptions, initializeApp } from "@firebase/app";
+import { GoogleAuthProvider, getAuth } from "@firebase/auth";
 
 import React from "react";
-
-export interface FirebaseContext {
-  firebaseApp: FirebaseApp;
-  firebaseAuth: Auth;
-  firebaseStore: Firestore;
-  googleProvider: GoogleAuthProvider;
-}
-
-export const Firebase = React.createContext<FirebaseContext>(undefined!);
+import { getFirestore } from "@firebase/firestore";
 
 interface FirebaseProviderProps {
   config: FirebaseOptions;
 }
-
 interface FirebaseProviderState extends FirebaseContext {}
 
 export class FirebaseProvider extends React.Component<
@@ -46,5 +37,3 @@ export class FirebaseProvider extends React.Component<
     );
   }
 }
-
-export const FirebaseConsumer = Firebase.Consumer;

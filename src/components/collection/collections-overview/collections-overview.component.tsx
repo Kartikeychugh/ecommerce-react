@@ -2,6 +2,7 @@ import "./collections-overview.styles.scss";
 
 import { CollectionData } from "../../../models";
 import { CollectionPreview } from "../collection-preview";
+import { WithSpinner } from "../../with-spinner/with-spinner.component";
 
 type CollectionsOverviewProps = {
   collections: CollectionData;
@@ -9,20 +10,23 @@ type CollectionsOverviewProps = {
 
 const CollectionsOverviewInternal = (props: CollectionsOverviewProps) => {
   const { collections } = props;
-  return collections ? (
-    <div className="collection-preview">
-      {Object.keys(collections).map((shopItemKey: string) => {
-        const shopItem = collections[shopItemKey];
-        return (
-          <CollectionPreview
-            key={shopItemKey}
-            title={shopItem.title.toUpperCase()}
-            items={shopItem.items}
-          />
-        );
-      })}
-    </div>
-  ) : null;
+  return (
+    <WithSpinner isLoading={!collections}>
+      <div className="collection-preview">
+        {collections &&
+          Object.keys(collections!).map((shopItemKey: string) => {
+            const shopItem = collections![shopItemKey];
+            return (
+              <CollectionPreview
+                key={shopItemKey}
+                title={shopItem.title.toUpperCase()}
+                items={shopItem.items}
+              />
+            );
+          })}
+      </div>
+    </WithSpinner>
+  );
 };
 
 export const CollectionsOverview = CollectionsOverviewInternal;

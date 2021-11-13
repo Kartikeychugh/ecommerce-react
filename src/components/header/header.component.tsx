@@ -1,5 +1,3 @@
-// import "./header.styles.scss";
-
 import {
   HeaderContainer,
   LogoContainer,
@@ -16,11 +14,11 @@ import {
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
 
-type HeaderProps = {} & WithFirebaseAuthProps & WithFirebaseUserProps;
+interface IHeaderProps {}
 
-const HeaderInternal = (props: HeaderProps) => {
-  const { user } = props;
-
+const HeaderInternal = (
+  props: IHeaderProps & WithFirebaseUserProps & WithFirebaseAuthProps
+) => {
   return (
     <HeaderContainer>
       <LogoContainer to="/">
@@ -30,7 +28,7 @@ const HeaderInternal = (props: HeaderProps) => {
       <OptionsContainer>
         <OptionLink to="/shop">SHOP</OptionLink>
         <OptionLink to="/shop">CONTACT</OptionLink>
-        {user ? (
+        {props.user ? (
           <OptionLink
             as="div"
             onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
@@ -40,7 +38,11 @@ const HeaderInternal = (props: HeaderProps) => {
             SIGN OUT
           </OptionLink>
         ) : (
-          <OptionLink to={{ pathname: "/signin", state: { navType: "inApp" } }}>
+          <OptionLink
+            to={{
+              pathname: "/signin",
+              state: { navType: "inApp" },
+            }}>
             SIGN IN
           </OptionLink>
         )}

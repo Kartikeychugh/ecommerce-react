@@ -33,7 +33,13 @@ class SignInInternal extends React.Component<
         <h2>I already have an account</h2>
         <span>Sign in with your email and password</span>
 
-        <form onSubmit={this.signInWithEmalAndPassword}>
+        <form
+          onSubmit={(event: React.SyntheticEvent) => {
+            event.preventDefault();
+            this.signInWithEmalAndPassword(
+              this.props.signInWithEmailAndPassword
+            );
+          }}>
           <Input
             name="email"
             type="email"
@@ -55,7 +61,10 @@ class SignInInternal extends React.Component<
             <Button
               googleButton={true}
               type="button"
-              onClick={this.signWithGoogle}>
+              onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {
+                event.preventDefault();
+                this.signWithGoogle(this.props.signInWithGooglePopup);
+              }}>
               Sign in with Google
             </Button>
           </div>
@@ -68,15 +77,20 @@ class SignInInternal extends React.Component<
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
 
+    console.log("Updating state:", "signin");
+
     this.setState({ [name]: value });
   };
 
-  private signInWithEmalAndPassword = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
+  private signInWithEmalAndPassword = async (
+    signInWithEmailAndPassword: WithFirebaseAuthProps["signInWithEmailAndPassword"]
+  ) => {
     const { email, password } = this.state;
 
     try {
-      await this.props.signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(email, password);
+      console.log("Updating state:", "signin");
+
       this.setState({ password: "", email: "" });
     } catch (e) {
       console.log(e);
@@ -84,12 +98,10 @@ class SignInInternal extends React.Component<
   };
 
   private signWithGoogle = async (
-    event: React.SyntheticEvent<HTMLButtonElement>
+    signInWithGooglePopup: WithFirebaseAuthProps["signInWithGooglePopup"]
   ) => {
-    event.stopPropagation();
-
     try {
-      await this.props.signInWithGooglePopup();
+      await signInWithGooglePopup();
     } catch (e) {
       console.log(e);
     }

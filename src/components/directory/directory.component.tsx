@@ -32,14 +32,16 @@ class DirectoryInternal extends React.Component<
 
   public render() {
     return (
-      <WithSpinner isLoading={!this.props.sections}>
-        <div className="directory-menu">
-          {this.props.sections &&
-            this.props.sections.map((section) => (
+      <WithSpinner
+        isLoading={!this.props.sections}
+        render={() => (
+          <div className="directory-menu">
+            {this.props.sections!.map((section) => (
               <MenuItem key={section.id} section={section} />
             ))}
-        </div>
-      </WithSpinner>
+          </div>
+        )}
+      />
     );
   }
 
