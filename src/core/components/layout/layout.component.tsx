@@ -4,20 +4,22 @@ import {
   ShopPage,
   SignInAndSignUpPage,
 } from "../../../pages";
+import { Header, WithSpinner } from "../../../components";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { WithFirebaseUserProps, withFirebaseUser } from "../../firebase";
+import { RootState, selectUser } from "../../redux";
 
-import { Header } from "../../../components";
+import { CurrentUser } from "../../firebase";
 import React from "react";
-import { WithSpinner } from "../../../components/with-spinner/with-spinner.component";
+import { connect } from "react-redux";
+
+interface LayoutOwnProps {
+  user: CurrentUser;
+}
 
 type LayoutState = {};
-interface LayoutProps {}
+type LayoutProps = LayoutOwnProps;
 
-class LayoutInternal extends React.Component<
-  LayoutProps & WithFirebaseUserProps,
-  LayoutState
-> {
+class LayoutInternal extends React.Component<LayoutProps, LayoutState> {
   public render() {
     return (
       <WithSpinner
@@ -46,4 +48,8 @@ class LayoutInternal extends React.Component<
   }
 }
 
-export const Layout = withFirebaseUser(LayoutInternal);
+export const Layout = connect((state: RootState) => {
+  return {
+    user: selectUser(state),
+  };
+})(LayoutInternal);

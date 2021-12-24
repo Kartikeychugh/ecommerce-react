@@ -4,21 +4,22 @@ import {
   OptionLink,
   OptionsContainer,
 } from "./header.styles";
-import {
-  WithFirebaseAuthProps,
-  WithFirebaseUserProps,
-  withFirebaseAuth,
-  withFirebaseUser,
-} from "../../core/firebase";
+import { RootState, selectUser, signOut } from "../../core/redux";
 
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
+import { CurrentUser } from "../../core/firebase";
+import { connect } from "react-redux";
 
-interface IHeaderProps {}
+interface HeaderOwnProps {
+  signOut: () => void;
+  user: CurrentUser;
+}
 
-const HeaderInternal = (
-  props: IHeaderProps & WithFirebaseUserProps & WithFirebaseAuthProps
-) => {
+type HeaderProps = HeaderOwnProps;
+
+const HeaderInternal = (props: HeaderProps) => {
+  const { user } = props;
   return (
     <HeaderContainer>
       <LogoContainer to="/">
@@ -28,7 +29,7 @@ const HeaderInternal = (
       <OptionsContainer>
         <OptionLink to="/shop">SHOP</OptionLink>
         <OptionLink to="/shop">CONTACT</OptionLink>
-        {props.user ? (
+        {user ? (
           <OptionLink
             as="div"
             onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
@@ -52,4 +53,17 @@ const HeaderInternal = (
   );
 };
 
-export const Header = withFirebaseAuth(withFirebaseUser(HeaderInternal));
+export const Header = connect(
+  (state: RootState) => {
+    return {
+      user: selectUser(state),
+    };
+  },
+  (dispatch: any) => {
+    return {
+      signOut: () => {
+        dispatch(signOut());
+      },
+    };
+  }
+)(HeaderInternal);

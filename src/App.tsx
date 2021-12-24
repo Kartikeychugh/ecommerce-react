@@ -1,13 +1,12 @@
 import {
-  FirebaseAuthProvider,
+  FirebaseAuthListener,
   FirebaseProvider,
-  FirebaseUserProvider,
+  Layout,
+  ReduxProvider,
 } from "./core";
 
 import { BrowserRouter } from "react-router-dom";
-import { Layout } from "./core/components";
 import React from "react";
-import { ReduxProvider } from "./core/redux";
 import { firebaseConfig } from "./firebase.config";
 
 type AppState = {};
@@ -18,13 +17,11 @@ class AppInternal extends React.Component<AppProps, AppState> {
     return (
       <BrowserRouter>
         <FirebaseProvider config={firebaseConfig}>
-          <FirebaseUserProvider>
-            <FirebaseAuthProvider>
-              <ReduxProvider>
-                <Layout />
-              </ReduxProvider>
-            </FirebaseAuthProvider>
-          </FirebaseUserProvider>
+          <ReduxProvider>
+            <FirebaseAuthListener>
+              <Layout />
+            </FirebaseAuthListener>
+          </ReduxProvider>
         </FirebaseProvider>
       </BrowserRouter>
     );

@@ -6,10 +6,11 @@ import { cartReducer } from "./reducers/cart";
 import { directoryReducer } from "./reducers/directory";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { userReducer } from "./reducers/user";
 
 const config = {
   key: "root",
-  whitelist: ["cart", "directory", "shop"],
+  whitelist: ["cart", "directory", "shop", "user"],
   storage,
 };
 
@@ -17,6 +18,7 @@ const rootReducer = combineReducers<RootState | {}, AnyAction>({
   cart: cartReducer,
   directory: directoryReducer,
   shop: ShopReducer,
+  user: userReducer,
 });
 
 export const reducer = persistReducer(config, rootReducer);

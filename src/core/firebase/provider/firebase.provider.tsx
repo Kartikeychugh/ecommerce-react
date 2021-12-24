@@ -1,8 +1,8 @@
 import { Firebase, FirebaseContext } from "../contexts";
 import { FirebaseOptions, initializeApp } from "@firebase/app";
-import { GoogleAuthProvider, getAuth } from "@firebase/auth";
 
 import React from "react";
+import { getAuth } from "@firebase/auth";
 import { getFirestore } from "@firebase/firestore";
 
 interface FirebaseProviderProps {
@@ -16,17 +16,18 @@ export class FirebaseProvider extends React.Component<
 > {
   constructor(props: FirebaseProviderProps) {
     super(props);
+
+    this.state = {
+      ...this.initFirebase(),
+    };
+  }
+
+  private initFirebase() {
     const firebaseApp = initializeApp(this.props.config);
     const firebaseAuth = getAuth(firebaseApp);
     const firebaseStore = getFirestore(firebaseApp);
-    const googleProvider = new GoogleAuthProvider();
 
-    this.state = {
-      firebaseApp,
-      firebaseAuth,
-      firebaseStore,
-      googleProvider,
-    };
+    return { firebaseAuth, firebaseStore };
   }
 
   render() {

@@ -30,6 +30,7 @@ export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
           {...(onChange ? { onChange } : {})}
           {...(type ? { type } : {})}
           {...(required ? { required } : {})}
+          {...{ autoComplete: getAuthCompleteAttrValue(type) }}
         />
         {label ? (
           <InputLabel
@@ -44,3 +45,14 @@ export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
     );
   }
 );
+
+const getAuthCompleteAttrValue = (type?: string) => {
+  switch (type) {
+    case "password":
+      return "current-password";
+    case "email":
+      return "username";
+    default:
+      return "";
+  }
+};

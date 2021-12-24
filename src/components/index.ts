@@ -9,3 +9,4 @@ export { SignIn } from "./sign-in"; // sign-in page entry
 export { SignUp } from "./sign-up"; // sign-in page entry
 export { CartDropdown } from "./cart";
 export { CheckoutItem } from "./checkout-item";
+export { WithSpinner } from "./with-spinner";

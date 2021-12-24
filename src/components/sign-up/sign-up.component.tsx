@@ -1,26 +1,33 @@
 import "./sign-up.styles.scss";
 
 import { Button, Input } from "./../../core/ui";
-import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
 
 import React from "react";
+import { connect } from "react-redux";
+import { signInAsync } from "../../core/redux";
 
-interface SignUpProps {}
+interface SignUpOwnProps {
+  signInAsync: (
+    providerId: "password" | "google.com",
+    email?: string,
+    password?: string,
+    displayName?: string
+  ) => void;
+}
 
-interface SignUpState {
+type SignUpState = {
   /** To handle allowing update from onChange event directly using name and value */
   [key: string]: string;
   displayName: string;
   email: string;
   password: string;
   confirmPassword: string;
-}
+};
 
-class SignUpInternal extends React.Component<
-  SignUpProps & WithFirebaseAuthProps,
-  SignUpState
-> {
-  constructor(props: SignUpProps & WithFirebaseAuthProps) {
+type SignUpProps = SignUpOwnProps;
+
+class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
+  constructor(props: SignUpProps) {
     super(props);
 
     this.state = {
@@ -40,7 +47,7 @@ class SignUpInternal extends React.Component<
           className="sign-up-form"
           onSubmit={(event: React.SyntheticEvent<HTMLFormElement>) => {
             event.preventDefault();
-            this.signUp(this.props.createUserWithEmailAndPassword);
+            this.signUp();
           }}>
           <Input
             type="text"
@@ -80,9 +87,7 @@ class SignUpInternal extends React.Component<
     );
   }
 
-  private signUp = async (
-    createUserWithEmailAndPassword: WithFirebaseAuthProps["createUserWithEmailAndPassword"]
-  ) => {
+  private signUp = async () => {
     const { email, password, displayName, confirmPassword } = this.state;
 
     if (password !== confirmPassword) {
@@ -90,7 +95,14 @@ class SignUpInternal extends React.Component<
     }
 
     try {
-      await createUserWithEmailAndPassword(email, password, displayName);
+      await this.props.signInAsync("password", email, password, displayName);
+
+      this.setState({
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     } catch (e) {
       console.log(e);
     }
@@ -100,10 +112,19 @@ class SignUpInternal extends React.Component<
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
 
-    console.log("Updating state:", "signup");
-
     this.setState({ [name]: value });
   };
 }
 
-export const SignUp = withFirebaseAuth(SignUpInternal);
+export const SignUp = connect(null, (dispatch: any) => {
+  return {
+    signInAsync: (
+      providerId: "password" | "google.com",
+      email?: string,
+      password?: string,
+      displayName?: string
+    ) => {
+      dispatch(signInAsync(providerId, email, password, displayName));
+    },
+  };
+})(SignUpInternal);

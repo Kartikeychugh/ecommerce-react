@@ -115,8 +115,6 @@ export class Popup extends React.Component<PopupProps, PopupState> {
     const targetTop = this.targetRef.current.offsetTop;
     const targetHeight = this.targetRef.current.offsetHeight;
 
-    console.log("Updating state:", "popup");
-
     this.setState((prevState) => {
       return {
         ...prevState,
@@ -135,8 +133,6 @@ export class Popup extends React.Component<PopupProps, PopupState> {
       }
       return;
     }
-
-    console.log("Updating state:", "popup");
 
     this.setState(
       (prevState) => {
@@ -160,8 +156,6 @@ export class Popup extends React.Component<PopupProps, PopupState> {
       }
       return;
     }
-
-    console.log("Updating state:", "popup");
 
     this.setState(
       (prevState) => {

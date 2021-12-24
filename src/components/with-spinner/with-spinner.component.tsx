@@ -31,8 +31,6 @@ export class WithSpinner extends React.Component<
         clearTimeout(this.timer);
       }
 
-      console.log("Updating state:", "withSpinner");
-
       this.setState({ waiting: false }, () => {
         if (this.props.isLoading) {
           console.log("Spinner: Showing spinner now");
@@ -45,7 +43,6 @@ export class WithSpinner extends React.Component<
     const { isLoading, children, render: Render } = this.props;
 
     if (!isLoading && this.timer && this.state.waiting) {
-      console.log("Spinner: Stopped in between");
       clearTimeout(this.timer);
     }
 

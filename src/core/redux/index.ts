@@ -16,4 +16,11 @@ export {
   selectCollection,
   fetchCollectionsStart,
 } from "./reducers/shop";
+export {
+  signInAsync,
+  signOut,
+  setUser,
+  signInWithEmailAndPassword,
+  selectUser,
+} from "./reducers/user";
 export { ReduxProvider } from "./provider";

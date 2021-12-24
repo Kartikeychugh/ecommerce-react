@@ -1,11 +1,15 @@
 import "./sign-in.styles.scss";
 
 import { Button, Input } from "../../core/ui";
-import { WithFirebaseAuthProps, withFirebaseAuth } from "../../core/firebase";
+import { signInAsync, signInWithEmailAndPassword } from "../../core/redux";
 
 import React from "react";
+import { connect } from "react-redux";
 
-interface SignInProps {}
+interface SignInOwnProps {
+  signInAsync: (providerId: "password" | "google.com") => void;
+  signInWithEmailAndPassword: (email: string, password: string) => void;
+}
 
 type SignInState = {
   email: string;
@@ -13,12 +17,10 @@ type SignInState = {
   /** To handle allowing update from onChange event directly using name and value */
   [key: string]: string;
 };
+type SignInProps = SignInOwnProps;
 
-class SignInInternal extends React.Component<
-  SignInProps & WithFirebaseAuthProps,
-  SignInState
-> {
-  constructor(props: SignInProps & WithFirebaseAuthProps) {
+class SignInInternal extends React.Component<SignInProps, SignInState> {
+  constructor(props: SignInProps) {
     super(props);
 
     this.state = {
@@ -36,9 +38,7 @@ class SignInInternal extends React.Component<
         <form
           onSubmit={(event: React.SyntheticEvent) => {
             event.preventDefault();
-            this.signInWithEmalAndPassword(
-              this.props.signInWithEmailAndPassword
-            );
+            this.signInWithEmalAndPassword();
           }}>
           <Input
             name="email"
@@ -63,7 +63,7 @@ class SignInInternal extends React.Component<
               type="button"
               onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {
                 event.preventDefault();
-                this.signWithGoogle(this.props.signInWithGooglePopup);
+                this.signWithGoogle();
               }}>
               Sign in with Google
             </Button>
@@ -77,35 +77,35 @@ class SignInInternal extends React.Component<
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
 
-    console.log("Updating state:", "signin");
-
     this.setState({ [name]: value });
   };
 
-  private signInWithEmalAndPassword = async (
-    signInWithEmailAndPassword: WithFirebaseAuthProps["signInWithEmailAndPassword"]
-  ) => {
+  private signInWithEmalAndPassword = async () => {
     const { email, password } = this.state;
 
     try {
-      await signInWithEmailAndPassword(email, password);
-      console.log("Updating state:", "signin");
-
-      this.setState({ password: "", email: "" });
+      await this.props.signInWithEmailAndPassword(email, password);
     } catch (e) {
       console.log(e);
     }
   };
 
-  private signWithGoogle = async (
-    signInWithGooglePopup: WithFirebaseAuthProps["signInWithGooglePopup"]
-  ) => {
+  private signWithGoogle = async () => {
     try {
-      await signInWithGooglePopup();
+      this.props.signInAsync("google.com");
     } catch (e) {
       console.log(e);
     }
   };
 }
 
-export const SignIn = withFirebaseAuth(SignInInternal);
+export const SignIn = connect(null, (dispatch: any) => {
+  return {
+    signInAsync: (providerId: "password" | "google.com") => {
+      dispatch(signInAsync(providerId));
+    },
+    signInWithEmailAndPassword: (email: string, password: string) => {
+      dispatch(signInWithEmailAndPassword(email, password));
+    },
+  };
+})(SignInInternal);
