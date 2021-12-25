@@ -4,11 +4,12 @@ import {
   OptionLink,
   OptionsContainer,
 } from "./header.styles";
-import { RootState, selectUser, signOut } from "../../core/redux";
+import { RootState, selectUser } from "../../core/redux";
 
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
 import { CurrentUser } from "../../core/firebase";
+import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import { connect } from "react-redux";
 
 interface HeaderOwnProps {
@@ -59,11 +60,9 @@ export const Header = connect(
       user: selectUser(state),
     };
   },
-  (dispatch: any) => {
+  (dispatch) => {
     return {
-      signOut: () => {
-        dispatch(signOut());
-      },
+      signOut: FirebaseActions(dispatch).signOut,
     };
   }
 )(HeaderInternal);

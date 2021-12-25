@@ -2,16 +2,15 @@ import "./sign-up.styles.scss";
 
 import { Button, Input } from "./../../core/ui";
 
+import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import React from "react";
 import { connect } from "react-redux";
-import { signInAsync } from "../../core/redux";
 
 interface SignUpOwnProps {
-  signInAsync: (
-    providerId: "password" | "google.com",
-    email?: string,
-    password?: string,
-    displayName?: string
+  createUserWithEmailAndPassword: (
+    email: string,
+    password: string,
+    displayName: string
   ) => void;
 }
 
@@ -95,7 +94,11 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
     }
 
     try {
-      await this.props.signInAsync("password", email, password, displayName);
+      await this.props.createUserWithEmailAndPassword(
+        email,
+        password,
+        displayName
+      );
 
       this.setState({
         displayName: "",
@@ -118,13 +121,7 @@ class SignUpInternal extends React.Component<SignUpProps, SignUpState> {
 
 export const SignUp = connect(null, (dispatch: any) => {
   return {
-    signInAsync: (
-      providerId: "password" | "google.com",
-      email?: string,
-      password?: string,
-      displayName?: string
-    ) => {
-      dispatch(signInAsync(providerId, email, password, displayName));
-    },
+    createUserWithEmailAndPassword:
+      FirebaseActions(dispatch).createUserWithEmailAndPassword,
   };
 })(SignUpInternal);

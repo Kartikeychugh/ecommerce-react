@@ -5,19 +5,17 @@ import { Reducer } from "react";
 
 const INITIAL_STATE = {
   user: undefined,
-  isFetching: false,
+  logging: false,
 };
 
 export const userReducer: Reducer<UserReducerManagedState, UserReducerAction> =
   (state = INITIAL_STATE, action) => {
     switch (action.type) {
-      case "FETCH_USER_START":
-        return { ...state, isFetching: true };
-      case "FETCH_USER_SUCCESS":
-        return { ...state, isFetching: false };
-      case "SET_USER":
+      case "USER_SESSION_START":
         return setUser(state, action.payload);
-      case "UPDATE_USER_PROFILE":
+      case "USER_SESSION_END":
+        return setUser(state, action.payload);
+      case "USER_PROFILE_UPDATE":
         return updateUserProfile(state, action.payload);
       default:
         return state;

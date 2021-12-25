@@ -10,9 +10,7 @@ export type ShopReducerAction = {
   payload?: ShopPayloadType;
 };
 
-export type ShopActionTypes =
-  | "FETCH_COLLECTIONS_START"
-  | "FETCH_COLLECTIONS_SUCCESS";
+export type ShopActionTypes = "FETCH_COLLECTIONS_SUCCESS";
 export type ShopPayloadType = ICollectionData | undefined;
 
 export type ShopReducerStateManagers = (

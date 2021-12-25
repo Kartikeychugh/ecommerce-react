@@ -24,3 +24,8 @@ export type ReducerThunk = (
   getState: () => RootState,
   extraArgs: IServices
 ) => Promise<any>;
+
+export type Action<T = string, P = any> = {
+  type: T;
+  payload: P;
+};

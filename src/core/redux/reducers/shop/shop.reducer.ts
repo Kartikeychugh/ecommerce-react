@@ -11,8 +11,6 @@ const INITIAL_STATE = {
 export const ShopReducer: Reducer<ShopReducerManagedState, ShopReducerAction> =
   (state = INITIAL_STATE, action) => {
     switch (action.type) {
-      case "FETCH_COLLECTIONS_START":
-        return { ...state, isFetching: true };
       case "FETCH_COLLECTIONS_SUCCESS":
         return addCollections(state, action.payload);
 

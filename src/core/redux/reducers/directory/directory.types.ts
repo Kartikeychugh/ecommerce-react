@@ -10,10 +10,7 @@ export type DirectoryReducerAction = {
   payload?: DirectoryPayloadType;
 };
 
-export type DirectoryActionTypes =
-  | "UPDATE_SECTIONS"
-  | "FETCH_SECTIONS_START"
-  | "FETCH_SECTIONS_SUCCESS";
+export type DirectoryActionTypes = "FETCH_SECTIONS_SUCCESS";
 export type DirectoryPayloadType = Sections;
 
 export type DirectoryReducerStateManagers = (

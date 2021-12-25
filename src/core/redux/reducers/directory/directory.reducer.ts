@@ -15,8 +15,6 @@ export const directoryReducer: Reducer<
   DirectoryReducerAction
 > = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "FETCH_SECTIONS_START":
-      return { ...state, isFetching: true };
     case "FETCH_SECTIONS_SUCCESS":
       return postSections(state, action.payload);
     default:

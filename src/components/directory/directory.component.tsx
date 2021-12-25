@@ -1,11 +1,8 @@
 import "./directory.styles.scss";
 
-import {
-  RootState,
-  fetchSectionsAsync,
-  selectSections,
-} from "../../core/redux";
+import { RootState, selectSections } from "../../core/redux";
 
+import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import { MenuItem } from "./directory-menu-item";
 import React from "react";
 import { Sections } from "../../models";
@@ -58,9 +55,7 @@ export const Directory = connect(
   },
   (dispatch: any) => {
     return {
-      fetchSectionsAsync: () => {
-        dispatch(fetchSectionsAsync());
-      },
+      fetchSectionsAsync: FirebaseActions(dispatch).fetchSections,
     };
   }
 )(DirectoryInternal);

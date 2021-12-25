@@ -1,13 +1,13 @@
 import "./sign-in.styles.scss";
 
 import { Button, Input } from "../../core/ui";
-import { signInAsync, signInWithEmailAndPassword } from "../../core/redux";
 
+import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import React from "react";
 import { connect } from "react-redux";
 
 interface SignInOwnProps {
-  signInAsync: (providerId: "password" | "google.com") => void;
+  signInWithGooglePopup: () => void;
   signInWithEmailAndPassword: (email: string, password: string) => void;
 }
 
@@ -92,20 +92,19 @@ class SignInInternal extends React.Component<SignInProps, SignInState> {
 
   private signWithGoogle = async () => {
     try {
-      this.props.signInAsync("google.com");
+      this.props.signInWithGooglePopup();
     } catch (e) {
       console.log(e);
     }
   };
 }
 
-export const SignIn = connect(null, (dispatch: any) => {
+export const SignIn = connect(null, (dispatch) => {
+  const { signInWithGooglePopup, signInWithEmailAndPassword } =
+    FirebaseActions(dispatch);
+
   return {
-    signInAsync: (providerId: "password" | "google.com") => {
-      dispatch(signInAsync(providerId));
-    },
-    signInWithEmailAndPassword: (email: string, password: string) => {
-      dispatch(signInWithEmailAndPassword(email, password));
-    },
+    signInWithGooglePopup,
+    signInWithEmailAndPassword,
   };
 })(SignInInternal);

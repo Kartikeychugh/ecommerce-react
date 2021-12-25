@@ -8,19 +8,24 @@ import {
 
 import { GoogleAuthProvider } from "@firebase/auth";
 
-export interface IServices {
+export interface IFirebaseServices {
   firebaseStoreService: IFirebaseStoreService;
   firebaseAuthService: IFirebaseAuthService;
+}
+export interface IServices {
+  firebase: IFirebaseServices;
 }
 
 export const getServices = (firebaseContext: FirebaseContext): IServices => {
   return {
-    firebaseStoreService: new FirebaseStoreService(
-      firebaseContext.firebaseStore
-    ),
-    firebaseAuthService: new FirebaseAuthService(
-      firebaseContext.firebaseAuth,
-      new GoogleAuthProvider()
-    ),
+    firebase: {
+      firebaseStoreService: new FirebaseStoreService(
+        firebaseContext.firebaseStore
+      ),
+      firebaseAuthService: new FirebaseAuthService(
+        firebaseContext.firebaseAuth,
+        new GoogleAuthProvider()
+      ),
+    },
   };
 };

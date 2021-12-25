@@ -1,12 +1,13 @@
 import { CurrentUser } from "../firebase.types";
 import { Firebase } from "../contexts";
 import React from "react";
+import { UserAction } from "../../redux/reducers/user/user.action";
 import { connect } from "react-redux";
 import { onAuthStateChanged } from "@firebase/auth";
-import { setUser } from "../../redux";
 
 interface FirebaseAuthListenerProps {
-  setUser: (user: CurrentUser) => void;
+  userSessionStart: (user: CurrentUser) => void;
+  userSessionEnd: () => void;
 }
 interface FirebaseAuthListenerState {
   user: CurrentUser;
@@ -27,7 +28,11 @@ class FirebaseAuthListenerInternal extends React.Component<
 
   componentDidMount() {
     onAuthStateChanged(this.context.firebaseAuth, (user) => {
-      this.props.setUser(user);
+      if (user) {
+        this.props.userSessionStart(user);
+      } else {
+        this.props.userSessionEnd();
+      }
     });
   }
 
@@ -37,9 +42,9 @@ class FirebaseAuthListenerInternal extends React.Component<
 }
 
 export const FirebaseAuthListener = connect(null, (dispatch: any) => {
+  const { userSessionStart, userSessionEnd } = UserAction(dispatch);
   return {
-    setUser: (user: CurrentUser) => {
-      dispatch(setUser(user));
-    },
+    userSessionStart,
+    userSessionEnd,
   };
 })(FirebaseAuthListenerInternal);

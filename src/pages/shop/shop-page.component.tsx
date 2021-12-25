@@ -3,10 +3,10 @@ import { Route, RouteComponentProps } from "react-router-dom";
 
 import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
+import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import { ICollectionData } from "../../models";
 import React from "react";
 import { connect } from "react-redux";
-import { fetchCollectionsAsync } from "../../core/redux/reducers/shop/shop.actions";
 
 type ShopPageProps = {
   collections: ICollectionData | null;
@@ -49,9 +49,7 @@ export const ShopPage = connect(
   },
   (dispatch: any) => {
     return {
-      fetchCollections: () => {
-        dispatch(fetchCollectionsAsync());
-      },
+      fetchCollections: FirebaseActions(dispatch).fetchCollections,
     };
   }
 )(ShopPageInternal);

@@ -2,15 +2,13 @@ import { CurrentUser, UserProfileData } from "../../../firebase";
 
 export type UserReducerManagedState = {
   user: CurrentUser;
-  isFetching: boolean;
+  logging: boolean;
 };
 
 export type UserActionTypes =
-  | "FETCH_USER_START"
-  | "FETCH_USER_SUCCESS"
-  | "SET_USER"
-  | "SIGN_OUT"
-  | "UPDATE_USER_PROFILE";
+  | "USER_SESSION_START"
+  | "USER_SESSION_END"
+  | "USER_PROFILE_UPDATE";
 
 export type UserPayloadType = CurrentUser | UserProfileData;
 
