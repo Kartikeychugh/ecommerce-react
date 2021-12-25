@@ -3,6 +3,7 @@ import { DirectoryReducerManagedState } from "./reducers/directory";
 import { Dispatch } from "redux";
 import { IFirebaseAuthService } from "../firebase/services";
 import { IFirebaseStoreService } from "../firebase";
+import { IServices } from "./init/services.init";
 import { ShopReducerManagedState } from "./reducers/shop";
 import { UserReducerManagedState } from "./reducers/user/user.types";
 
@@ -21,8 +22,5 @@ export type RootState = {
 export type ReducerThunk = (
   dispatch: Dispatch,
   getState: () => RootState,
-  extraArgs: {
-    firebaseStoreService: IFirebaseStoreService;
-    firebaseAuthService: IFirebaseAuthService;
-  }
+  extraArgs: IServices
 ) => Promise<any>;

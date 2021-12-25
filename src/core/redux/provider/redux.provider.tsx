@@ -1,14 +1,8 @@
-import {
-  Firebase,
-  FirebaseAuthService,
-  FirebaseStoreService,
-} from "../../firebase";
-
-import { GoogleAuthProvider } from "@firebase/auth";
+import { Firebase } from "../../firebase";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import React from "react";
-import { createReduxStore } from "../store";
+import { getStores } from "../init";
 
 interface IReduxProviderProps {}
 interface IReduxProviderState {}
@@ -20,15 +14,7 @@ export class ReduxProvider extends React.Component<
   static contextType = Firebase;
 
   render() {
-    const { store, persistor } = createReduxStore({
-      firebaseStoreService: new FirebaseStoreService(
-        this.context.firebaseStore
-      ),
-      firebaseAuthService: new FirebaseAuthService(
-        this.context.firebaseAuth,
-        new GoogleAuthProvider()
-      ),
-    });
+    const { store, persistor } = getStores(this.context);
 
     return (
       <Provider store={store}>

@@ -23,10 +23,11 @@ const CartIconInternal = (props: CartIconProps) => (
   <Popup
     open={props.cartOpen}
     onClose={() => props.toggleCart(false)}
+    onClick={() => props.toggleCart()}
     width={240}
     content={() => <CartDropdown />}
     position="left">
-    <div id="popup" className="cart-icon" onClick={() => props.toggleCart()}>
+    <div id="popup" className="cart-icon">
       <ShoppingBag className="shopping-icon" />
       <span className="item-count">{props.cartCount}</span>
     </div>
