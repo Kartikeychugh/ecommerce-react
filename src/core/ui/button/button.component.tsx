@@ -6,15 +6,24 @@ interface IButtonProperties {
   onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
   googleButton?: boolean;
   invertedButton?: boolean;
+  disabled?: boolean;
 }
 
 type ButtonProps = React.PropsWithChildren<Partial<IButtonProperties>> &
   Partial<IButtonProperties>;
 
 export const Button = (props: React.PropsWithChildren<ButtonProps>) => {
-  const { children, onClick, type, googleButton, invertedButton } = props;
+  const {
+    children,
+    onClick,
+    type,
+    googleButton,
+    invertedButton,
+    disabled = false,
+  } = props;
   return (
     <button
+      disabled={disabled}
       className={`custom-button ${googleButton ? "google-sign-in" : ""} ${
         invertedButton ? "inverted" : ""
       } `}

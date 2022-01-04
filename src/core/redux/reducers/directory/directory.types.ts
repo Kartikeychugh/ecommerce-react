@@ -2,7 +2,6 @@ import { Sections } from "../../../../models";
 
 export type DirectoryReducerManagedState = {
   sections: Sections;
-  isFetching: boolean;
 };
 
 export type DirectoryReducerAction = {

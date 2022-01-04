@@ -1,6 +1,6 @@
-import { Firebase, FirebaseContext } from "../contexts";
 import { FirebaseOptions, initializeApp } from "@firebase/app";
 
+import { Firebase } from "../contexts";
 import React from "react";
 import { getAuth } from "@firebase/auth";
 import { getFirestore } from "@firebase/firestore";
@@ -8,33 +8,24 @@ import { getFirestore } from "@firebase/firestore";
 interface FirebaseProviderProps {
   config: FirebaseOptions;
 }
-interface FirebaseProviderState extends FirebaseContext {}
 
-export class FirebaseProvider extends React.Component<
-  FirebaseProviderProps,
-  FirebaseProviderState
-> {
-  constructor(props: FirebaseProviderProps) {
-    super(props);
-
-    this.state = {
-      ...this.initFirebase(),
-    };
-  }
-
-  private initFirebase() {
-    const firebaseApp = initializeApp(this.props.config);
+export const FirebaseProvider = (
+  props: React.PropsWithChildren<FirebaseProviderProps>
+) => {
+  const initFirebase = () => {
+    const firebaseApp = initializeApp(props.config);
     const firebaseAuth = getAuth(firebaseApp);
     const firebaseStore = getFirestore(firebaseApp);
 
     return { firebaseAuth, firebaseStore };
-  }
+  };
 
-  render() {
-    return (
-      <Firebase.Provider value={this.state}>
-        {this.props.children}
-      </Firebase.Provider>
-    );
-  }
-}
+  return (
+    <Firebase.Provider
+      value={{
+        ...initFirebase(),
+      }}>
+      {props.children}
+    </Firebase.Provider>
+  );
+};

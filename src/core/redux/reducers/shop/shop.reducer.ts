@@ -5,7 +5,6 @@ import { addCollections } from "./shop.utils";
 
 const INITIAL_STATE = {
   collections: null,
-  isFetching: false,
 };
 
 export const ShopReducer: Reducer<ShopReducerManagedState, ShopReducerAction> =

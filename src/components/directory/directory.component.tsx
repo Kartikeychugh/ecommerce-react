@@ -1,10 +1,10 @@
 import "./directory.styles.scss";
 
+import React, { useEffect } from "react";
 import { RootState, selectSections } from "../../core/redux";
 
 import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import { MenuItem } from "./directory-menu-item";
-import React from "react";
 import { Sections } from "../../models";
 import { WithSpinner } from "../with-spinner/with-spinner.component";
 import { connect } from "react-redux";
@@ -14,38 +14,31 @@ type DirectoryProps = {
   fetchSectionsAsync: () => void;
 };
 
-type DirectoryState = {};
-class DirectoryInternal extends React.Component<
-  DirectoryProps,
-  DirectoryState
-> {
-  public componentDidMount() {
-    if (this.props.sections) {
+const DirectoryInternal = (props: DirectoryProps) => {
+  const { sections, fetchSectionsAsync } = props;
+
+  useEffect(() => {
+    if (sections) {
       return;
     }
 
-    this.fetchSections();
-  }
+    fetchSectionsAsync();
+    return () => {};
+  }, [sections, fetchSectionsAsync]);
 
-  public render() {
-    return (
-      <WithSpinner
-        isLoading={!this.props.sections}
-        render={() => (
-          <div className="directory-menu">
-            {this.props.sections!.map((section) => (
-              <MenuItem key={section.id} section={section} />
-            ))}
-          </div>
-        )}
-      />
-    );
-  }
-
-  private fetchSections() {
-    this.props.fetchSectionsAsync();
-  }
-}
+  return (
+    <WithSpinner
+      isLoading={!props.sections}
+      render={() => (
+        <div className="directory-menu">
+          {props.sections!.map((section) => (
+            <MenuItem key={section.id} section={section} />
+          ))}
+        </div>
+      )}
+    />
+  );
+};
 
 export const Directory = connect(
   (state: RootState) => {

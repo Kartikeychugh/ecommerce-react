@@ -6,9 +6,11 @@ export type UserReducerManagedState = {
 };
 
 export type UserActionTypes =
-  | "USER_SESSION_START"
-  | "USER_SESSION_END"
-  | "USER_PROFILE_UPDATE";
+  | "USER_SESSION_STARTED"
+  | "USER_SESSION_ENDED"
+  | "USER_PROFILE_UPDATE"
+  | "USER_SESSION_CHANGE_INITIATE"
+  | "USER_SESSION_CHANGE_COMPLETE";
 
 export type UserPayloadType = CurrentUser | UserProfileData;
 

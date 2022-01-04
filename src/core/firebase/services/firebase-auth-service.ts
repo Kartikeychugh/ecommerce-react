@@ -1,8 +1,10 @@
 import {
   Auth,
   GoogleAuthProvider,
+  User,
   UserCredential,
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -42,6 +44,10 @@ export class FirebaseAuthService implements IFirebaseAuthService {
   public signInWithEmailAndPassword = (email: string, password: string) => {
     return signInWithEmailAndPassword(this.firebaseAuth, email, password);
   };
+
+  public registerAuthCallback(callback: (user: User | null) => void) {
+    onAuthStateChanged(this.firebaseAuth, callback);
+  }
 
   public createUserWithEmailAndPassword = (
     email: string,

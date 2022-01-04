@@ -1,6 +1,5 @@
+import React, { useEffect, useRef, useState } from "react";
 import { SpinnerContainer, SpinnerOverlay } from "./with-spinner.styles";
-
-import React from "react";
 
 type WithSpinnerPropsType = {
   isLoading: boolean;
@@ -11,54 +10,42 @@ type WithSpinnerStateType = {
   waiting: boolean;
 };
 
-export class WithSpinner extends React.Component<
-  WithSpinnerPropsType,
-  WithSpinnerStateType
-> {
-  private timer: NodeJS.Timer | undefined;
+export const WithSpinner = (
+  props: React.PropsWithChildren<WithSpinnerPropsType>
+) => {
+  const [state, setState] = useState<WithSpinnerStateType>({
+    waiting: true,
+  });
+  const timerRef = useRef<NodeJS.Timer | undefined>(undefined);
 
-  constructor(props: WithSpinnerPropsType) {
-    super(props);
-
-    this.state = {
-      waiting: true,
-    };
-  }
-
-  public componentDidMount() {
-    this.timer = setTimeout(() => {
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
-
-      this.setState({ waiting: false }, () => {
-        if (this.props.isLoading) {
-          console.log("Spinner: Showing spinner now");
-        }
-      });
-    }, 500);
-  }
-
-  public render() {
-    const { isLoading, children, render: Render } = this.props;
-
-    if (!isLoading && this.timer && this.state.waiting) {
-      clearTimeout(this.timer);
-    }
-
-    return isLoading ? (
-      this.getLoadingContent()
-    ) : Render ? (
-      <Render />
-    ) : (
-      children
-    );
-  }
-
-  private getLoadingContent = () =>
-    this.state.waiting ? null : (
+  const getLoadingContent = () =>
+    state.waiting ? null : (
       <SpinnerOverlay>
         <SpinnerContainer />
       </SpinnerOverlay>
     );
-}
+
+  useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      setState({ waiting: false });
+    }, 500);
+    return () => {};
+  }, []);
+
+  const { isLoading, children, render: Render } = props;
+
+  if (!isLoading && timerRef.current && state.waiting) {
+    clearTimeout(timerRef.current);
+  }
+
+  return isLoading ? (
+    getLoadingContent()
+  ) : Render ? (
+    <Render />
+  ) : (
+    <>{children}</>
+  );
+};

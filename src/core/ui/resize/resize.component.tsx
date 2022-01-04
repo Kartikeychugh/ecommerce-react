@@ -1,26 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 type ResizeProps = {
   onResize: () => void;
 };
 
-export class Resize extends React.Component<
-  React.PropsWithChildren<ResizeProps>,
-  {}
-> {
-  public componentDidMount() {
-    window.addEventListener("resize", this.triggerChange);
-  }
+export const Resize = (props: React.PropsWithChildren<ResizeProps>) => {
+  const { onResize } = props;
 
-  public componentWillUnmount() {
-    window.removeEventListener("resize", this.triggerChange);
-  }
+  useEffect(() => {
+    window.addEventListener("resize", () => onResize());
+    return () => {
+      window.removeEventListener("resize", () => onResize());
+    };
+  }, [onResize]);
 
-  private triggerChange = () => {
-    this.props.onResize();
-  };
-
-  public render() {
-    return this.props.children;
-  }
-}
+  return <>{props.children}</>;
+};

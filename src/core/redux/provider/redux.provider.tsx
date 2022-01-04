@@ -1,27 +1,21 @@
+import React, { useContext } from "react";
+
 import { Firebase } from "../../firebase";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
-import React from "react";
 import { getStores } from "../init";
 
-interface IReduxProviderProps {}
-interface IReduxProviderState {}
+export const ReduxProvider = (props: React.PropsWithChildren<{}>) => {
+  const { children } = props;
+  const firebaseContext = useContext(Firebase);
 
-export class ReduxProvider extends React.Component<
-  IReduxProviderProps,
-  IReduxProviderState
-> {
-  static contextType = Firebase;
+  const { store, persistor } = getStores(firebaseContext);
 
-  render() {
-    const { store, persistor } = getStores(this.context);
-
-    return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          {this.props.children}
-        </PersistGate>
-      </Provider>
-    );
-  }
-}
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        {children}
+      </PersistGate>
+    </Provider>
+  );
+};

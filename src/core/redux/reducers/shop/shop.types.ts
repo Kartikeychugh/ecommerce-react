@@ -2,7 +2,6 @@ import { CollectionData, ICollectionData } from "../../../../models";
 
 export type ShopReducerManagedState = {
   collections: CollectionData;
-  isFetching: boolean;
 };
 
 export type ShopReducerAction = {

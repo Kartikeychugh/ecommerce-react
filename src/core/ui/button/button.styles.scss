@@ -16,6 +16,17 @@
   display: flex;
   justify-content: center;
 
+  &:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: grey;
+      border: none;
+      color: white;
+    }
+  }
+
   &:hover {
     background-color: white;
     color: black;

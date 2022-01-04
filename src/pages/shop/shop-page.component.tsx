@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { RootState, selectShopCollections } from "../../core/redux";
 import { Route, RouteComponentProps } from "react-router-dom";
 
@@ -5,7 +6,6 @@ import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
 import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
 import { ICollectionData } from "../../models";
-import React from "react";
 import { connect } from "react-redux";
 
 type ShopPageProps = {
@@ -13,33 +13,29 @@ type ShopPageProps = {
   fetchCollections: () => void;
 } & RouteComponentProps;
 
-class ShopPageInternal extends React.Component<ShopPageProps, {}> {
-  public componentDidMount() {
-    if (this.props.collections) {
+const ShopPageInternal = (props: ShopPageProps) => {
+  const {
+    collections,
+    fetchCollections,
+    match: { path },
+  } = props;
+  useEffect(() => {
+    if (collections) {
       return;
     }
 
-    this.fetchCollections();
-  }
+    fetchCollections();
+  }, [fetchCollections, collections]);
 
-  public render() {
-    const {
-      match: { path },
-    } = this.props;
-    return (
-      <div className="shop-page">
-        <Route exact path={`${path}`}>
-          <CollectionsOverview collections={this.props.collections} />
-        </Route>
-        <Route path={`${path}/:collectionId`} component={CollectionPage} />
-      </div>
-    );
-  }
-
-  private fetchCollections() {
-    this.props.fetchCollections();
-  }
-}
+  return (
+    <div className="shop-page">
+      <Route exact path={`${path}`}>
+        <CollectionsOverview collections={collections} />
+      </Route>
+      <Route path={`${path}/:collectionId`} component={CollectionPage} />
+    </div>
+  );
+};
 
 export const ShopPage = connect(
   (state: RootState) => {

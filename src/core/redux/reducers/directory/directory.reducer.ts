@@ -8,7 +8,6 @@ import { postSections } from "./directory.utils";
 
 const INITIAL_STATE = {
   sections: null,
-  isFetching: false,
 };
 export const directoryReducer: Reducer<
   DirectoryReducerManagedState,
