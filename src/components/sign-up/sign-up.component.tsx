@@ -3,16 +3,7 @@ import "./sign-up.styles.scss";
 import { Button, Input } from "./../../core/ui";
 import React, { useState } from "react";
 
-import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
-import { connect } from "react-redux";
-
-interface SignUpOwnProps {
-  createUserWithEmailAndPassword: (
-    email: string,
-    password: string,
-    displayName: string
-  ) => void;
-}
+import { useFirebaseAction } from "../../core";
 
 type SignUpState = {
   /** To handle allowing update from onChange event directly using name and value */
@@ -23,15 +14,15 @@ type SignUpState = {
   confirmPassword: string;
 };
 
-type SignUpProps = SignUpOwnProps;
-
-const SignUpIntenal = (props: SignUpProps) => {
+export const SignUp = () => {
   const [state, setState] = useState<SignUpState>({
     displayName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
+  const { createUserWithEmailAndPassword } = useFirebaseAction();
 
   const signUp = async () => {
     const { email, password, displayName, confirmPassword } = state;
@@ -41,7 +32,7 @@ const SignUpIntenal = (props: SignUpProps) => {
     }
 
     try {
-      await props.createUserWithEmailAndPassword(email, password, displayName);
+      await createUserWithEmailAndPassword(email, password, displayName);
 
       setState({
         displayName: "",
@@ -108,10 +99,3 @@ const SignUpIntenal = (props: SignUpProps) => {
     </div>
   );
 };
-
-export const SignUp = connect(null, (dispatch: any) => {
-  return {
-    createUserWithEmailAndPassword:
-      FirebaseActions(dispatch).createUserWithEmailAndPassword,
-  };
-})(SignUpIntenal);

@@ -2,16 +2,13 @@ import "./checkout.styles.scss";
 
 import { RootState, selectCartItems, selectCartTotal } from "../../core/redux";
 
-import { CartItem } from "../../models";
 import { CheckoutItem } from "../../components";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-type CheckoutPageProps = {
-  cartItems: CartItem[];
-  cartTotal: number;
-};
+export const CheckoutPage = () => {
+  const cartItems = useSelector((state: RootState) => selectCartItems(state));
+  const cartTotal = useSelector((state: RootState) => selectCartTotal(state));
 
-const CheckoutPageInternal = (props: CheckoutPageProps) => {
   return (
     <div className="checkout-page">
       <div className="checkout-header">
@@ -32,26 +29,10 @@ const CheckoutPageInternal = (props: CheckoutPageProps) => {
         </div>
       </div>
 
-      {props.cartItems.map((cartItem) => (
+      {cartItems.map((cartItem) => (
         <CheckoutItem key={cartItem.id} item={cartItem} />
       ))}
-      <div className="total">TOTAL: ${props.cartTotal}</div>
+      <div className="total">TOTAL: ${cartTotal}</div>
     </div>
   );
 };
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    cartItems: selectCartItems(state),
-    cartTotal: selectCartTotal(state),
-  };
-};
-
-// const mapDispatchToProps = (dispatch: Dispatch) => {
-//   return {};
-// };
-
-export const CheckoutPage = connect(
-  mapStateToProps,
-  null
-)(CheckoutPageInternal);

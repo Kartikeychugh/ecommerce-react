@@ -5,14 +5,15 @@ import { RootState, selectCollection } from "../../core/redux";
 import { CollectionItem } from "../../components";
 import { ICollection } from "../../models";
 import { RouteComponentProps } from "react-router";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-type CollectionsPage = {
-  collection: ICollection | null;
-} & RouteComponentProps<{ collectionId: string }>;
+type CollectionsPage = {} & RouteComponentProps<{ collectionId: string }>;
 
-const CollectionPageInternal = (props: CollectionsPage) => {
-  const { collection } = props;
+export const CollectionPage = (props: CollectionsPage) => {
+  const collection = useSelector<RootState, ICollection | null>(
+    (state: RootState) =>
+      selectCollection(props.match.params.collectionId)(state)
+  );
 
   return collection ? (
     <div className="collection-page">
@@ -25,11 +26,3 @@ const CollectionPageInternal = (props: CollectionsPage) => {
     </div>
   ) : null;
 };
-
-const mapStateToProps = (state: RootState, ownProps: CollectionsPage) => {
-  return {
-    collection: selectCollection(ownProps.match.params.collectionId)(state),
-  };
-};
-
-export const CollectionPage = connect(mapStateToProps)(CollectionPageInternal);

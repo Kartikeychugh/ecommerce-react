@@ -1,31 +1,27 @@
+import { Action, Dispatch } from "redux";
 import { CartItem, ICollectionItem } from "../../../../models";
 
-import { CartReducerAction } from "./cart.types";
-
-export const toggleCart = (cartOpen?: boolean): CartReducerAction => {
+export const CartActions = (dispatch: Dispatch<Action<any>>) => {
   return {
-    type: "TOGGLE_CART",
-    payload: cartOpen !== undefined ? cartOpen : null,
-  };
-};
-
-export const addToCart = (item: ICollectionItem): CartReducerAction => {
-  return {
-    type: "ADD_ITEM",
-    payload: item,
-  };
-};
-
-export const reduceFromCart = (item: CartItem): CartReducerAction => {
-  return {
-    type: "REDUCE_ITEM",
-    payload: item,
-  };
-};
-
-export const removeFromCart = (item: CartItem): CartReducerAction => {
-  return {
-    type: "REMOVE_ITEM",
-    payload: item,
+    toggleCart: (cartOpen?: boolean) =>
+      dispatch({
+        type: "TOGGLE_CART",
+        payload: cartOpen !== undefined ? cartOpen : null,
+      }),
+    addToCart: (item: ICollectionItem) =>
+      dispatch({
+        type: "ADD_ITEM",
+        payload: item,
+      }),
+    reduceFromCart: (item: CartItem) =>
+      dispatch({
+        type: "REDUCE_ITEM",
+        payload: item,
+      }),
+    removeFromCart: (item: CartItem) =>
+      dispatch({
+        type: "REMOVE_ITEM",
+        payload: item,
+      }),
   };
 };

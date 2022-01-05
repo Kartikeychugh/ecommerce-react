@@ -1,21 +1,17 @@
 import React, { useContext, useEffect } from "react";
 
-import { CurrentUser } from "../firebase.types";
 import { Firebase } from "../contexts";
-import { UserAction } from "../../redux/reducers/user/user.action";
-import { connect } from "react-redux";
 import { onAuthStateChanged } from "@firebase/auth";
+import { useUserActions } from "../..";
 
-interface FirebaseAuthListenerProps {
-  userSessionStart: (user: CurrentUser) => void;
-  userSessionEnd: () => void;
-}
+interface FirebaseAuthListenerProps {}
 
-const FirebaseAuthListenerInternal = (
+export const FirebaseAuthListener = (
   props: React.PropsWithChildren<FirebaseAuthListenerProps>
 ) => {
-  const { userSessionStart, userSessionEnd, children } = props;
+  const { children } = props;
   const { firebaseAuth } = useContext(Firebase);
+  const { userSessionStart, userSessionEnd } = useUserActions();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
@@ -32,11 +28,3 @@ const FirebaseAuthListenerInternal = (
 
   return <>{children}</>;
 };
-
-export const FirebaseAuthListener = connect(null, (dispatch: any) => {
-  const { userSessionStart, userSessionEnd } = UserAction(dispatch);
-  return {
-    userSessionStart,
-    userSessionEnd,
-  };
-})(FirebaseAuthListenerInternal);

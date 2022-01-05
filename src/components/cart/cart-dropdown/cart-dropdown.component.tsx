@@ -1,53 +1,43 @@
 import "./cart-dropdown.styles.scss";
 
-import { RootState, selectCartItems, toggleCart } from "../../../core/redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import {
+  RootState,
+  selectCartItems,
+  useCartActions,
+} from "../../../core/redux";
 
 import { Button } from "../../../core/ui";
 import { CartItem } from "../cart-item";
-import { CartItem as CartItemType } from "../../../models";
-import { Dispatch } from "redux";
 import React from "react";
-import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-type CartDropdownProps = {
-  cartItems: CartItemType[];
-  toggleCart: (cartOpen?: boolean) => void;
-} & RouteComponentProps;
+type CartDropdownProps = {};
 
-const CartDropdownInternal = (props: CartDropdownProps) => (
-  <div className="cart-dropdown">
-    <div className="cart-items">
-      {props.cartItems.length ? (
-        props.cartItems.map((cartItem) => (
-          <CartItem key={cartItem.id} item={cartItem} />
-        ))
-      ) : (
-        <span className="empty-message">Ek paisa nahi kharcha tune.</span>
-      )}
+export const CartDropdown = (props: CartDropdownProps) => {
+  const history = useHistory();
+  const cartItems = useSelector((state: RootState) => selectCartItems(state));
+  const { toggleCart } = useCartActions();
+
+  return (
+    <div className="cart-dropdown">
+      <div className="cart-items">
+        {cartItems.length ? (
+          cartItems.map((cartItem) => (
+            <CartItem key={cartItem.id} item={cartItem} />
+          ))
+        ) : (
+          <span className="empty-message">Ek paisa nahi kharcha tune.</span>
+        )}
+      </div>
+      <Button
+        onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {
+          event.stopPropagation();
+          toggleCart();
+          history.push("/checkout");
+        }}>
+        GO TO CHECKOUT
+      </Button>
     </div>
-    <Button
-      onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        props.toggleCart();
-        props.history.push("/checkout");
-      }}>
-      GO TO CHECKOUT
-    </Button>
-  </div>
-);
-
-const mapStateToProps = (state: RootState) => ({
-  cartItems: selectCartItems(state),
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    toggleCart: (cartOpen?: boolean) => dispatch(toggleCart(cartOpen)),
-  };
+  );
 };
-
-export const CartDropdown = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(CartDropdownInternal));

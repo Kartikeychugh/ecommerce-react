@@ -3,6 +3,8 @@ import { put, takeLeading } from "redux-saga/effects";
 
 import { FirebaseStoreSagaActions } from "./firebase-store.types";
 import { IFirebaseStoreService } from "../../../..";
+import { fetchCollectionsSuccess } from "../../shop";
+import { fetchSectionSuccess } from "../../directory";
 
 export const initFirebaseStoreSaga = (
   firebaseStoreService: IFirebaseStoreService
@@ -45,10 +47,7 @@ const fetchSectionsGenerator = (firebaseStoreService: IFirebaseStoreService) =>
         sections.push(section);
       });
 
-      yield put({
-        type: "FETCH_SECTIONS_SUCCESS",
-        payload: sections,
-      });
+      yield put(fetchSectionSuccess(sections));
     } catch (e) {
       console.log(e);
     }
@@ -72,10 +71,7 @@ const fetchCollectionsGenerator = (
         };
       });
 
-      yield put({
-        type: "FETCH_COLLECTIONS_SUCCESS",
-        payload: collections,
-      });
+      yield put(fetchCollectionsSuccess(collections));
     } catch (e) {
       console.log(e);
     }

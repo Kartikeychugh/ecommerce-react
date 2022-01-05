@@ -8,19 +8,14 @@ import { Header, WithSpinner } from "../../../components";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { RootState, selectUser } from "../../redux";
 
-import { CurrentUser } from "../../firebase";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-interface LayoutOwnProps {
-  user: CurrentUser;
-}
+export const Layout = () => {
+  const user = useSelector((state: RootState) => selectUser(state));
 
-type LayoutProps = LayoutOwnProps;
-
-const LayoutInternal = (props: LayoutProps) => {
   return (
     <WithSpinner
-      isLoading={props.user === undefined}
+      isLoading={user === undefined}
       render={() => (
         <>
           <Header />
@@ -30,11 +25,7 @@ const LayoutInternal = (props: LayoutProps) => {
             <Route path="/shop" component={ShopPage} />
             <Route exact={true} path="/checkout" component={CheckoutPage} />
             <Route exact={true} path="/signin">
-              {props.user !== null ? (
-                <Redirect to="/" />
-              ) : (
-                <SignInAndSignUpPage />
-              )}
+              {user !== null ? <Redirect to="/" /> : <SignInAndSignUpPage />}
             </Route>
             <Route path="*" component={() => <div>404</div>} />
           </Switch>
@@ -43,9 +34,3 @@ const LayoutInternal = (props: LayoutProps) => {
     />
   );
 };
-
-export const Layout = connect((state: RootState) => {
-  return {
-    user: selectUser(state),
-  };
-})(LayoutInternal);

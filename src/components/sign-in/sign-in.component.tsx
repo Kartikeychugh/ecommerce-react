@@ -2,17 +2,10 @@ import "./sign-in.styles.scss";
 
 import { Button, Input } from "../../core/ui";
 import React, { useState } from "react";
+import { RootState, useFirebaseAction } from "../../core";
 
-import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
-import { RootState } from "../../core";
-import { connect } from "react-redux";
 import { selectLogging } from "../../core/redux/reducers/user/user.selectors";
-
-interface SignInOwnProps {
-  logging: boolean;
-  signInWithGooglePopup: () => void;
-  signInWithEmailAndPassword: (email: string, password: string) => void;
-}
+import { useSelector } from "react-redux";
 
 type SignInState = {
   email: string;
@@ -20,14 +13,16 @@ type SignInState = {
   /** To handle allowing update from onChange event directly using name and value */
   [key: string]: string;
 };
-type SignInProps = SignInOwnProps;
 
-const SignInInternal = (props: SignInProps) => {
+export const SignIn = () => {
   const [passwordAndEmail, setPasswordAndEmail] = useState<SignInState>({
     password: "",
     email: "",
   });
 
+  const { signInWithEmailAndPassword, signInWithGooglePopup } =
+    useFirebaseAction();
+  const logging = useSelector((state: RootState) => selectLogging(state));
   const handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
@@ -37,7 +32,7 @@ const SignInInternal = (props: SignInProps) => {
 
   async function signInWithEmalAndPassword() {
     try {
-      await props.signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         passwordAndEmail.email,
         passwordAndEmail.password
       );
@@ -48,7 +43,7 @@ const SignInInternal = (props: SignInProps) => {
 
   const signWithGoogle = async () => {
     try {
-      props.signInWithGooglePopup();
+      signInWithGooglePopup();
     } catch (e) {
       console.log(e);
     }
@@ -81,11 +76,11 @@ const SignInInternal = (props: SignInProps) => {
           label={"Password"}
         />
         <div className="button">
-          <Button disabled={props.logging} type="submit">
+          <Button disabled={logging} type="submit">
             Sign In
           </Button>
           <Button
-            disabled={props.logging}
+            disabled={logging}
             googleButton={true}
             type="button"
             onClick={(event: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -99,20 +94,3 @@ const SignInInternal = (props: SignInProps) => {
     </div>
   );
 };
-
-export const SignIn = connect(
-  (state: RootState) => {
-    return {
-      logging: selectLogging(state),
-    };
-  },
-  (dispatch) => {
-    const { signInWithGooglePopup, signInWithEmailAndPassword } =
-      FirebaseActions(dispatch);
-
-    return {
-      signInWithGooglePopup,
-      signInWithEmailAndPassword,
-    };
-  }
-)(SignInInternal);

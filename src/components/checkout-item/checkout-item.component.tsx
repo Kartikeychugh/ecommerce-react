@@ -1,20 +1,16 @@
 import "./checkout-item.styles.scss";
 
-import { addToCart, reduceFromCart, removeFromCart } from "../../core/redux";
-
 import { CartItem } from "../../models";
-import { Dispatch } from "redux";
-import { connect } from "react-redux";
+import { useCartActions } from "../../core/redux";
 
 type CheckoutItemProps = {
   item: CartItem;
-  addItem: (item: CartItem) => void;
-  reduceFromCart: (item: CartItem) => void;
-  removeFromCart: (item: CartItem) => void;
 };
 
-const CheckoutItemInternal = (props: CheckoutItemProps) => {
+export const CheckoutItem = (props: CheckoutItemProps) => {
   const { item } = props;
+  const { addToCart, reduceFromCart, removeFromCart } = useCartActions();
+
   return (
     <div className="checkout-item">
       <div className="image-container">
@@ -25,7 +21,7 @@ const CheckoutItemInternal = (props: CheckoutItemProps) => {
         <div
           className="arrow"
           onClick={() => {
-            props.reduceFromCart(item);
+            reduceFromCart(item);
           }}>
           {" "}
           &#10094;
@@ -34,7 +30,7 @@ const CheckoutItemInternal = (props: CheckoutItemProps) => {
         <div
           className="arrow"
           onClick={() => {
-            props.addItem(item);
+            addToCart(item);
           }}>
           {" "}
           &#10095;
@@ -44,23 +40,10 @@ const CheckoutItemInternal = (props: CheckoutItemProps) => {
       <div
         className="remove-button"
         onClick={() => {
-          props.removeFromCart(item);
+          removeFromCart(item);
         }}>
         &#10005;
       </div>
     </div>
   );
 };
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    addItem: (item: CartItem) => dispatch(addToCart(item)),
-    reduceFromCart: (item: CartItem) => dispatch(reduceFromCart(item)),
-    removeFromCart: (item: CartItem) => dispatch(removeFromCart(item)),
-  };
-};
-
-export const CheckoutItem = connect(
-  null,
-  mapDispatchToProps
-)(CheckoutItemInternal);

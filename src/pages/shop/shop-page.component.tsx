@@ -1,24 +1,25 @@
-import React, { useEffect } from "react";
-import { RootState, selectShopCollections } from "../../core/redux";
+import {
+  RootState,
+  selectShopCollections,
+  useFirebaseAction,
+} from "../../core/redux";
 import { Route, RouteComponentProps } from "react-router-dom";
 
 import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
-import { FirebaseActions } from "../../core/redux/reducers/firebase/firebase.actions";
-import { ICollectionData } from "../../models";
-import { connect } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-type ShopPageProps = {
-  collections: ICollectionData | null;
-  fetchCollections: () => void;
-} & RouteComponentProps;
+type ShopPageProps = {} & RouteComponentProps;
 
-const ShopPageInternal = (props: ShopPageProps) => {
+export const ShopPage = (props: ShopPageProps) => {
   const {
-    collections,
-    fetchCollections,
     match: { path },
   } = props;
+  const collections = useSelector((state: RootState) =>
+    selectShopCollections(state)
+  );
+  const { fetchCollections } = useFirebaseAction();
   useEffect(() => {
     if (collections) {
       return;
@@ -36,16 +37,3 @@ const ShopPageInternal = (props: ShopPageProps) => {
     </div>
   );
 };
-
-export const ShopPage = connect(
-  (state: RootState) => {
-    return {
-      collections: selectShopCollections(state),
-    };
-  },
-  (dispatch: any) => {
-    return {
-      fetchCollections: FirebaseActions(dispatch).fetchCollections,
-    };
-  }
-)(ShopPageInternal);

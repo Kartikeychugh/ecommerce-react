@@ -1,23 +1,22 @@
 import "./directory-menu-item.styles.scss";
 
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 import { ISection } from "../../../models";
 
 type MenuItemProps = {
   section: ISection;
-} & RouteComponentProps;
+};
 
-const MenuItemInternal = (props: MenuItemProps) => {
+export const MenuItem = (props: MenuItemProps) => {
   const {
     section: { imageUrl, size, title },
   } = props;
-
+  const history = useHistory();
+  const match = useRouteMatch();
   return (
     <div
-      onClick={() =>
-        props.history.push(`${props.match.url}shop/${props.section.id}`)
-      }
+      onClick={() => history.push(`${match.url}shop/${props.section.id}`)}
       style={{ backgroundImage: `url(${imageUrl})` }}
       className={`${size} menu-item`}>
       <div
@@ -30,5 +29,3 @@ const MenuItemInternal = (props: MenuItemProps) => {
     </div>
   );
 };
-
-export const MenuItem = withRouter(MenuItemInternal);
