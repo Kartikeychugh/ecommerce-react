@@ -1,10 +1,6 @@
 import "./cart-dropdown.styles.scss";
 
-import {
-  RootState,
-  selectCartItems,
-  useCartActions,
-} from "../../../core/redux";
+import { selectCartItems, useCartActions } from "../../../core/redux";
 
 import { Button } from "../../../core/ui";
 import { CartItem } from "../cart-item";
@@ -12,11 +8,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-type CartDropdownProps = {};
-
-export const CartDropdown = (props: CartDropdownProps) => {
+export const CartDropdown = () => {
   const history = useHistory();
-  const cartItems = useSelector((state: RootState) => selectCartItems(state));
+  const cartItems = useSelector(selectCartItems);
   const { toggleCart } = useCartActions();
 
   return (

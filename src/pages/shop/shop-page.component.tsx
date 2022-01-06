@@ -1,9 +1,5 @@
-import {
-  RootState,
-  selectShopCollections,
-  useFirebaseAction,
-} from "../../core/redux";
 import { Route, RouteComponentProps } from "react-router-dom";
+import { selectShopCollections, useFirebaseAction } from "../../core/redux";
 
 import { CollectionPage } from "../collection";
 import { CollectionsOverview } from "../../components";
@@ -16,9 +12,7 @@ export const ShopPage = (props: ShopPageProps) => {
   const {
     match: { path },
   } = props;
-  const collections = useSelector((state: RootState) =>
-    selectShopCollections(state)
-  );
+  const collections = useSelector(selectShopCollections);
   const { fetchCollections } = useFirebaseAction();
   useEffect(() => {
     if (collections) {

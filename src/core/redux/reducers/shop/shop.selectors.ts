@@ -8,10 +8,14 @@ export const selectShopCollections = createSelector(
   (shop: RootState["shop"]) => shop.collections
 );
 
-export const selectCollection = (collectionUrlParam: string) =>
-  createSelector(
-    [selectShopCollections],
-    (collections: RootState["shop"]["collections"]) => {
-      return collections && collections[collectionUrlParam];
-    }
-  );
+export const selectCollectionParam = (
+  _state: RootState,
+  collectionId: string
+) => collectionId;
+
+export const selectCollection = createSelector(
+  [selectShopCollections, selectCollectionParam],
+  (collections: RootState["shop"]["collections"], collectionId: string) => {
+    return collections && collections[collectionId];
+  }
+);

@@ -1,7 +1,6 @@
 import "./cart-icon.styles.scss";
 
 import {
-  RootState,
   selectCartItemCount,
   selectCartOpenState,
   useCartActions,
@@ -14,12 +13,9 @@ import { useSelector } from "react-redux";
 
 export const CartIcon = () => {
   const { toggleCart } = useCartActions();
-  const cartOpen = useSelector((state: RootState) =>
-    selectCartOpenState(state)
-  );
-  const cartCount = useSelector((state: RootState) =>
-    selectCartItemCount(state)
-  );
+  const cartOpen = useSelector(selectCartOpenState);
+  const cartCount = useSelector(selectCartItemCount);
+
   return (
     <Popup
       open={cartOpen}

@@ -6,12 +6,12 @@ import {
 } from "../../../pages";
 import { Header, WithSpinner } from "../../../components";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { RootState, selectUser } from "../../redux";
 
+import { selectUser } from "../../redux";
 import { useSelector } from "react-redux";
 
 export const Layout = () => {
-  const user = useSelector((state: RootState) => selectUser(state));
+  const user = useSelector(selectUser);
 
   return (
     <WithSpinner

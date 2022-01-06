@@ -4,7 +4,7 @@ import {
   OptionLink,
   OptionsContainer,
 } from "./header.styles";
-import { RootState, selectUser, useFirebaseAction } from "../../core/redux";
+import { selectUser, useFirebaseAction } from "../../core/redux";
 
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 export const Header = () => {
   const { signOut } = useFirebaseAction();
-  const user = useSelector((state: RootState) => selectUser(state));
+  const user = useSelector(selectUser);
 
   return (
     <HeaderContainer>

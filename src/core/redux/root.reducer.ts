@@ -10,7 +10,7 @@ import { userReducer } from "./reducers/user";
 
 const config = {
   key: "root",
-  whitelist: ["cart", "directory", "shop", "user"],
+  whitelist: ["cart", "directory", "shop"],
   storage,
 };
 

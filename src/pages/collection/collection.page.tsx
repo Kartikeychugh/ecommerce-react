@@ -4,15 +4,13 @@ import { RootState, selectCollection } from "../../core/redux";
 
 import { CollectionItem } from "../../components";
 import { ICollection } from "../../models";
-import { RouteComponentProps } from "react-router";
+import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 
-type CollectionsPage = {} & RouteComponentProps<{ collectionId: string }>;
-
-export const CollectionPage = (props: CollectionsPage) => {
+export const CollectionPage = () => {
+  const { collectionId } = useParams<{ collectionId: string }>();
   const collection = useSelector<RootState, ICollection | null>(
-    (state: RootState) =>
-      selectCollection(props.match.params.collectionId)(state)
+    (state: RootState) => selectCollection(state, collectionId)
   );
 
   return collection ? (

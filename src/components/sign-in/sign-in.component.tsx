@@ -2,9 +2,9 @@ import "./sign-in.styles.scss";
 
 import { Button, Input } from "../../core/ui";
 import React, { useState } from "react";
-import { RootState, useFirebaseAction } from "../../core";
 
 import { selectLogging } from "../../core/redux/reducers/user/user.selectors";
+import { useFirebaseAction } from "../../core";
 import { useSelector } from "react-redux";
 
 type SignInState = {
@@ -22,7 +22,7 @@ export const SignIn = () => {
 
   const { signInWithEmailAndPassword, signInWithGooglePopup } =
     useFirebaseAction();
-  const logging = useSelector((state: RootState) => selectLogging(state));
+  const logging = useSelector(selectLogging);
   const handleChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;

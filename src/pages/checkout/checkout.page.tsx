@@ -1,13 +1,13 @@
 import "./checkout.styles.scss";
 
-import { RootState, selectCartItems, selectCartTotal } from "../../core/redux";
+import { selectCartItems, selectCartTotal } from "../../core/redux";
 
 import { CheckoutItem } from "../../components";
 import { useSelector } from "react-redux";
 
 export const CheckoutPage = () => {
-  const cartItems = useSelector((state: RootState) => selectCartItems(state));
-  const cartTotal = useSelector((state: RootState) => selectCartTotal(state));
+  const cartItems = useSelector(selectCartItems);
+  const cartTotal = useSelector(selectCartTotal);
 
   return (
     <div className="checkout-page">

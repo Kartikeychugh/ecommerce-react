@@ -1,6 +1,6 @@
 import "./directory.styles.scss";
 
-import { RootState, selectSections, useFirebaseAction } from "../../core/redux";
+import { selectSections, useFirebaseAction } from "../../core/redux";
 
 import { MenuItem } from "./directory-menu-item";
 import { WithSpinner } from "../with-spinner/with-spinner.component";
@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export const Directory = () => {
-  const sections = useSelector((state: RootState) => selectSections(state));
+  const sections = useSelector(selectSections);
   const { fetchSections } = useFirebaseAction();
 
   useEffect(() => {
@@ -17,7 +17,6 @@ export const Directory = () => {
     }
 
     fetchSections();
-    return () => {};
   }, [sections, fetchSections]);
 
   return (
