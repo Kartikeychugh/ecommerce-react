@@ -8,6 +8,7 @@ import { selectUser, useFirebaseAction } from "../../core/redux";
 
 import { CartIcon } from "../cart";
 import { Crown } from "../../assests";
+import { WithSpinner } from "../with-spinner";
 import { useSelector } from "react-redux";
 
 export const Header = () => {
@@ -23,24 +24,29 @@ export const Header = () => {
       <OptionsContainer>
         <OptionLink to="/shop">SHOP</OptionLink>
         <OptionLink to="/shop">CONTACT</OptionLink>
-        {user ? (
-          <OptionLink
-            as="div"
-            onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
-              event.stopPropagation();
-              signOut();
-            }}>
-            SIGN OUT
-          </OptionLink>
-        ) : (
-          <OptionLink
-            to={{
-              pathname: "/signin",
-              state: { navType: "inApp" },
-            }}>
-            SIGN IN
-          </OptionLink>
-        )}
+        <WithSpinner
+          isLoading={user === undefined}
+          render={() => {
+            return user ? (
+              <OptionLink
+                as="div"
+                onClick={(event: React.SyntheticEvent<HTMLDivElement>) => {
+                  event.stopPropagation();
+                  signOut();
+                }}>
+                SIGN OUT
+              </OptionLink>
+            ) : (
+              <OptionLink
+                to={{
+                  pathname: "/signin",
+                  state: { navType: "inApp" },
+                }}>
+                SIGN IN
+              </OptionLink>
+            );
+          }}
+        />
         <CartIcon />
       </OptionsContainer>
     </HeaderContainer>

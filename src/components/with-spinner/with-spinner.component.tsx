@@ -20,7 +20,7 @@ export const WithSpinner = (
 
   const getLoadingContent = () =>
     state.waiting ? null : (
-      <SpinnerOverlay>
+      <SpinnerOverlay style={{ height: "25px", width: "25px" }}>
         <SpinnerContainer />
       </SpinnerOverlay>
     );
@@ -31,7 +31,7 @@ export const WithSpinner = (
         clearTimeout(timerRef.current);
       }
       setState({ waiting: false });
-    }, 500);
+    }, 0);
     return () => {};
   }, []);
 
